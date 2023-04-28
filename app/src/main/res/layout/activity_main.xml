@@ -3,11 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/cream">
 
-    <FrameLayout
-        android:id="@+id/main_frag_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <com.example.doubtless.theming.buttons.PrimaryButton
+        android:id="@+id/primaryBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:text="Yes" />
+
+    <com.example.doubtless.theming.buttons.SecondaryButton
+        android:id="@+id/secondayBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/primaryBtn"
+        app:text="No" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
