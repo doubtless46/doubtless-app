@@ -2,7 +2,9 @@ package com.example.doubtless.theming.buttons
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
 import android.util.AttributeSet
+import android.view.Gravity
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import com.example.doubtless.R
@@ -35,13 +37,16 @@ class SecondaryButton constructor(
         this.addView(textView)
 
         // setup ui properties
-        this.radius = 100.dpToPx() // fully rounded
+        this.radius = 0.dpToPx() // fully rounded
         this.cardElevation = 0f
         this.setCardBackgroundColor(context.resources.getColor(R.color.cream))
         this.foreground = context.resources.getDrawable(R.drawable.seconday_button_border)
 
         textView.setTextColor(Color.BLACK)
         textView.text = text
+
+        textView.typeface = resources.getFont(R.font.roboto_medium)
+
         val padding = 8.dpToPx().toInt()
         textView.setPadding(
             /* left = */ 14.dpToPx().toInt() + padding,
@@ -49,18 +54,14 @@ class SecondaryButton constructor(
             /* right = */ 14.dpToPx().toInt() + padding,
             /* bottom = */ padding
         )
-        textView.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-        textView.textSize = 22f
+
+        val lp = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        lp.gravity = Gravity.CENTER
+        textView.layoutParams = lp
+
+        textView.textSize = 18f
 
         // other properties
         isClickable = true
-    }
-
-    override fun performClick(): Boolean {
-        this.animate().scaleXBy(-0.2f).scaleYBy(-0.2f).setDuration(200L).withEndAction {
-            this.animate().scaleXBy(0.2f).scaleYBy(0.2f).setDuration(200L).start()
-        }.start()
-
-        return super.performClick()
     }
 }

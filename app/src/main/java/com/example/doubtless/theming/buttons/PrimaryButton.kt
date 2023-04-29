@@ -3,6 +3,7 @@ package com.example.doubtless.theming.buttons
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Color
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.widget.Button
 import android.widget.TextView
@@ -37,12 +38,15 @@ class PrimaryButton constructor(
         this.addView(textView)
 
         // setup ui properties
-        this.radius = 100.dpToPx() // fully rounded
+        this.radius = 0.dpToPx() // fully rounded
         this.setCardBackgroundColor(Color.BLACK)
         this.cardElevation = 0f
 
         textView.setTextColor(Color.WHITE)
         textView.text = text
+
+        textView.typeface = resources.getFont(R.font.roboto_medium)
+
         val padding = 8.dpToPx().toInt()
         textView.setPadding(
             /* left = */ 14.dpToPx().toInt() + padding,
@@ -51,17 +55,9 @@ class PrimaryButton constructor(
             /* bottom = */ padding
         )
         textView.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-        textView.textSize = 22f
+        textView.textSize = 18f
 
         // other properties
         isClickable = true
-    }
-
-    override fun performClick(): Boolean {
-        this.animate().scaleXBy(-0.2f).scaleYBy(-0.2f).setDuration(200L).withEndAction {
-            this.animate().scaleXBy(0.2f).scaleYBy(0.2f).setDuration(200L).start()
-        }.start()
-
-        return super.performClick()
     }
 }

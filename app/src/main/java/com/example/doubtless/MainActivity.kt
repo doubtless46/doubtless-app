@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -21,5 +22,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         window.navigationBarColor = Color.BLACK
+
+        binding.retroBtn.setOnClickListener {
+            binding.progress.isVisible = !binding.progress.isVisible
+        }
     }
 }
