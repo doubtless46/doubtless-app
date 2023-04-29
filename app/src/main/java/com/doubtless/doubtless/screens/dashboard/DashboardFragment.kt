@@ -1,4 +1,4 @@
-package com.example.doubtless.screens.home
+package com.doubtless.doubtless.screens.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,34 +7,27 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.doubtless.databinding.FragmentHomeBinding
+import com.doubtless.doubtless.databinding.FragmentDashboardBinding
 
-class HomeFragment : Fragment() {
+class DashboardFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private var _binding: FragmentDashboardBinding? = null
 
-    private var _binding: FragmentHomeBinding? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        val dashboardViewModel =
+            ViewModelProvider(this).get(DashboardViewModel::class.java)
 
+        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
-        return root
+        return binding.root
     }
 
     override fun onDestroyView() {
