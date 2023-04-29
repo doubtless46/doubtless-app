@@ -11,6 +11,7 @@ import android.view.View
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.doubtless.doubtless.R
+import com.google.android.material.card.MaterialCardView
 
 class RetroLayout constructor(
     context: Context,
@@ -22,6 +23,8 @@ class RetroLayout constructor(
     private val sideShadow: View
     private val bottomShadow: View
 
+    private val isPlainStyled: Boolean
+
     init {
         root = LayoutInflater.from(context).inflate(R.layout.layout_retro, this, true)
         contentContainer = root.findViewById(R.id.cv_content)
@@ -30,6 +33,30 @@ class RetroLayout constructor(
         setCardBackgroundColor(Color.TRANSPARENT)
         cardElevation = 0f
         isClickable = true
+
+        // set attributes
+        val typedArray = context.theme.obtainStyledAttributes(
+            /* set = */ attributeSet,
+            /* attrs = */ R.styleable.RetroLayout,
+            /* defStyleAttr = */ 0,
+            /* defStyleRes = */ 0
+        )
+
+        try {
+            isPlainStyled = typedArray.getBoolean(R.styleable.RetroLayout_isPlainStyled, false)
+        } finally {
+            typedArray.recycle()
+        }
+
+        // set ui properties if plain styled
+        if (isPlainStyled) {
+            sideShadow.setBackgroundColor(Color.BLACK)
+            bottomShadow.setBackgroundColor(Color.BLACK)
+
+            contentContainer.setCardBackgroundColor(resources.getColor(R.color.cream))
+            (contentContainer as MaterialCardView).strokeWidth = resources.getDimension(R.dimen.retro_stroke_width).toInt()
+            contentContainer.strokeColor = Color.BLACK
+        }
     }
 
     private var lastClicked = System.currentTimeMillis()
@@ -57,7 +84,7 @@ class RetroLayout constructor(
             (contentContainer.layoutParams as ConstraintLayout.LayoutParams).setMargins(
                 /* left = */ 0,
                 /* top = */ 0,
-                /* right = */ resources.getDimension(R.dimen.retro_def_space).toInt() - 5,
+                /* right = */ resources.getDimension(R.dimen.retro_def_space).toInt(),
                 /* bottom = */ 0
             )
 
@@ -149,7 +176,7 @@ class RetroLayout constructor(
     private fun animateUp() {
         contentContainer.animate().translationYBy(-(contentDisplacement))
             .translationXBy(-(contentDisplacement))
-            .setDuration(duration)
+            .setDuration(duration - 10)
             .withStartAction {
                 currState = STATE.RELEASING
             }
@@ -160,12 +187,12 @@ class RetroLayout constructor(
             .start()
 
         sideShadow.animate().translationXBy(shadowDisplacement)
-            .translationYBy(shadowDisplacement).setDuration(duration)
+            .translationYBy(shadowDisplacement).setDuration(duration - 10)
             .start()
 
         bottomShadow.animate().translationYBy(shadowDisplacement)
             .translationXBy(shadowDisplacement)
-            .setDuration(duration).start()
+            .setDuration(duration - 10).start()
     }
 
     private val Number.toPx

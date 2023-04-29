@@ -2,20 +2,22 @@ package com.doubtless.doubtless.theming.buttons
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import com.doubtless.doubtless.R
+import com.doubtless.doubtless.main.bottomNav.BottomIntractableElement
 import com.doubtless.doubtless.utils.Utils.dpToPx
 
 class SecondaryButton constructor(
     context: Context,
     attributeSet: AttributeSet?
-) : CardView(context, attributeSet) {
+) : CardView(context, attributeSet), BottomIntractableElement {
 
     private var text = "" // create a separate data class for these.
+
+    private var textView: TextView? = null
 
     init {
         // set attributes
@@ -33,7 +35,7 @@ class SecondaryButton constructor(
         }
 
         // add textview
-        val textView = TextView(context)
+        textView = TextView(context)
         this.addView(textView)
 
         // setup ui properties
@@ -42,13 +44,13 @@ class SecondaryButton constructor(
         this.setCardBackgroundColor(context.resources.getColor(R.color.cream))
         this.foreground = context.resources.getDrawable(R.drawable.seconday_button_border)
 
-        textView.setTextColor(Color.BLACK)
-        textView.text = text
+        textView!!.setTextColor(Color.BLACK)
+        textView!!.text = text
 
-        textView.typeface = resources.getFont(R.font.roboto_medium)
+        textView!!.typeface = resources.getFont(R.font.roboto_medium)
 
         val padding = 8.dpToPx().toInt()
-        textView.setPadding(
+        textView!!.setPadding(
             /* left = */ 14.dpToPx().toInt() + padding,
             /* top = */ padding,
             /* right = */ 14.dpToPx().toInt() + padding,
@@ -57,11 +59,29 @@ class SecondaryButton constructor(
 
         val lp = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         lp.gravity = Gravity.CENTER
-        textView.layoutParams = lp
+        textView!!.layoutParams = lp
 
-        textView.textSize = 18f
+        textView!!.textSize = 18f
 
         // other properties
         isClickable = true
+    }
+
+    // bottom nav interaction
+
+    private var isCurrentlySelected = false
+
+    override fun onSelected() {
+        isCurrentlySelected = true
+        setCardBackgroundColor(resources.getColor(R.color.cream))
+    }
+
+    override fun onUnselected() {
+        setCardBackgroundColor(resources.getColor(R.color.cream))
+        isCurrentlySelected = false
+    }
+
+    override fun onReselected() {
+        /* no-op */
     }
 }

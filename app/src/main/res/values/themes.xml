@@ -2,16 +2,22 @@
     <!-- Base application theme. -->
     <style name="Theme.Doubtless" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/pink</item>
-        <item name="colorPrimaryVariant">@color/pink</item>
+        <item name="colorPrimary">@color/purple</item>
+        <item name="colorPrimaryVariant">@color/purple</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/purple</item>
         <item name="colorSecondaryVariant">@color/purple</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="colorOnSurface">@color/black</item>
-        <item name="android:statusBarColor">@color/black</item>
-        <!-- Customize your theme here. -->
+
+        <!-- set light themed system bars i.e dark icon on white bg -->
+
+        <item name="android:statusBarColor">@color/cream</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">@color/cream</item>
     </style>
 
     <style name="button_text" parent="TextAppearance.AppCompat.Medium">
