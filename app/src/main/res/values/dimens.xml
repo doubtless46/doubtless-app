@@ -2,5 +2,8 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="retro_def_space">8dp</dimen>
+    <dimen name="retro_def_space">6dp</dimen>
+    <dimen name="retro_def_space_added">8dp</dimen> // retro_def_space + abs(retro_def_space_added_value)
+    <dimen name="retro_def_space_added_value">-2dp</dimen>
+    <dimen name="retro_stroke_width">1.5dp</dimen>
 </resources>
