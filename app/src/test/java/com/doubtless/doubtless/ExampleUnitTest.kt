@@ -1,4 +1,4 @@
-package com.example.doubtless
+package com.doubtless.doubtless
 
 import org.junit.Test
 

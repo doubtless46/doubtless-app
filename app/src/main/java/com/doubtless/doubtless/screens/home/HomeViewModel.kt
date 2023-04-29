@@ -1,4 +1,4 @@
-package com.example.doubtless.screens.home
+package com.doubtless.doubtless.screens.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

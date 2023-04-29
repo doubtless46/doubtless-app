@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/cream">
 
-    <com.example.doubtless.theming.buttons.PrimaryButton
+    <com.doubtless.doubtless.theming.buttons.PrimaryButton
         android:id="@+id/primaryBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:text="Yes" />
 
-    <com.example.doubtless.theming.buttons.SecondaryButton
+    <com.doubtless.doubtless.theming.buttons.SecondaryButton
         android:id="@+id/secondayBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
         app:layout_constraintTop_toBottomOf="@id/primaryBtn"
         app:text="No" />
 
-    <com.example.doubtless.theming.retro.RetroLayout
+    <com.doubtless.doubtless.theming.retro.RetroLayout
         android:id="@+id/retro_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -68,6 +68,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.example.doubtless.theming.retro.RetroLayout>
+    </com.doubtless.doubtless.theming.retro.RetroLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

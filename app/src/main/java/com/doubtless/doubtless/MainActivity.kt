@@ -1,15 +1,10 @@
-package com.example.doubtless
+package com.doubtless.doubtless
 
 import android.graphics.Color
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import com.example.doubtless.databinding.ActivityMainBinding
+import com.doubtless.doubtless.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.example.doubtless.utils
+package com.doubtless.doubtless.utils
 
 import android.content.Context
 import android.content.res.Resources

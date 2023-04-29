@@ -1,15 +1,12 @@
-package com.example.doubtless.theming.buttons
+package com.doubtless.doubtless.theming.buttons
 
 import android.content.Context
-import android.content.res.TypedArray
 import android.graphics.Color
-import android.graphics.Typeface
 import android.util.AttributeSet
-import android.widget.Button
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import com.example.doubtless.R
-import com.example.doubtless.utils.Utils.dpToPx
+import com.doubtless.doubtless.R
+import com.doubtless.doubtless.utils.Utils.dpToPx
 
 class PrimaryButton constructor(
     context: Context,

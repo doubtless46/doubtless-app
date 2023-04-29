@@ -1,4 +1,4 @@
-package com.example.doubtless.theming.retro
+package com.doubtless.doubtless.theming.retro
 
 import android.content.Context
 import android.content.res.Resources
@@ -10,7 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.doubtless.R
+import com.doubtless.doubtless.R
 
 class RetroLayout constructor(
     context: Context,
