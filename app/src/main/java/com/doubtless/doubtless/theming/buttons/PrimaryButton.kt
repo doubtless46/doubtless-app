@@ -13,7 +13,7 @@ class PrimaryButton constructor(
     attributeSet: AttributeSet?
 ) : CardView(context, attributeSet) {
 
-    private var text = "" // create a separate data class for these.
+    internal var text = "" // create a separate data class for these.
 
     init {
         // set attributes
