@@ -10,11 +10,13 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat.startActivity
 import com.doubtless.doubtless.theming.retro.RetroLayout
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
@@ -38,56 +40,50 @@ class LoginActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         findViewById<RetroLayout>(R.id.btn_signin).setOnClickListener{
-            signInGoogle()
+
             val progressBar = findViewById<ProgressBar>(R.id.progress)
             progressBar.visibility = View.VISIBLE
+
+            val signInIntent = googleSignInClient.signInIntent
+            startActivityForResult(signInIntent, 1001)
+
+
         }
     }
 
-    private fun signInGoogle(){
-        val signInIntent = googleSignInClient.signInIntent
-        launcher.launch(signInIntent)
-    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        result ->
-            if(result.resultCode == Activity.RESULT_OK){
-                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                handleResults(task)
-            }
+        if (resultCode== 1001){
+
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            val account = task.getResult(ApiException::class.java)!!
+            val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+            mAuth.signInWithCredential(credential)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful){
+                        val i = Intent(this, MainActivity::class.java)
+                        startActivity(i)
 
 
-    }
+                    }else{
+                        Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT).show()
+                    }
 
-    private fun handleResults(task: Task<GoogleSignInAccount>) {
-
-        if (task.isSuccessful){
-            val account: GoogleSignInAccount? = task.result
-            if (account!=null){
-                Log.i("Hello", "Handle result ok")
-                updateUI(account)
-            }
-
-        }else{
-            Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT).show()
+                }
         }
 
     }
 
-    private fun updateUI(account: GoogleSignInAccount) {
-        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-        mAuth.signInWithCredential(credential).addOnCompleteListener {
-            if (it.isSuccessful){
-                val intent = Intent(this, MainActivity::class.java)
-                //intent.putExtra("email", account.email)
-                //intent.putExtra("name", account.displayName)
-                startActivity(intent)
-                //finish()
+    override fun onStart() {
+        super.onStart()
+        if (mAuth.currentUser !=null){
+            val i = Intent(this, MainActivity::class.java)
+            //intent.putExtra("email", account.email)
+            //intent.putExtra("name", account.displayName)
+            startActivity(i)
 
-            }else{
-                Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
-            }
         }
-
     }
+
 }
