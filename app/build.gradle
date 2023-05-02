@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace 'com.doubtless.doubtless'
-    compileSdk 33
+    compileSdk 31
 
     defaultConfig {
         applicationId "com.doubtless.doubtless"
         minSdk 28
-        targetSdk 33
+        targetSdk 31
         versionCode 1
         versionName "1.0"
 
@@ -34,7 +34,6 @@ android {
     buildFeatures {
         viewBinding true
     }
-    buildToolsVersion '33.0.2'
 }
 
 dependencies {
@@ -55,7 +54,6 @@ dependencies {
     // firebase
     implementation platform('com.google.firebase:firebase-bom:31.5.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
 

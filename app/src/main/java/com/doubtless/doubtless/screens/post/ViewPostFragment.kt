@@ -1,32 +1,38 @@
 package com.doubtless.doubtless.screens.post
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.doubtless.doubtless.R
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.doubtless.doubtless.databinding.FragmentViewPostBinding
 
 class ViewPostFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = ViewPostFragment()
-    }
-
+    private var _binding: FragmentViewPostBinding? = null
+    private val binding get() = _binding!!
     private lateinit var viewModel: ViewPostViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_view_post, container, false)
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        viewModel = ViewModelProvider(this)[ViewPostViewModel::class.java]
+        _binding = FragmentViewPostBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ViewPostViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.allPosts.observe(viewLifecycleOwner) {
+            binding.postsRecyclerView.adapter = ViewPostAdapter(it)
+            binding.postsRecyclerView.layoutManager = LinearLayoutManager(context)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

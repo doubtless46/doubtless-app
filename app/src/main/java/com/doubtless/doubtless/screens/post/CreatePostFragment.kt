@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.doubtless.doubtless.databinding.FragmentCreatePostBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -23,7 +22,6 @@ class CreatePostFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val createPostViewModel = ViewModelProvider(this)[CreatePostViewModel::class.java]
         _binding = FragmentCreatePostBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -31,21 +29,25 @@ class CreatePostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.postButton.setOnClickListener {
-            Toast.makeText(context, binding.postContent.text, Toast.LENGTH_SHORT).show()
-            createPost(binding.postContent.text.toString())
+            createPost(
+                binding.postDoubt.text.toString(),
+                binding.postHeading.text.toString(),
+                binding.postDescription.text.toString()
+            )
         }
     }
 
-    private fun createPost(text: String) {
+    private fun createPost(doubt: String, heading: String, description: String) {
         val post = hashMapOf(
-            "Question" to text,
-            "Time" to Date(),
-            "User" to "Aditya",
-            "UserUid" to "EDF90KLJFLKAUKLF"
+            "doubt" to doubt,
+            "heading" to heading,
+            "description" to description,
+            "date" to Date(),
+            "username" to "Aditya",
+            "uid" to "EDF90KLJFLKAUKLF"
         )
         db = Firebase.firestore
-
-        db.collection("posts").add(post).addOnSuccessListener {
+        db.collection("AllPosts").add(post).addOnSuccessListener {
             Toast.makeText(context, "Post Created", Toast.LENGTH_SHORT).show()
         }.addOnFailureListener {
             Toast.makeText(context, "Post Failed ${it.message}", Toast.LENGTH_SHORT).show()
