@@ -26,8 +26,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
 
-    private lateinit var progressBar: ProgressBar
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -43,11 +41,11 @@ class LoginActivity : AppCompatActivity() {
 
         findViewById<RetroLayout>(R.id.btn_signin).setOnClickListener{
 
-            progressBar = findViewById(R.id.progress)
+            val progressBar = findViewById<ProgressBar>(R.id.progress)
             progressBar.visibility = View.VISIBLE
 
-            val intent = googleSignInClient.signInIntent
-            startActivityForResult(intent, 1001)
+            val signInIntent = googleSignInClient.signInIntent
+            startActivityForResult(signInIntent, 1001)
 
 
         }
@@ -56,10 +54,10 @@ class LoginActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode== 1001){
+        if (resultCode== 1001){
 
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            val account = task.getResult(ApiException::class.java)
+            val account = task.getResult(ApiException::class.java)!!
             val credential = GoogleAuthProvider.getCredential(account.idToken, null)
             mAuth.signInWithCredential(credential)
                 .addOnCompleteListener { task ->
@@ -67,8 +65,6 @@ class LoginActivity : AppCompatActivity() {
                         val i = Intent(this, MainActivity::class.java)
                         startActivity(i)
 
-                        progressBar = findViewById(R.id.progress)
-                        progressBar.visibility = View.GONE
 
                     }else{
                         Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT).show()
@@ -78,4 +74,16 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onStart() {
+        super.onStart()
+        if (mAuth.currentUser !=null){
+            val i = Intent(this, MainActivity::class.java)
+            //intent.putExtra("email", account.email)
+            //intent.putExtra("name", account.displayName)
+            startActivity(i)
+
+        }
+    }
+
 }
