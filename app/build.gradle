@@ -54,9 +54,6 @@ dependencies {
     // firebase
     implementation platform('com.google.firebase:firebase-bom:31.5.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-auth:21.0.8'
-    implementation 'com.google.firebase:firebase-auth-ktx:21.3.0'
-    implementation 'com.google.android.gms:play-services-auth:20.5.0'
 
 
     testImplementation 'junit:junit:4.13.2'
