@@ -13,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
@@ -31,10 +32,9 @@ class LoginActivity : AppCompatActivity() {
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        findViewById<RetroLayout>(R.id.btn_signin).setOnClickListener{
+        btn_signin.setOnClickListener{
 
-            progressBar = findViewById(R.id.progress)
-            progressBar.visibility = View.VISIBLE
+            progress.visibility = View.VISIBLE
             val intent = googleSignInClient.signInIntent
             startActivityForResult(intent, 1001)
 
@@ -52,11 +52,9 @@ class LoginActivity : AppCompatActivity() {
                 mAuth.signInWithCredential(credential)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful){
-                            val i = Intent(this, MainActivity::class.java)
+                            val i = Intent(this, ProfileActivity::class.java)
                             startActivity(i)
-
-                            progressBar = findViewById(R.id.progress)
-                            progressBar.visibility = View.GONE
+                            progress.visibility = View.GONE
 
                         }else{
                             Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT).show()
