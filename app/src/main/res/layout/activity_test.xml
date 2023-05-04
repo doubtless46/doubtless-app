@@ -7,9 +7,9 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment"
-        android:name="com.doubtless.doubtless.screens.post.ViewPostFragment"
+        android:name="com.doubtless.doubtless.screens.doubt.ViewDoubtsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_view_post" />
+        tools:layout="@layout/fragment_view_doubts" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
