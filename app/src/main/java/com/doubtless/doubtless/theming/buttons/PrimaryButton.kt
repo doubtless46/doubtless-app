@@ -3,6 +3,7 @@ package com.doubtless.doubtless.theming.buttons
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
+import android.view.Gravity
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import com.doubtless.doubtless.R
@@ -51,7 +52,9 @@ class PrimaryButton constructor(
             /* right = */ 14.dpToPx().toInt() + padding,
             /* bottom = */ padding
         )
-        textView.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        textView.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+            this.gravity = Gravity.CENTER
+        }
         textView.textSize = 18f
 
         // other properties
