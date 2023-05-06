@@ -1,4 +1,4 @@
-package com.doubtless.doubtless.screens.doubt
+package com.doubtless.doubtless.screens.viewDoubt
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ServerTimestamp

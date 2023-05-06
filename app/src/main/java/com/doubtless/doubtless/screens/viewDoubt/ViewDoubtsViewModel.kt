@@ -1,4 +1,4 @@
-package com.doubtless.doubtless.screens.doubt
+package com.doubtless.doubtless.screens.viewDoubt
 
 import androidx.lifecycle.*
 import com.doubtless.doubtless.analytics.AnalyticsTracker
