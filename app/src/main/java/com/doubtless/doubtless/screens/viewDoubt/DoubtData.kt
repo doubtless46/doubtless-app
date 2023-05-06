@@ -1,4 +1,4 @@
-package com.doubtless.doubtless.screens.doubt
+package com.doubtless.doubtless.screens.viewDoubt
 
 data class DoubtData(
     var id: String,

@@ -1,4 +1,4 @@
-package com.doubtless.doubtless.screens.doubt
+package com.doubtless.doubtless.screens.viewDoubt
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.doubtless.doubtless.databinding.FragmentViewDoubtsBinding
-import com.doubtless.doubtless.screens.adapters.ViewDoubtsAdapter
+import com.doubtless.doubtless.screens.viewDoubt.adapters.ViewDoubtsAdapter
 
 class ViewDoubtsFragment : Fragment() {
     private var _binding: FragmentViewDoubtsBinding? = null

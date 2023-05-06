@@ -32,6 +32,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            app:text="Post" />
+
+        <com.doubtless.doubtless.theming.buttons.SecondaryButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             app:text="Profile" />
 
     </com.doubtless.doubtless.main.bottomNav.RetroBottomNav>

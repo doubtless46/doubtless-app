@@ -9,6 +9,7 @@ import com.doubtless.doubtless.R
 import com.doubtless.doubtless.databinding.FragmentMainBinding
 import com.doubtless.doubtless.main.bottomNav.OnSelectedItemChangedListener
 import com.doubtless.doubtless.screens.dashboard.DashboardFragment
+import com.doubtless.doubtless.screens.createDoubt.CreateDoubtFragment
 import com.doubtless.doubtless.screens.home.HomeFragment
 
 class MainFragment : Fragment() {
@@ -16,7 +17,7 @@ class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
-    private val bottomNavFragments = listOf(HomeFragment(), DashboardFragment())
+    private val bottomNavFragments = listOf(HomeFragment(), CreateDoubtFragment(), DashboardFragment())
 
     private var areBottomNavFragmentsAdded = false
 

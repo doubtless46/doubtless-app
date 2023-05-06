@@ -1,18 +1,17 @@
-package com.doubtless.doubtless.screens.doubt
+package com.doubtless.doubtless.screens.createDoubt
 
 import android.app.AlertDialog
-import android.content.Context
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.doubtless.doubtless.databinding.FragmentCreateDoubtBinding
+import com.doubtless.doubtless.utils.Utils.showKeyboard
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -37,8 +36,7 @@ class CreateDoubtFragment : Fragment() {
 
         binding.doubtHeading.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_MULTI_LINE)
         binding.doubtHeading.requestFocus()
-        val mgr = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        mgr.showSoftInput(binding.doubtHeading, InputMethodManager.SHOW_FORCED)
+        showKeyboard(context, binding.doubtHeading)
 
         binding.postButton.setOnClickListener {
             if (!isButtonClicked) {
@@ -47,10 +45,6 @@ class CreateDoubtFragment : Fragment() {
         }
 
         requireActivity().onBackPressedDispatcher.addCallback {
-            handleBackPress()
-        }
-
-        binding.close.setOnClickListener {
             handleBackPress()
         }
 
@@ -97,7 +91,7 @@ class CreateDoubtFragment : Fragment() {
             "heading" to heading,
             "description" to description,
             "date" to Date(),
-            "uid" to "EDF90KLJFLKAUKLF",
+            "uid" to "GJGJHFHFHHVY",
             "upVotes" to listOf<String>(),
             "downVotes" to listOf<String>(),
             "answersIds" to listOf<String>()

@@ -1,4 +1,4 @@
-package com.doubtless.doubtless.screens.adapters
+package com.doubtless.doubtless.screens.viewDoubt.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +7,9 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.doubtless.doubtless.R
-import com.doubtless.doubtless.screens.doubt.DoubtData
+import com.doubtless.doubtless.screens.viewDoubt.DoubtData
+import com.doubtless.doubtless.screens.viewDoubt.useCases.UpvoteDownvoteUseCase.Companion.downvote
+import com.doubtless.doubtless.screens.viewDoubt.useCases.UpvoteDownvoteUseCase.Companion.upvote
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -57,51 +59,13 @@ class ViewDoubtsAdapter(private val allDoubts: ArrayList<DoubtData>) :
 
         val doubt = allDoubts[position]
         holder.upvote.setOnClickListener {
-            db.collection("AllDoubts").document(doubt.id).get().addOnSuccessListener {
-                val upVoters = it.get("upVotes") as MutableList<String>
-                val downVoters = it.get("downVotes") as MutableList<String>
-                val currUserUid = "FLKSJD3298UJFS"
-                if (!upVoters.contains(currUserUid)) {
-                    if (downVoters.contains(currUserUid)) {
-                        downVoters.remove(currUserUid)
-                    }
-                    upVoters.add(currUserUid)
-
-                } else {
-                    upVoters.remove(currUserUid)
-                }
-                db.collection("AllDoubts").document(doubt.id).update(
-                    mapOf(
-                        "upVotes" to upVoters, "downVotes" to downVoters
-                    )
-                ).addOnSuccessListener {
-                    holder.voteCount.text = (upVoters.size - downVoters.size).toString()
-                }
-            }
+            upvote(db, doubt.id, holder.voteCount)
         }
         holder.downvote.setOnClickListener {
-            db.collection("AllDoubts").document(doubt.id).get().addOnSuccessListener {
-                val downVoters = it.get("downVotes") as MutableList<String>
-                val upVoters = it.get("upVotes") as MutableList<String>
-                val currUserUid = "FLKSJD3298UJFS"
-                if (!downVoters.contains(currUserUid)) {
-                    if (upVoters.contains(currUserUid)) {
-                        upVoters.remove(currUserUid)
-                    }
-                    downVoters.add(currUserUid)
-                } else {
-                    downVoters.remove(currUserUid)
-                }
-                db.collection("AllDoubts").document(doubt.id).update(
-                    mapOf(
-                        "upVotes" to upVoters, "downVotes" to downVoters
-                    )
-                ).addOnSuccessListener {
-                    holder.voteCount.text = (upVoters.size - downVoters.size).toString()
-                }
-            }
+            downvote(db, doubt.id, holder.voteCount)
         }
 
-
     }
+
+
 }

@@ -6,19 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".screens.doubt.CreateDoubtFragment">
-
-    <ImageView
-        android:id="@+id/close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:minWidth="35dp"
-        android:minHeight="35dp"
-        android:src="@drawable/ic_close"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription,HardcodedText" />
+    tools:context=".screens.createDoubt.CreateDoubtFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -29,7 +17,7 @@
         app:layout_constraintBottom_toTopOf="@+id/post_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/close">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -96,6 +84,7 @@
                 android:padding="12dp"
                 android:paddingEnd="0dp"
                 android:text="Post"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -109,7 +98,7 @@
                 android:layout_marginStart="6dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
-                android:indeterminateTint="@color/black"
+                android:indeterminateTint="@color/white"
                 android:paddingEnd="0dp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"

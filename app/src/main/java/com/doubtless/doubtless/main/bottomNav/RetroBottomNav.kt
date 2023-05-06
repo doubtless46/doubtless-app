@@ -78,13 +78,13 @@ class RetroBottomNav(
     }
 
     private fun performUiUpdateOnIndexSelection(selectedIndex: Int) {
-        (elements[selectedIndex] as View).layoutParams =
-            LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f)
+//        (elements[selectedIndex] as View).layoutParams =
+//            LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f)
     }
 
     private fun performUiUpdateOnIndexUnSelection(element: BottomIntractableElement) {
-        (element as View).layoutParams =
-            LayoutParams(0, LayoutParams.WRAP_CONTENT, 0.5f)
+//        (element as View).layoutParams =
+//            LayoutParams(0, LayoutParams.WRAP_CONTENT, 0.5f)
     }
 
     private fun findBottomNavElements(): List<BottomIntractableElement> {
