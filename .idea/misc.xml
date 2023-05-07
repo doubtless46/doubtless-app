@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.171" />
+        <entry key="app/src/main/res/drawable/circular_image_frame.xml" value="0.1855" />
+        <entry key="app/src/main/res/drawable/ic_cancel.xml" value="0.1855" />
         <entry key="app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.171" />
         <entry key="app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.171" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.171" />
@@ -12,7 +14,8 @@
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.24375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_profile.xml" value="1.0" />
-        <entry key="app/src/main/res/layout/activity_profile2.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_profile2.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/doubt_item.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.2013681060282172" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.2013681060282172" />
         <entry key="app/src/main/res/layout/hello.xml" value="0.20051303976058144" />
