@@ -13,7 +13,7 @@ import com.doubtless.doubtless.utils.Utils.dpToPx
 class SecondaryButton constructor(
     context: Context,
     attributeSet: AttributeSet?
-) : CardView(context, attributeSet), BottomIntractableElement {
+) : CardView(context, attributeSet) {
 
     private var text = "" // create a separate data class for these.
 
@@ -42,7 +42,7 @@ class SecondaryButton constructor(
         this.radius = 0.dpToPx() // fully rounded
         this.cardElevation = 0f
         this.setCardBackgroundColor(context.resources.getColor(R.color.cream))
-        this.foreground = context.resources.getDrawable(R.drawable.seconday_button_border)
+        this.foreground = context.resources.getDrawable(R.drawable.rect_border)
 
         textView!!.setTextColor(Color.BLACK)
         textView!!.text = text
@@ -65,23 +65,5 @@ class SecondaryButton constructor(
 
         // other properties
         isClickable = true
-    }
-
-    // bottom nav interaction
-
-    private var isCurrentlySelected = false
-
-    override fun onSelected() {
-        isCurrentlySelected = true
-        setCardBackgroundColor(resources.getColor(R.color.cream))
-    }
-
-    override fun onUnselected() {
-        setCardBackgroundColor(resources.getColor(R.color.cream))
-        isCurrentlySelected = false
-    }
-
-    override fun onReselected() {
-        /* no-op */
     }
 }
