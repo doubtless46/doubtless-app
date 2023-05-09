@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_medium"
                 android:text="50K"
-                android:textColor="@color/purple2"
+                android:textColor="@color/purple"
                 android:textSize="8sp"
                 app:layout_constraintStart_toEndOf="@+id/tv_reputation"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name_user" />
@@ -99,7 +99,7 @@
                 android:layout_width="2dp"
                 android:layout_height="37dp"
                 android:layout_marginStart="18dp"
-                android:background="@color/purple2"
+                android:background="@color/purple"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_doubt_question"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_doubt_question" />
@@ -151,7 +151,7 @@
                     android:fontFamily="@font/poppins_bold"
                     android:padding="4dp"
                     android:text="Answer"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/white" />
             </com.doubtless.doubtless.theming.retro.RetroLayout>
 
             <TextView

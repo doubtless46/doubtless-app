@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.doubtless.doubtless.databinding.ActivityLoginBinding
+import com.doubtless.doubtless.main.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -55,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
                 mAuth.signInWithCredential(credential)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful){
-                            val i = Intent(this, ProfileActivity::class.java)
+                            val i = Intent(this, MainActivity::class.java)
                             startActivity(i)
                             binding.progress.visibility = View.GONE
 
