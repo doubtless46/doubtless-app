@@ -8,8 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.viewDoubt.DoubtData
-import com.doubtless.doubtless.screens.viewDoubt.useCases.UpvoteDownvoteUseCase.Companion.downvote
-import com.doubtless.doubtless.screens.viewDoubt.useCases.UpvoteDownvoteUseCase.Companion.upvote
+import com.doubtless.doubtless.screens.viewDoubt.useCases.UpvoteDownvoteUseCase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -56,13 +55,14 @@ class ViewDoubtsAdapter(private val allDoubts: ArrayList<DoubtData>) :
         holder.description.text = allDoubts[position].description
         holder.voteCount.text =
             (allDoubts[position].upVotes - allDoubts[position].downVotes).toString()
-
         val doubt = allDoubts[position]
+
+        val upvoteAndDownvoteUseCase = UpvoteDownvoteUseCase()
         holder.upvote.setOnClickListener {
-            upvote(db, doubt.id, holder.voteCount)
+            upvoteAndDownvoteUseCase.upvote(db, doubt.id, holder.voteCount)
         }
         holder.downvote.setOnClickListener {
-            downvote(db, doubt.id, holder.voteCount)
+            upvoteAndDownvoteUseCase.downvote(db, doubt.id, holder.voteCount)
         }
 
     }
