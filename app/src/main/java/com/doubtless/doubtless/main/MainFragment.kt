@@ -16,7 +16,8 @@ class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
-    private val bottomNavFragments = listOf(HomeFragment(), DashboardFragment())
+    private val bottomNavFragments =
+        listOf(HomeFragment(), DashboardFragment(), DashboardFragment())
 
     private var areBottomNavFragmentsAdded = false
 
@@ -34,10 +35,13 @@ class MainFragment : Fragment() {
                 // add fragments to fm if not already given this callback
                 // gets triggered for initial default element selection.
                 if (!areBottomNavFragmentsAdded) {
-                    childFragmentManager.beginTransaction()
-                        .add(R.id.bottom_nav_fragment_container, bottomNavFragments[0])
-                        .add(R.id.bottom_nav_fragment_container, bottomNavFragments[1])
-                        .commit()
+                    val transaction = childFragmentManager.beginTransaction()
+
+                    bottomNavFragments.forEach {
+                        transaction.add(R.id.bottom_nav_fragment_container, it)
+                    }
+
+                    transaction.commit()
 
                     areBottomNavFragmentsAdded = true
                 }

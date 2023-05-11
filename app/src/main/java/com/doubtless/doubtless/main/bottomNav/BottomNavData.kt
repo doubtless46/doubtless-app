@@ -14,5 +14,4 @@ interface OnSelectedItemChangedListener {
 interface BottomIntractableElement {
     fun onSelected()
     fun onUnselected()
-    fun onReselected()
 }

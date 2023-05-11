@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.doubtless.doubtless.R
 import com.google.android.material.card.MaterialCardView
 
-class RetroLayout constructor(
+open class RetroLayout constructor(
     context: Context,
     attributeSet: AttributeSet?
 ) : CardView(context, attributeSet) {
@@ -54,7 +54,8 @@ class RetroLayout constructor(
             bottomShadow.setBackgroundColor(Color.BLACK)
 
             contentContainer.setCardBackgroundColor(resources.getColor(R.color.cream))
-            (contentContainer as MaterialCardView).strokeWidth = resources.getDimension(R.dimen.retro_stroke_width).toInt()
+            (contentContainer as MaterialCardView).strokeWidth =
+                resources.getDimension(R.dimen.retro_stroke_width).toInt()
             contentContainer.strokeColor = Color.BLACK
         }
     }
@@ -95,11 +96,13 @@ class RetroLayout constructor(
 
     private var animUpUnconsumed = false
 
-    enum class STATE {
+    protected enum class STATE {
         PRESSING, PRESSED, RELEASING, RELEASED
     }
 
     private var currState: STATE = STATE.RELEASED
+
+    protected var shouldPerformUpAnimationWhenReleased = true
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
 
@@ -119,11 +122,23 @@ class RetroLayout constructor(
             MotionEvent.ACTION_UP -> {
 
                 if (currState == STATE.PRESSING) {
+                    performClick()
+
+                    // inheriting class bottom nav element sets this false in order to never animate up when released.
+                    if (!shouldPerformUpAnimationWhenReleased)
+                        return true
+
                     animUpUnconsumed = true
-                    performClick()
+
                 } else if (currState == STATE.PRESSED) {
-                    animateUp()
                     performClick()
+
+                    // inheriting class bottom nav element sets this false in order to never animate up when released.
+                    if (!shouldPerformUpAnimationWhenReleased)
+                        return true
+
+                    animUpUnconsumed = true
+                    animateUp()
                 }
 
                 return true
@@ -150,7 +165,7 @@ class RetroLayout constructor(
     private val contentDisplacement = 2 * space / 3
     private val shadowDisplacement = space / 3
 
-    private fun animateDown() {
+    protected fun animateDown() {
         contentContainer.animate().translationXBy(contentDisplacement)
             .translationYBy(contentDisplacement)
             .setDuration(duration)
@@ -173,7 +188,7 @@ class RetroLayout constructor(
             .setDuration(duration).start()
     }
 
-    private fun animateUp() {
+    protected fun animateUp() {
         contentContainer.animate().translationYBy(-(contentDisplacement))
             .translationXBy(-(contentDisplacement))
             .setDuration(duration - 10)
