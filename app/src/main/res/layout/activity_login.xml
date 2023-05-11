@@ -26,14 +26,13 @@
                 android:id="@+id/iv_google"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_marginStart="36dp"
+                app:layout_constraintEnd_toStartOf="@id/retro_text"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/google_image_removebg" />
 
             <TextView
-                android:id="@+id/retor_text"
+                android:id="@+id/retro_text"
                 style="@style/button_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -42,9 +41,8 @@
                 android:text="Login"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.317"
-                app:layout_constraintStart_toEndOf="@+id/iv_google"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
 
@@ -55,11 +53,11 @@
                 android:layout_marginStart="6dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
-                android:indeterminateTint="@color/black"
+                android:indeterminateTint="@color/white"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintStart_toEndOf="@id/retor_text"
+                app:layout_constraintStart_toEndOf="@id/retro_text"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
