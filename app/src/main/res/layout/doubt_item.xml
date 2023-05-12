@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:foreground="@drawable/seconday_button_border"
     android:layout_margin="4dp"
+    android:foreground="@drawable/doubt_item_border"
     >
 
 
@@ -126,13 +126,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="18dp"
-                app:layout_constraintBottom_toTopOf="@+id/retroLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/tv_doubt_question"
                 app:layout_constraintTop_toBottomOf="@+id/tv_doubt_question"
-                app:layout_constraintVertical_bias="0.0"
-                android:layout_marginBottom="8dp"
                 tools:text="MSIT, or Master of Science in Information Technology, is a graduate program offered by various universities and institutions around the world." />
 
             <com.doubtless.doubtless.theming.retro.RetroLayout
@@ -167,6 +164,47 @@
                 app:layout_constraintStart_toEndOf="@+id/retroLayout"
                 app:layout_constraintTop_toTopOf="@+id/retroLayout"
                 app:layout_constraintVertical_bias="0.409" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/retroLayout"
+                app:layout_constraintStart_toStartOf="@+id/tv_doubt_answer"
+                app:layout_constraintTop_toBottomOf="@+id/tv_doubt_answer">
+
+                <ImageButton
+                    android:id="@+id/upvote_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="UpvoteButton"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_upvote"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <TextView
+                    android:id="@+id/vote_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <ImageButton
+                    android:id="@+id/downvote_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="DownvoteButton"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_downvote"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
