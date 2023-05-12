@@ -71,6 +71,7 @@ class LoginActivity : AppCompatActivity() {
                         val i = Intent(this, MainActivity::class.java)
                         startActivity(i)
                         binding.progress.visibility = View.GONE
+                        finish()
 
                     } else {
                         Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT)
