@@ -1,4 +1,4 @@
-package com.doubtless.doubtless.main.bottomNav
+package com.doubtless.doubtless.screens.main.bottomNav
 
 object BottomNavMenu {
     const val defaultSelectedIndex = 0

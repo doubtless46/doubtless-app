@@ -7,7 +7,7 @@ import android.view.Gravity
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import com.doubtless.doubtless.R
-import com.doubtless.doubtless.main.bottomNav.BottomIntractableElement
+import com.doubtless.doubtless.screens.main.bottomNav.BottomIntractableElement
 import com.doubtless.doubtless.utils.Utils.dpToPx
 
 class SecondaryButton constructor(

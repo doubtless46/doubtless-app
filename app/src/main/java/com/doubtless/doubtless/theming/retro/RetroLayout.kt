@@ -209,12 +209,4 @@ open class RetroLayout constructor(
             .translationXBy(shadowDisplacement)
             .setDuration(duration - 10).start()
     }
-
-    private val Number.toPx
-        get() = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            this.toFloat(),
-            Resources.getSystem().displayMetrics
-        )
-
 }
