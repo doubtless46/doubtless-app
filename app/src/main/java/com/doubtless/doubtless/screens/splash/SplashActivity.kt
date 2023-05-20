@@ -3,8 +3,8 @@ package com.doubtless.doubtless.screens.splash
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
-import com.doubtless.doubtless.utils.anims.animateFadeDown
 import com.doubtless.doubtless.utils.anims.animateFadeUp
 import kotlinx.coroutines.*
 
@@ -17,8 +17,16 @@ class SplashActivity : AppCompatActivity() {
             val view = findViewById<TextView>(R.id.tv_title)
             delay(200L)
             view.animateFadeUp(800L)
-            delay(1600L)
-            view.animateFadeDown(800L)
+
+            val userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
+
+            if (userManager.getLoggedInUser() != null) {
+                DoubtlessApp.getInstance().getAppCompRoot().router.moveToMainActivity(this@SplashActivity)
+                finish()
+            } else {
+                DoubtlessApp.getInstance().getAppCompRoot().router.moveToLoginActivity(this@SplashActivity)
+                finish()
+            }
         }
     }
 }
