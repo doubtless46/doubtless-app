@@ -1,4 +1,4 @@
-package com.doubtless.doubtless.main.bottomNav
+package com.doubtless.doubtless.screens.main.bottomNav
 
 import android.content.Context
 import android.os.Bundle

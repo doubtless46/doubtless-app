@@ -1,21 +1,28 @@
-package com.doubtless.doubtless
+package com.doubtless.doubtless.screens.auth
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.app.AppCompatActivity
+import com.doubtless.doubtless.DoubtlessApp
+import com.doubtless.doubtless.R
 import com.doubtless.doubtless.databinding.ActivityLoginBinding
-import com.doubtless.doubtless.main.MainActivity
+import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.*
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
@@ -32,19 +39,18 @@ class LoginActivity : AppCompatActivity() {
         setContentView(view)
 
         mAuth = FirebaseAuth.getInstance()
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
+
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         binding.btnSignin.setOnClickListener {
-
             binding.progress.visibility = View.VISIBLE
             val intent = googleSignInClient.signInIntent
             startActivityForResult(intent, 1001)
-
-
         }
     }
 
@@ -63,29 +69,56 @@ class LoginActivity : AppCompatActivity() {
                 return
             }
 
-
             val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+
             mAuth.signInWithCredential(credential)
                 .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val i = Intent(this, MainActivity::class.java)
-                        startActivity(i)
-                        binding.progress.visibility = View.GONE
-                        finish()
-
+                    if (task.isSuccessful && task.result.user != null) {
+                        onAuthSuccess(task)
                     } else {
-                        Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT)
-                            .show()
-                        binding.progress.visibility = View.GONE
+                        onError(task.exception?.message ?: "some error occurred")
                     }
                 }
-
         }
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+    private fun onAuthSuccess(task: Task<AuthResult>) {
+        // notify login to user manager
+        val serverUser = task.result.user!!
+
+        val userManager =
+            DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
+
+        CoroutineScope(Dispatchers.Main).launch {
+
+            val result = withContext(Dispatchers.IO) {
+                userManager.registerAndGetIfNewUserSync(serverUser)
+            }
+
+            if (this@LoginActivity.isDestroyed) return@launch
+
+            if (result is UserManager.Result.Error) {
+                Toast.makeText(this@LoginActivity, result.message, Toast.LENGTH_SHORT).show()
+                binding.progress.visibility = View.GONE
+                return@launch
+            }
+
+            val isNewUser = (result as UserManager.Result.Success).isNewUser
+
+            if (isNewUser == false) {
+                DoubtlessApp.getInstance().getAppCompRoot().router.moveToMainActivity(this@LoginActivity)
+            } else {
+                DoubtlessApp.getInstance().getAppCompRoot().router.moveToOnBoardingActivity(this@LoginActivity)
+            }
+
+            finish()
+        }
+    }
+
+    private fun onError(s: String) {
+        Toast.makeText(this, s, Toast.LENGTH_SHORT)
+            .show()
+        binding.progress.visibility = View.GONE
     }
 }

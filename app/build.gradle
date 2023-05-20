@@ -61,6 +61,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx:21.3.0'
     implementation 'com.google.android.gms:play-services-auth:20.5.0'
 
+    implementation 'com.google.code.gson:gson:2.10.1'
+
     // analytics
     implementation 'com.amplitude:analytics-android:1.+' // works with .+ and not 1.0 :/
 

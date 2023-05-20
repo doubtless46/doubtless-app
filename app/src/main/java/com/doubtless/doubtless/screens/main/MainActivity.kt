@@ -1,4 +1,4 @@
-package com.doubtless.doubtless.main
+package com.doubtless.doubtless.screens.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

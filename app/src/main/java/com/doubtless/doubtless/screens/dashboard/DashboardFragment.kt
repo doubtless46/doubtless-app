@@ -1,20 +1,26 @@
 package com.doubtless.doubtless.screens.dashboard
 
-import android.accounts.NetworkErrorException
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.doubtless.doubtless.LoginActivity
+import com.doubtless.doubtless.DoubtlessApp
+import com.doubtless.doubtless.screens.auth.LoginActivity
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.databinding.FragmentDashboardBinding
+import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DashboardFragment : Fragment() {
     private lateinit var mAuth: FirebaseAuth
@@ -30,9 +36,6 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
-
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
         mAuth = FirebaseAuth.getInstance()
@@ -42,16 +45,28 @@ class DashboardFragment : Fragment() {
 
         binding.btnSignout.setOnClickListener {
 
-            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
+            CoroutineScope(Dispatchers.Main).launch {
+                val result = withContext(Dispatchers.IO) {
+                    DoubtlessApp.getInstance().getAppCompRoot().getUserManager().onUserLogoutSync()
+                }
 
-            val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-            googleSignInClient.signOut()
-            startActivity(Intent(context, LoginActivity::class.java))
-            activity?.finish()
-            //sign out process doesn't require any internet
+                if (!isAdded) return@launch
+
+                if (result is UserManager.Result.LoggedOut) {
+
+                    DoubtlessApp.getInstance().getAppCompRoot().router.moveToLoginActivity(requireActivity())
+                    requireActivity().finish()
+
+                } else if (result is UserManager.Result.Error) {
+
+                    Toast.makeText(
+                        this@DashboardFragment.requireContext(),
+                        result.message,
+                        Toast.LENGTH_LONG
+                    ).show() // encapsulate error ui handling
+
+                }
+            }
         }
 
         return binding.root

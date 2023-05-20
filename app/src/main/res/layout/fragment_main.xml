@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cream"
-    tools:context=".main.MainFragment">
+    tools:context=".screens.main.MainFragment">
 
     <FrameLayout
         android:id="@+id/bottom_nav_fragment_container"
@@ -14,7 +14,7 @@
         app:layout_constraintBottom_toTopOf="@id/retro_bottom_nav"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.doubtless.doubtless.main.bottomNav.RetroBottomNav
+    <com.doubtless.doubtless.screens.main.bottomNav.RetroBottomNav
         android:id="@+id/retro_bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -134,6 +134,6 @@
             </LinearLayout>
         </com.doubtless.doubtless.theming.buttons.RetroBottomNavElementLayout>
 
-    </com.doubtless.doubtless.main.bottomNav.RetroBottomNav>
+    </com.doubtless.doubtless.screens.main.bottomNav.RetroBottomNav>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
