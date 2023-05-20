@@ -104,7 +104,7 @@ class CreateDoubtFragment : Fragment() {
         )
         db = Firebase.firestore
         db.collection("AllDoubts").add(doubt).addOnSuccessListener {
-            requireActivity().finish()
+           // requireActivity().finish()
         }.addOnFailureListener {
             Toast.makeText(context, "Failed to Post ${it.message}", Toast.LENGTH_SHORT).show()
         }
