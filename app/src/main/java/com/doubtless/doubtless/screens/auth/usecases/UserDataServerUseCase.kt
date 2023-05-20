@@ -42,7 +42,6 @@ class UserDataServerUseCase constructor(
 
             if (it.documents.size == 0) {
                 isNew = true
-                Log.d("user store", "45")
                 latch.countDown()
                 return@addOnSuccessListener
             }
@@ -53,25 +52,17 @@ class UserDataServerUseCase constructor(
 
             latch.countDown()
 
-            Log.d("user store", "56")
-
         }.addOnFailureListener {
             errorMessage = it.message
-            Log.d("user store", "57")
             latch.countDown()
         }
 
-        Log.d("user store", "60")
-
         latch.await(20, TimeUnit.SECONDS)
-
-        Log.d("user store", "62")
 
         if (errorMessage != null)
             return Result.Error(errorMessage!!)
 
         if (!isNew) {
-            Log.d("user store", "66")
             return Result.OldUser(serverUser!!)
         }
 

@@ -26,9 +26,7 @@ class UserDataStorageUseCase constructor(
         sharedPreferences.edit().apply {
             val userString = gson.toJson(user)
             this.putString(USER_KEY, userString)
-            Log.d("user store", userString)
             apply()
-            Log.d("user store", "applied")
         }
     }
 
