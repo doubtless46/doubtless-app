@@ -3,9 +3,9 @@ package com.doubtless.doubtless.screens.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.doubtless.doubtless.R
@@ -25,9 +25,6 @@ class ViewDoubtsAdapter(
         val time: TextView
         val heading: TextView
         val description: TextView
-        val voteCount: TextView
-        val upvote: ImageButton
-        val downvote: ImageButton
         val ivDp: ImageView
 
         init {
@@ -35,9 +32,6 @@ class ViewDoubtsAdapter(
             time = view.findViewById(R.id.user_doubt_timestamp)
             heading = view.findViewById(R.id.user_doubt_heading)
             description = view.findViewById(R.id.user_doubt_description)
-            voteCount = view.findViewById(R.id.vote_count)
-            upvote = view.findViewById(R.id.upvote_btn)
-            downvote = view.findViewById(R.id.downvote_btn)
             ivDp = view.findViewById(R.id.iv_dp)
         }
     }
@@ -56,20 +50,10 @@ class ViewDoubtsAdapter(
         holder.time.text = Utils.getTimeAgo(Date(allDoubts[position].date))
         holder.heading.text = allDoubts[position].heading
         holder.description.text = allDoubts[position].description
-        holder.voteCount.text =
-            (allDoubts[position].upVotes - allDoubts[position].downVotes).toString()
+
+        holder.description.isVisible = !allDoubts[position].description.isNullOrEmpty()
 
         Glide.with(holder.ivDp).load(allDoubts[position].userPhotoUrl).circleCrop().into(holder.ivDp)
-
-        val doubt = allDoubts[position]
-
-        holder.upvote.setOnClickListener {
-
-        }
-
-        holder.downvote.setOnClickListener {
-
-        }
 
         if (position == itemCount - 1) {
             onLastItemReached.invoke()
