@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.doubtless.doubtless.DoubtlessApp
+import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentViewDoubtsBinding
 import com.doubtless.doubtless.screens.adapters.ViewDoubtsAdapter
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
@@ -15,15 +16,18 @@ import com.doubtless.doubtless.screens.auth.usecases.UserManager
 class ViewDoubtsFragment : Fragment() {
     private var _binding: FragmentViewDoubtsBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var viewModel: ViewDoubtsViewModel
     private lateinit var adapter: ViewDoubtsAdapter
     private lateinit var userManager: UserManager
+    private lateinit var analyticsTracker: AnalyticsTracker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
+        analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
         viewModel = getViewModel()
         viewModel.fetchDoubts()
-        userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
     }
 
     override fun onCreateView(
@@ -47,6 +51,8 @@ class ViewDoubtsFragment : Fragment() {
             }
 
             lastRefreshed = System.currentTimeMillis()
+
+            analyticsTracker.trackFeedRefresh()
 
             binding.layoutSwipe.isRefreshing = true
             viewModel.refreshList()
@@ -80,7 +86,8 @@ class ViewDoubtsFragment : Fragment() {
             factory = ViewDoubtsViewModel.Companion.Factory(
                 fetchHomeFeedUseCase = DoubtlessApp.getInstance().getAppCompRoot()
                     .getFetchHomeFeedUseCase(),
-                userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
+                analyticsTracker = analyticsTracker,
+                userManager = userManager
             )
         )[ViewDoubtsViewModel::class.java]
     }

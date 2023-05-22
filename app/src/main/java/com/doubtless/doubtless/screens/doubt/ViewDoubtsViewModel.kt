@@ -1,6 +1,7 @@
 package com.doubtless.doubtless.screens.doubt
 
 import androidx.lifecycle.*
+import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.home.network.FetchHomeFeedUseCase
 import com.doubtless.doubtless.screens.home.network.FetchHomeFeedUseCase.*
@@ -9,6 +10,7 @@ import kotlinx.coroutines.launch
 
 class ViewDoubtsViewModel constructor(
     private val fetchHomeFeedUseCase: FetchHomeFeedUseCase,
+    private val analyticsTracker: AnalyticsTracker,
     private val userManager: UserManager
 ) : ViewModel() {
 
@@ -18,13 +20,13 @@ class ViewDoubtsViewModel constructor(
     private var isLoading = false
 
     private val _fetchedDoubts = MutableLiveData<List<DoubtData>?>()
-    val fetchedDoubts: LiveData<List<DoubtData>?> = _fetchedDoubts
+    val fetchedDoubts: LiveData<List<DoubtData>?> = _fetchedDoubts // TODO : use Result here!
 
     fun notifyFetchedDoubtsConsumed() {
         _fetchedDoubts.postValue(null)
     }
 
-    fun fetchDoubts(refreshCall: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
+    fun fetchDoubts(isRefreshCall: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
 
         if (isLoading) return@launch
 
@@ -33,12 +35,17 @@ class ViewDoubtsViewModel constructor(
         val result = fetchHomeFeedUseCase.fetchFeedSync(
             request = FetchHomeFeedRequest(
                 user = userManager.getCachedUserData()!!,
-                fetchFromPage1 = refreshCall
+                fetchFromPage1 = isRefreshCall
             )
         )
 
         if (result is Result.Success && result.data.isNotEmpty()) {
             _fetchedDoubts.postValue(result.data)
+
+            if (isRefreshCall) {
+                analyticsTracker.trackFeedNextPage(allDoubts.size)
+            }
+
             _allDoubts.addAll(result.data)
         } else {
             // ERROR CASE
@@ -50,17 +57,18 @@ class ViewDoubtsViewModel constructor(
 
     fun refreshList() {
         _allDoubts.clear()
-        fetchDoubts(refreshCall = true)
+        fetchDoubts(isRefreshCall = true)
     }
 
     companion object {
         class Factory constructor(
             private val fetchHomeFeedUseCase: FetchHomeFeedUseCase,
+            private val analyticsTracker: AnalyticsTracker,
             private val userManager: UserManager
         ) : ViewModelProvider.Factory {
 
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return ViewDoubtsViewModel(fetchHomeFeedUseCase, userManager) as T
+                return ViewDoubtsViewModel(fetchHomeFeedUseCase, analyticsTracker, userManager) as T
             }
         }
     }
