@@ -3,6 +3,7 @@ package com.doubtless.doubtless.screens.doubt
 data class DoubtData(
     var id: String? = null,
     var userName: String? = null,
+    var userId: String? = null,
     var userPhotoUrl : String? = null,
     var date: String? = null,
     var heading: String? = null,

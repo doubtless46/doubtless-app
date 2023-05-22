@@ -105,6 +105,7 @@ class CreateDoubtFragment : Fragment() {
         val doubt = DoubtData(
             id = UUID.randomUUID().toString(),
             userName = user.name,
+            userId = user.id,
             userPhotoUrl = user.photoUrl,
             date = Date().toString(),
             heading = heading,
