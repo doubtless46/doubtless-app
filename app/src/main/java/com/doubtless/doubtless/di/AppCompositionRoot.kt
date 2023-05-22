@@ -11,6 +11,7 @@ import com.doubtless.doubtless.navigation.Router
 import com.doubtless.doubtless.screens.auth.usecases.UserDataServerUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserDataStorageUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.home.network.FetchHomeFeedUseCase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.*
@@ -31,20 +32,28 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
     )
 
     @Synchronized
+    // should be initialized after splash screen isLoggedIn check
     fun getAnalyticsTracker(): AnalyticsTracker {
 
         if (::analyticsTracker.isInitialized == false) {
-            analyticsTracker = AnalyticsTracker(amplitude)
+            analyticsTracker = AnalyticsTracker(amplitude, getUserManager())
         }
 
         return analyticsTracker
     }
 
+    // --------- HomeFeed ------------
+
+    // should be initialized after splash screen isLoggedIn check
+    fun getFetchHomeFeedUseCase(): FetchHomeFeedUseCase {
+        return FetchHomeFeedUseCase(FirebaseFirestore.getInstance())
+    }
 
     // ------- User ---------
 
     private lateinit var userManager: UserManager
 
+    @Synchronized
     fun getUserManager(): UserManager {
 
         if (::userManager.isInitialized == false) {
@@ -57,6 +66,7 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
     private lateinit var userDataStorageUseCase: UserDataStorageUseCase
 
+    @Synchronized
     private fun getUserDataStorage(): UserDataStorageUseCase {
 
         if (::userDataStorageUseCase.isInitialized == false) {
@@ -68,6 +78,7 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
     private lateinit var userDataServerUseCase: UserDataServerUseCase
 
+    @Synchronized
     private fun getUserDataServer(): UserDataServerUseCase {
 
         if (::userDataServerUseCase.isInitialized == false) {

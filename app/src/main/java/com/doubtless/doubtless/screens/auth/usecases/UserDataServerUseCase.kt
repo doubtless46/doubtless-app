@@ -47,8 +47,12 @@ class UserDataServerUseCase constructor(
             }
 
             // old user
-            serverUser =
-                it.documents[0].toObject(User::class.java) // make ServerUser and map to User
+            try {
+                serverUser =
+                    it.documents[0].toObject(User::class.java) // make ServerUser and map to User
+            } catch (e: Exception) {
+                errorMessage = e.localizedMessage
+            }
 
             latch.countDown()
 

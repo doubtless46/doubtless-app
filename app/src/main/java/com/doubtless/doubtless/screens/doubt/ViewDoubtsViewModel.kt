@@ -1,49 +1,60 @@
 package com.doubtless.doubtless.screens.doubt
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.util.Log
+import androidx.lifecycle.*
+import com.doubtless.doubtless.constants.FirestoreCollection
+import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.home.network.FetchHomeFeedUseCase
+import com.doubtless.doubtless.screens.home.network.FetchHomeFeedUseCase.*
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class ViewDoubtsViewModel : ViewModel() {
-    private val db = Firebase.firestore
-    private val _allDoubts = MutableLiveData<ArrayList<DoubtData>>()
-    val allDoubts: MutableLiveData<ArrayList<DoubtData>>
-        get() = _allDoubts
+class ViewDoubtsViewModel constructor(
+    private val fetchHomeFeedUseCase: FetchHomeFeedUseCase,
+    private val userManager: UserManager
+) : ViewModel() {
 
-    init {
-        fetchAllDoubts()
+    private val _allDoubts = MutableLiveData<List<DoubtData>>()
+    val allDoubts: LiveData<List<DoubtData>> = _allDoubts
+
+    private var isLoading = false
+
+    fun fetchDoubts() = viewModelScope.launch(Dispatchers.IO) {
+
+        if (isLoading) return@launch
+
+        isLoading = true
+
+        val result = fetchHomeFeedUseCase.fetchFeedSync(
+            request = FetchHomeFeedRequest(userManager.getCachedUserData()!!)
+        )
+
+        if (result is Result.Success && result.data.isNotEmpty()) {
+            _allDoubts.postValue(result.data)
+        } else {
+            // ERROR CASE
+        }
+
+        isLoading = false
     }
 
-    private fun fetchAllDoubts() {
-        val allDoubtsReference = db.collection("AllDoubts")
-        allDoubtsReference.orderBy(FieldPath.of("date"), Query.Direction.DESCENDING).get()
-            .addOnSuccessListener {
-                val doubtsList = ArrayList<DoubtData>()
-                for (data in it.documents) {
-                    val doubtData = DoubtData(
-                        data.id,
-                        data.get("username").toString(),
-                        getDateTime(data.get("date") as Timestamp),
-                        data.get("heading").toString(),
-                        data.get("description").toString(),
-                        data.get("answerIds"),
-                        (data.get("upVotes") as List<*>).size.toLong(),
-                        (data.get("downVotes") as List<*>).size.toLong()
-                    )
-                    doubtsList.add(doubtData)
-                }
-                _allDoubts.value = doubtsList
+    companion object {
+        class Factory constructor(
+            private val fetchHomeFeedUseCase: FetchHomeFeedUseCase,
+            private val userManager: UserManager
+        ) : ViewModelProvider.Factory {
+
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return ViewDoubtsViewModel(fetchHomeFeedUseCase, userManager) as T
             }
+        }
     }
 
-    private fun getDateTime(s: Timestamp): String {
-
-        return SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.ENGLISH).format(s.toDate())
-    }
 }

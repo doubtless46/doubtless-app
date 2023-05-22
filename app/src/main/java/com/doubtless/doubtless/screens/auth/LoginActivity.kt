@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
+import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.ActivityLoginBinding
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -31,6 +32,8 @@ class LoginActivity : AppCompatActivity() {
     private var _binding: ActivityLoginBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var analyticsTracker: AnalyticsTracker
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -38,6 +41,7 @@ class LoginActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
         mAuth = FirebaseAuth.getInstance()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -48,6 +52,9 @@ class LoginActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         binding.btnSignin.setOnClickListener {
+
+            analyticsTracker.trackLoginStarted()
+
             binding.progress.visibility = View.VISIBLE
             val intent = googleSignInClient.signInIntent
             startActivityForResult(intent, 1001)
@@ -105,6 +112,8 @@ class LoginActivity : AppCompatActivity() {
             }
 
             val isNewUser = (result as UserManager.Result.Success).isNewUser
+
+            analyticsTracker.trackLoginSuccess(isNewUser)
 
             if (isNewUser == false) {
                 DoubtlessApp.getInstance().getAppCompRoot().router.moveToMainActivity(this@LoginActivity)
