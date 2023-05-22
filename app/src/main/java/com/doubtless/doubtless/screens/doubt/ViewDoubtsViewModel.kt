@@ -1,48 +1,56 @@
 package com.doubtless.doubtless.screens.doubt
 
-import android.util.Log
 import androidx.lifecycle.*
-import com.doubtless.doubtless.constants.FirestoreCollection
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.home.network.FetchHomeFeedUseCase
 import com.doubtless.doubtless.screens.home.network.FetchHomeFeedUseCase.*
-import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FieldPath
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class ViewDoubtsViewModel constructor(
     private val fetchHomeFeedUseCase: FetchHomeFeedUseCase,
     private val userManager: UserManager
 ) : ViewModel() {
 
-    private val _allDoubts = MutableLiveData<List<DoubtData>>()
-    val allDoubts: LiveData<List<DoubtData>> = _allDoubts
+    private val _allDoubts = mutableListOf<DoubtData>()
+    val allDoubts: List<DoubtData> = _allDoubts
 
     private var isLoading = false
 
-    fun fetchDoubts() = viewModelScope.launch(Dispatchers.IO) {
+    private val _fetchedDoubts = MutableLiveData<List<DoubtData>?>()
+    val fetchedDoubts: LiveData<List<DoubtData>?> = _fetchedDoubts
+
+    fun notifyFetchedDoubtsConsumed() {
+        _fetchedDoubts.postValue(null)
+    }
+
+    fun fetchDoubts(refreshCall: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
 
         if (isLoading) return@launch
 
         isLoading = true
 
         val result = fetchHomeFeedUseCase.fetchFeedSync(
-            request = FetchHomeFeedRequest(userManager.getCachedUserData()!!)
+            request = FetchHomeFeedRequest(
+                user = userManager.getCachedUserData()!!,
+                fetchFromPage1 = refreshCall
+            )
         )
 
         if (result is Result.Success && result.data.isNotEmpty()) {
-            _allDoubts.postValue(result.data)
+            _fetchedDoubts.postValue(result.data)
+            _allDoubts.addAll(result.data)
         } else {
             // ERROR CASE
+            _fetchedDoubts.postValue(null)
         }
 
         isLoading = false
+    }
+
+    fun refreshList() {
+        _allDoubts.clear()
+        fetchDoubts(refreshCall = true)
     }
 
     companion object {

@@ -17,7 +17,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#DFDFDF" />
+        android:background="@color/black" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -61,16 +61,43 @@
 
         <ImageView
             android:id="@+id/iv_dp"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="-2dp"
+            android:fontFamily="@font/poppins"
+            android:textColor="@color/grey"
+            android:text="Siddharth Sharma"
+            android:textSize="12dp"
+            app:layout_constraintStart_toEndOf="@id/iv_dp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/user_doubt_timestamp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="-3dp"
+            android:fontFamily="@font/poppins"
+            android:text="2 hours ago"
+            android:textColor="@color/grey"
+            android:textSize="12dp"
+            app:layout_constraintStart_toEndOf="@id/iv_dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_username" />
 
         <TextView
             android:id="@+id/user_doubt_heading"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/poppins_bold"
             android:text="Heading"
@@ -78,8 +105,8 @@
             android:textSize="16dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iv_dp"
-            app:layout_constraintTop_toTopOf="@id/iv_dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_dp" />
 
         <TextView
             android:id="@+id/user_doubt_description"
@@ -91,6 +118,7 @@
             android:linksClickable="true"
             android:text="Description"
             android:textSize="14dp"
+            android:maxLines="5"
             app:layout_constraintTop_toBottomOf="@id/user_doubt_heading" />
 
         <LinearLayout

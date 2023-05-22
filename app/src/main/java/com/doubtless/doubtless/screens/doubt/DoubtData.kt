@@ -9,5 +9,6 @@ data class DoubtData(
     var description: String? = null,
     var upVotes: Long = 0,
     var downVotes: Long = 0,
-    var score: Long = 0
+    var score: Long = 0,
+    var timeMillis: Long? = null
 )

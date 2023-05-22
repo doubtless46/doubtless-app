@@ -111,14 +111,18 @@ class CreateDoubtFragment : Fragment() {
             description = description,
             upVotes = 0,
             downVotes = 0,
-            score = (0..100).random().toLong() // fixme : for testing
+            score = (0..100).random().toLong(), // fixme : for testing
+            timeMillis = System.currentTimeMillis()
         )
 
         db.collection("AllDoubts").add(doubt).addOnSuccessListener {
             // requireActivity().finish()
             isButtonClicked = false
+            binding.postButton.alpha = 1f
+            Toast.makeText(context, "Posted Successfully!", Toast.LENGTH_SHORT).show()
         }.addOnFailureListener {
             isButtonClicked = false
+            binding.postButton.alpha = 1f
             Toast.makeText(context, "Failed to Post ${it.message}", Toast.LENGTH_SHORT).show()
         }
     }

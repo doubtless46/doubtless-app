@@ -79,6 +79,11 @@ class ViewDoubtsAdapter(
 
     }
 
+    fun clearCurrentList() {
+        allDoubts.clear()
+        notifyDataSetChanged()
+    }
+
     fun appendDoubts(doubts: List<DoubtData>) {
         val offset = allDoubts.size
         allDoubts.addAll(doubts)

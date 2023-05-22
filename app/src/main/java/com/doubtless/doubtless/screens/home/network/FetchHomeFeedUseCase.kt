@@ -13,10 +13,15 @@ class FetchHomeFeedUseCase constructor(
     private val firestore: FirebaseFirestore
 ) {
 
-    data class FetchHomeFeedRequest(val user: User, val pageSize: Int = 10)
+    data class FetchHomeFeedRequest(
+        val user: User,
+        val pageSize: Int = 10,
+        val fetchFromPage1: Boolean = false
+    )
 
     sealed class Result(data: List<DoubtData>? = null, message: String? = null) {
         class Success(val data: List<DoubtData>) : Result(data, null)
+        class ListEnded(): Result(null, null)
         class Error(val message: String) : Result(null, message)
     }
 
@@ -27,30 +32,22 @@ class FetchHomeFeedUseCase constructor(
     @WorkerThread
     fun fetchFeedSync(request: FetchHomeFeedRequest): Result {
 
-        // predetermine the count of total doubts to paginate accordingly.
-        if (collectionCount == -1L) {
-            val latch = CountDownLatch(1)
-
-            firestore.collection(FirestoreCollection.AllDoubts).count()
-                .get(AggregateSource.SERVER).addOnSuccessListener {
-                    collectionCount = it.count
-                    latch.countDown()
-                }.addOnFailureListener {
-                    latch.countDown()
-                }
-
-            latch.await(10, TimeUnit.SECONDS)
-
-            Log.d("doubts count :", "$collectionCount")
-
-            if (collectionCount == -1L)
-                return Result.Error("some error occurred!")
+        // if this is a refresh call then reset all the params,
+        // though for now, we don't reset collection count.
+        if (request.fetchFromPage1) {
+            docFetched = 0
+            lastDocumentSnapshot = null
         }
+
+        // predetermine the count of total doubts to paginate accordingly.
+        val fetchCountResult = fetchCollectionCountIfNotDoneAlready()
+
+        if (fetchCountResult != null)
+            return fetchCountResult
 
         // doc fetched should be less than total count in order to make a new call.
-        if (collectionCount <= docFetched) {
-            return Result.Error("List Ended!")
-        }
+        if (collectionCount <= docFetched)
+            return Result.ListEnded()
 
         val latch = CountDownLatch(1)
         var result: Result? = null
@@ -68,12 +65,6 @@ class FetchHomeFeedUseCase constructor(
             collectionCount - docFetched
         else
             request.pageSize
-
-        Log.d(
-            "last doubt",
-            lastDocumentSnapshot?.toObject(DoubtData::class.java)?.heading.toString() + " "
-                    + collectionCount + " " + docFetched + " " + size
-        )
 
         query.limit(size.toLong())
             .get().addOnSuccessListener {
@@ -109,6 +100,29 @@ class FetchHomeFeedUseCase constructor(
         latch.await(20, TimeUnit.SECONDS)
 
         return result!!
+    }
+
+    private fun fetchCollectionCountIfNotDoneAlready(): Result? {
+        if (collectionCount == -1L) {
+            val latch = CountDownLatch(1)
+
+            firestore.collection(FirestoreCollection.AllDoubts).count()
+                .get(AggregateSource.SERVER).addOnSuccessListener {
+                    collectionCount = it.count
+                    latch.countDown()
+                }.addOnFailureListener {
+                    latch.countDown()
+                }
+
+            latch.await(10, TimeUnit.SECONDS)
+
+            Log.d("doubts count :", "$collectionCount")
+
+            if (collectionCount == -1L)
+                return Result.Error("some error occurred!")
+        }
+
+        return null
     }
 
 }
