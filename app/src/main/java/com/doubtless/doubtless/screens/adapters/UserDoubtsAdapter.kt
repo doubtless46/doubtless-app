@@ -23,8 +23,8 @@ class UserDoubtsAdapter(private val doubtData: ArrayList<DoubtData>):
 
 
         init {
-            userName = view.findViewById(R.id.user_name)
-            time = view.findViewById(R.id.user_doubt_time)
+            userName = view.findViewById(R.id.tv_username)
+            time = view.findViewById(R.id.user_doubt_timestamp)
             heading = view.findViewById(R.id.user_doubt_heading)
             description = view.findViewById(R.id.user_doubt_description)
             voteCount = view.findViewById(R.id.vote_count)
