@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.screens.auth.LoginActivity
 import com.doubtless.doubtless.R
+import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentDashboardBinding
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -23,13 +24,23 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class DashboardFragment : Fragment() {
-    private lateinit var mAuth: FirebaseAuth
 
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var userManager: UserManager
     private var _binding: FragmentDashboardBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private lateinit var tracker: AnalyticsTracker
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        tracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
+        mAuth = FirebaseAuth.getInstance()
+        userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,14 +49,15 @@ class DashboardFragment : Fragment() {
     ): View {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
-        mAuth = FirebaseAuth.getInstance()
-
-        binding.tvName.text = mAuth.currentUser?.displayName
-        binding.tvUserEmail.text = mAuth.currentUser?.email
+        binding.tvName.text = userManager.getCachedUserData()!!.name
+        binding.tvUserEmail.text = userManager.getCachedUserData()!!.email
 
         binding.btnSignout.setOnClickListener {
 
+            tracker.trackLogout()
+
             CoroutineScope(Dispatchers.Main).launch {
+
                 val result = withContext(Dispatchers.IO) {
                     DoubtlessApp.getInstance().getAppCompRoot().getUserManager().onUserLogoutSync()
                 }

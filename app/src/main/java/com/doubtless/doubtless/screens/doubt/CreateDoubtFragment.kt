@@ -12,18 +12,30 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.databinding.FragmentCreateDoubtBinding
+import com.doubtless.doubtless.screens.auth.User
+import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.Date
+import java.util.UUID
 
 class CreateDoubtFragment : Fragment() {
     private var _binding: FragmentCreateDoubtBinding? = null
 
     private val binding get() = _binding!!
     private var isButtonClicked = false
+
     private lateinit var db: FirebaseFirestore
+    private lateinit var userManager: UserManager
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        db = Firebase.firestore
+        userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -44,10 +56,6 @@ class CreateDoubtFragment : Fragment() {
             if (!isButtonClicked) {
                 checkText()
             }
-        }
-
-        requireActivity().onBackPressedDispatcher.addCallback {
-            handleBackPress()
         }
 
         binding.close.setOnClickListener {
@@ -87,25 +95,34 @@ class CreateDoubtFragment : Fragment() {
             binding.postButton.isClickable = false
             binding.postButton.alpha = 0.8f
             createDoubt(
-                binding.doubtHeading.text.toString(), binding.doubtDescription.text.toString()
+                binding.doubtHeading.text.toString(), binding.doubtDescription.text.toString(),
+                userManager.getCachedUserData()!!
             )
         }
     }
 
-    private fun createDoubt(heading: String, description: String) {
-        val doubt = hashMapOf(
-            "heading" to heading,
-            "description" to description,
-            "date" to Date(),
-            "uid" to "EDF90KLJFLKAUKLF",
-            "upVotes" to listOf<String>(),
-            "downVotes" to listOf<String>(),
-            "answersIds" to listOf<String>()
+    private fun createDoubt(heading: String, description: String, user: User) {
+        val doubt = DoubtData(
+            id = UUID.randomUUID().toString(),
+            userName = user.name,
+            userPhotoUrl = user.photoUrl,
+            date = Date().toString(),
+            heading = heading,
+            description = description,
+            upVotes = 0,
+            downVotes = 0,
+            score = (0..100).random().toLong(), // fixme : for testing
+            timeMillis = System.currentTimeMillis()
         )
-        db = Firebase.firestore
+
         db.collection("AllDoubts").add(doubt).addOnSuccessListener {
-           // requireActivity().finish()
+            // requireActivity().finish()
+            isButtonClicked = false
+            binding.postButton.alpha = 1f
+            Toast.makeText(context, "Posted Successfully!", Toast.LENGTH_SHORT).show()
         }.addOnFailureListener {
+            isButtonClicked = false
+            binding.postButton.alpha = 1f
             Toast.makeText(context, "Failed to Post ${it.message}", Toast.LENGTH_SHORT).show()
         }
     }

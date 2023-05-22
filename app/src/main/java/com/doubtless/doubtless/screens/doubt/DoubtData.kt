@@ -1,12 +1,14 @@
 package com.doubtless.doubtless.screens.doubt
 
 data class DoubtData(
-    var id: String,
-    var userName: String,
-    var date: String,
-    var heading: String,
-    var description: String,
-    var answers: Any?,
-    var upVotes: Long,
-    var downVotes: Long
+    var id: String? = null,
+    var userName: String? = null,
+    var userPhotoUrl : String? = null,
+    var date: String? = null,
+    var heading: String? = null,
+    var description: String? = null,
+    var upVotes: Long = 0,
+    var downVotes: Long = 0,
+    var score: Long = 0,
+    var timeMillis: Long? = null
 )
