@@ -27,38 +27,6 @@
         android:paddingTop="15dp"
         android:paddingBottom="15dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="10dp"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center_vertical"
-                android:contentDescription="User Image"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:id="@+id/user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="Username" />
-
-
-            <TextView
-                android:id="@+id/user_doubt_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="Time" />
-        </LinearLayout>
-
         <ImageView
             android:id="@+id/iv_dp"
             android:layout_width="28dp"

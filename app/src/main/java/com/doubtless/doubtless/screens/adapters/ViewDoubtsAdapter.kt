@@ -11,9 +11,7 @@ import com.bumptech.glide.Glide
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.doubt.DoubtData
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.doubtless.doubtless.utils.Utils
 import java.util.Date
 
 class ViewDoubtsAdapter(
@@ -33,8 +31,8 @@ class ViewDoubtsAdapter(
         val ivDp: ImageView
 
         init {
-            userName = view.findViewById(R.id.user_name)
-            time = view.findViewById(R.id.user_doubt_time)
+            userName = view.findViewById(R.id.tv_username)
+            time = view.findViewById(R.id.user_doubt_timestamp)
             heading = view.findViewById(R.id.user_doubt_heading)
             description = view.findViewById(R.id.user_doubt_description)
             voteCount = view.findViewById(R.id.vote_count)
@@ -55,7 +53,7 @@ class ViewDoubtsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.userName.text = allDoubts[position].userName
-        holder.time.text = Date(allDoubts[position].date!!).day.toString()
+        holder.time.text = Utils.getTimeAgo(Date(allDoubts[position].date))
         holder.heading.text = allDoubts[position].heading
         holder.description.text = allDoubts[position].description
         holder.voteCount.text =
