@@ -21,10 +21,22 @@ class SplashActivity : AppCompatActivity() {
             val userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
 
             if (userManager.getLoggedInUser() != null) {
-                DoubtlessApp.getInstance().getAppCompRoot().router.moveToMainActivity(this@SplashActivity)
+                DoubtlessApp.getInstance()
+                    .getAppCompRoot().router.moveToMainActivity(this@SplashActivity)
+
+                val analyticsTracker =
+                    DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
+                analyticsTracker.trackAppLaunch()
+
                 finish()
             } else {
-                DoubtlessApp.getInstance().getAppCompRoot().router.moveToLoginActivity(this@SplashActivity)
+                DoubtlessApp.getInstance()
+                    .getAppCompRoot().router.moveToLoginActivity(this@SplashActivity)
+
+                val analyticsTracker =
+                    DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
+                analyticsTracker.trackAppLaunch()
+
                 finish()
             }
         }
