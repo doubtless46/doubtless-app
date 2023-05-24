@@ -1,6 +1,7 @@
 package com.doubtless.doubtless.screens.dashboard
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -66,22 +67,39 @@ class DashboardFragment : Fragment() {
 
                 if (result is UserManager.Result.LoggedOut) {
 
-                    DoubtlessApp.getInstance().getAppCompRoot().router.moveToLoginActivity(requireActivity())
+                    DoubtlessApp.getInstance().getAppCompRoot().router.moveToLoginActivity(
+                        requireActivity()
+                    )
                     requireActivity().finish()
 
                 } else if (result is UserManager.Result.Error) {
 
                     Toast.makeText(
-                        this@DashboardFragment.requireContext(),
-                        result.message,
-                        Toast.LENGTH_LONG
+                        this@DashboardFragment.requireContext(), result.message, Toast.LENGTH_LONG
                     ).show() // encapsulate error ui handling
 
                 }
             }
         }
 
+        binding.btnFeedback.setOnClickListener {
+            submitFeedback()
+        }
+
         return binding.root
+    }
+
+    private fun submitFeedback() {
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            putExtra(Intent.EXTRA_EMAIL, arrayOf("doubtless46@gmail.com"))
+            putExtra(Intent.EXTRA_SUBJECT, "Feedback")
+            putExtra(Intent.EXTRA_TEXT, "Enter Feedback Here")
+            selector = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:")
+            }
+        }
+        startActivity(intent)
+
     }
 
     override fun onDestroyView() {
