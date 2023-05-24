@@ -26,8 +26,8 @@
                 android:id="@+id/iv_google"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                app:layout_constraintEnd_toStartOf="@id/retro_text"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/retro_text"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/google_image_removebg" />
 
@@ -41,8 +41,8 @@
                 android:text="Login"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
 
@@ -63,32 +63,29 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.doubtless.doubtless.theming.retro.RetroLayout>
 
-    <TextView
-        android:id="@+id/tv_signin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-black"
-        android:text="Doubtless"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/btn_signin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+    <ImageView
+        android:id="@+id/iv_banner"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/login_banner1"
+        android:visibility="visible"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_signin2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-black"
+        android:layout_marginBottom="22dp"
+        android:fontFamily="@font/poppins_bold"
         android:text="Doubtless"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="30sp"
+        android:textSize="30dp"
         app:layout_constraintBottom_toTopOf="@+id/btn_signin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/iv_banner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

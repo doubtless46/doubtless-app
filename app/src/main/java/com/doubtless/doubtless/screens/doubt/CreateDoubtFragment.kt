@@ -13,6 +13,7 @@ import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.doubtless.doubtless.DoubtlessApp
+import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentCreateDoubtBinding
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
@@ -30,11 +31,13 @@ class CreateDoubtFragment : Fragment() {
 
     private lateinit var db: FirebaseFirestore
     private lateinit var userManager: UserManager
+    private lateinit var analyticsTracker: AnalyticsTracker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = Firebase.firestore
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
+        analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
     }
 
     override fun onCreateView(
@@ -90,10 +93,14 @@ class CreateDoubtFragment : Fragment() {
         if (binding.doubtHeading.text.toString().isEmpty()) {
             Toast.makeText(context, "Heading Required", Toast.LENGTH_SHORT).show()
         } else {
+
+            analyticsTracker.trackPostDoubtButtonClicked()
+
             isButtonClicked = true
             binding.progress.isVisible = !binding.progress.isVisible
             binding.postButton.isClickable = false
             binding.postButton.alpha = 0.8f
+
             createDoubt(
                 binding.doubtHeading.text.toString(), binding.doubtDescription.text.toString(),
                 userManager.getCachedUserData()!!
@@ -105,10 +112,11 @@ class CreateDoubtFragment : Fragment() {
         val doubt = DoubtData(
             id = UUID.randomUUID().toString(),
             userName = user.name,
+            userId = user.id,
             userPhotoUrl = user.photoUrl,
             date = Date().toString(),
-            heading = heading,
-            description = description,
+            heading = heading.trim(),
+            description = description.trim(),
             upVotes = 0,
             downVotes = 0,
             score = (0..100).random().toLong(), // fixme : for testing
@@ -116,7 +124,6 @@ class CreateDoubtFragment : Fragment() {
         )
 
         db.collection("AllDoubts").add(doubt).addOnSuccessListener {
-            // requireActivity().finish()
             isButtonClicked = false
             binding.postButton.alpha = 1f
             Toast.makeText(context, "Posted Successfully!", Toast.LENGTH_SHORT).show()
