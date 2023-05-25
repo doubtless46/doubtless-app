@@ -25,7 +25,7 @@ class FetchHomeFeedUseCase constructor(
         class Error(val message: String) : Result(null, message)
     }
 
-    private var lastDocumentSnapshot: DocumentSnapshot? = null
+    private var lastDoubtData: DoubtData? = null
     private var collectionCount = -1L
     private var docFetched = 0L
 
@@ -36,7 +36,7 @@ class FetchHomeFeedUseCase constructor(
         // though for now, we don't reset collection count.
         if (request.fetchFromPage1) {
             docFetched = 0
-            lastDocumentSnapshot = null
+            lastDoubtData = null
         }
 
         // predetermine the count of total doubts to paginate accordingly.
@@ -52,22 +52,9 @@ class FetchHomeFeedUseCase constructor(
         val latch = CountDownLatch(1)
         var result: Result? = null
 
-        var query = firestore.collection(FirestoreCollection.AllDoubts)
-            .orderBy(FieldPath.of("score"), Query.Direction.DESCENDING)
+        val query = getHomeFeedQuery(request) ?: return Result.Error("cannot create feed firestore query!")
 
-        if (lastDocumentSnapshot != null)
-            query =
-                query.startAfter(lastDocumentSnapshot!!.toObject(DoubtData::class.java)!!.score) // by doc ref doesn't work
-
-        // if total size = 33 and docFetched = 30, then request only 3 more,
-        // else request page size.
-        val size = if (collectionCount - docFetched < request.pageSize)
-            collectionCount - docFetched
-        else
-            request.pageSize
-
-        query.limit(size.toLong())
-            .get().addOnSuccessListener {
+        query.get().addOnSuccessListener {
 
                 // iterate on list, map to DoubtData and return result
                 Thread {
@@ -75,14 +62,15 @@ class FetchHomeFeedUseCase constructor(
 
                     for (document in it.documents) {
                         try {
-                            docs.add(document.toObject(DoubtData::class.java)!!) // will be caught if some error occurs
+                            val doubt = DoubtData.parse(document) ?: continue
+                            docs.add(doubt) // will be caught if some error occurs
                         } catch (e: Exception) {
                             /* no-op */
                         }
                     }
 
                     if (it.documents.isNotEmpty()) {
-                        lastDocumentSnapshot = it.documents.last()
+                        lastDoubtData = DoubtData.parse(it.documents.last())
                     }
 
                     docFetched += it.documents.size
@@ -100,6 +88,26 @@ class FetchHomeFeedUseCase constructor(
         latch.await(20, TimeUnit.SECONDS)
 
         return result!!
+    }
+
+    private fun getHomeFeedQuery(request: FetchHomeFeedRequest): Query? {
+        var query = firestore.collection(FirestoreCollection.AllDoubts)
+            .orderBy(FieldPath.of("score"), Query.Direction.DESCENDING)
+
+        if (lastDoubtData != null)
+            query =
+                query.startAfter(lastDoubtData!!.score) // by doc ref doesn't work
+
+        // if total size = 33 and docFetched = 30, then request only 3 more,
+        // else request page size.
+        val size = if (collectionCount - docFetched < request.pageSize)
+            collectionCount - docFetched
+        else
+            request.pageSize
+
+        query.limit(size.toLong())
+
+        return query
     }
 
     private fun fetchCollectionCountIfNotDoneAlready(): Result? {
