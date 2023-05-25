@@ -1,45 +1,28 @@
-package com.doubtless.doubtless.screens.doubt
+package com.doubtless.doubtless.screens.createDoubt
 
 import android.app.AlertDialog
-import android.content.Context
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.doubtless.doubtless.DoubtlessApp
-import com.doubtless.doubtless.analytics.AnalyticsTracker
-import com.doubtless.doubtless.constants.FirestoreCollection
 import com.doubtless.doubtless.databinding.FragmentCreateDoubtBinding
-import com.doubtless.doubtless.screens.auth.User
-import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.utils.Utils.showKeyboard
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.Date
-import java.util.UUID
 
 class CreateDoubtFragment : Fragment() {
     private var _binding: FragmentCreateDoubtBinding? = null
 
     private val binding get() = _binding!!
     private var isButtonClicked = false
-
     private lateinit var db: FirebaseFirestore
-    private lateinit var userManager: UserManager
-    private lateinit var analyticsTracker: AnalyticsTracker
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        db = Firebase.firestore
-        userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
-        analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
