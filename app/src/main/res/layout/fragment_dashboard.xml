@@ -69,15 +69,18 @@
                 android:minHeight="48dp"
                 app:text="SIGN OUT" />
 
-            <com.doubtless.doubtless.theming.buttons.SecondaryButton
+            <TextView
                 android:id="@+id/btnFeedback"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                android:minHeight="48dp"
-                app:text="SUBMIT FEEDBACK" />
+                android:layout_margin="16dp"
+                android:background="@android:color/transparent"
+                android:elevation="8dp"
+                android:text="Submit Feedback"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
