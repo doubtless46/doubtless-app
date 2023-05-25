@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cream"
-    tools:context=".main.MainFragment">
+    tools:context=".screens.main.MainFragment">
 
     <FrameLayout
         android:id="@+id/bottom_nav_fragment_container"
@@ -14,32 +14,126 @@
         app:layout_constraintBottom_toTopOf="@id/retro_bottom_nav"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.doubtless.doubtless.main.bottomNav.RetroBottomNav
+    <com.doubtless.doubtless.screens.main.bottomNav.RetroBottomNav
         android:id="@+id/retro_bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/rect_border"
         android:gravity="center"
         android:orientation="horizontal"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.doubtless.doubtless.theming.buttons.SecondaryButton
-            android:layout_width="0dp"
+        <com.doubtless.doubtless.theming.buttons.RetroBottomNavElementLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:text="Home" />
+            android:layout_gravity="center"
+            app:isPlainStyled="true">
 
-        <com.doubtless.doubtless.theming.buttons.SecondaryButton
-            android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/ic_home_black_24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:padding="12dp"
+                    android:text="Home"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+        </com.doubtless.doubtless.theming.buttons.RetroBottomNavElementLayout>
+
+        <com.doubtless.doubtless.theming.buttons.RetroBottomNavElementLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:text="Post" />
+            android:layout_gravity="center"
+            android:layout_marginStart="50dp"
+            app:isPlainStyled="true">
 
-        <com.doubtless.doubtless.theming.buttons.SecondaryButton
-            android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/ic_baseline_add_24" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:padding="12dp"
+                    android:text="Profile"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+        </com.doubtless.doubtless.theming.buttons.RetroBottomNavElementLayout>
+
+        <com.doubtless.doubtless.theming.buttons.RetroBottomNavElementLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:text="Profile" />
+            android:layout_gravity="center"
+            android:layout_marginStart="50dp"
+            app:isPlainStyled="true">
 
-    </com.doubtless.doubtless.main.bottomNav.RetroBottomNav>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/ic_dashboard_black_24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:padding="12dp"
+                    android:text="Profile"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+        </com.doubtless.doubtless.theming.buttons.RetroBottomNavElementLayout>
+
+    </com.doubtless.doubtless.screens.main.bottomNav.RetroBottomNav>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
