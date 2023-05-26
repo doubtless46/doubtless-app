@@ -3,4 +3,19 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="select">select</string>
+    <string name="select_year">Year</string>
+    <string name="select_branch">Branch</string>
+    <string name="select_department">Department</string>
+    <string name="select_tags">Tags</string>
+    <string name="select_purpose">Purpose</string>
+    <string name="select_hobbies">Hobbies</string>
+    <string name="Done">Done</string>
+    <string name="text_choice_1">Dancing\n</string>
+    <string name="text_choice_2">Singing</string>
+    <string name="text_choice_3">Swimming</string>
+    <string name="text_choice_4">Travelling</string>
+    <string name="text_choice_tag_1">Attendance</string>
+    <string name="text_choice_tag_2">Higher Studies</string>
+    <string name="text_choice_tag_3">Placements</string>
 </resources>
