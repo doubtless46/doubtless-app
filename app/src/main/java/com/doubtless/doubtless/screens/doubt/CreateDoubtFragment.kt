@@ -100,7 +100,6 @@ class CreateDoubtFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        Toast.makeText(context, "OnViewDestroyed", Toast.LENGTH_SHORT).show()
         saveTextToSharedPreferences(
             binding.doubtHeading.text.toString(), binding.doubtDescription.text.toString()
         )
@@ -167,13 +166,12 @@ class CreateDoubtFragment : Fragment() {
                     setMaxCharacterLimit(maxHeadingCharLimit, maxDescriptionCharLimit)
 
                 } catch (e: Exception) {
-                    Toast.makeText(context, e.message.toString(), Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, e.message.toString(), Toast.LENGTH_SHORT).show()
                 }
             } else {
                 Toast.makeText(context, "Try Again Later", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 
     private fun setMaxCharacterLimit(maxHeadingCharLimit: Int, maxDescriptionCharLimit: Int) {
