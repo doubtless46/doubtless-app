@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:overScrollMode="never"
-    android:scrollbars="vertical">
+    android:scrollbars="none"
+    android:paddingBottom="20dp">
 
 
     <LinearLayout
@@ -12,14 +13,43 @@
         android:layout_height="match_parent"
         android:focusableInTouchMode="true"
         android:orientation="vertical"
-        tools:context=".OnBoardingActivity">
+        android:background="@color/cream"
+        tools:context=".screens.onboarding.OnBoardingActivity">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/login_banner2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="Welcome OnBoard"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/poppins"
+            android:text="Hey, We have been waiting for you! But before starting we some info so that we can give you the best app experience. Don't worry its super safe with us."
+            android:textColor="@color/black"
+            android:textSize="14dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutYear"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/activity_vertical_margin"
             android:hint="@string/select_year">
 
             <AutoCompleteTextView
@@ -27,24 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                app:layout_anchor="@+id/textInputLayout"
-                app:layout_anchorGravity="center" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutBranch"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:hint="@string/select_branch">
-
-            <AutoCompleteTextView
-                android:id="@+id/auto_complete_txt_branch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none"
+                android:textSize="12dp"
                 app:layout_anchor="@+id/textInputLayout"
                 app:layout_anchorGravity="center" />
 
@@ -55,59 +68,46 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/activity_vertical_margin"
             android:hint="@string/select_department">
 
             <AutoCompleteTextView
-                android:id="@+id/auto_complete_txt_department"
+                android:id="@+id/auto_complete_txt_dept"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
+                android:textSize="12dp"
                 app:layout_anchor="@+id/textInputLayout"
                 app:layout_anchorGravity="center" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroupTag"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutCollege"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_vertical_margin">
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:hint="@string/select_college">
 
-            <!-- Chips can be declared here, or added dynamically. -->
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_tag_1"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
+            <AutoCompleteTextView
+                android:id="@+id/auto_complete_txt_college"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="@string/text_choice_tag_1" />
+                android:inputType="none"
+                android:textSize="12dp"
+                app:layout_anchor="@+id/textInputLayout"
+                app:layout_anchorGravity="center" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_tag_2"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="@string/text_choice_tag_2" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_tag_3"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="@string/text_choice_tag_3" />
-
-        </com.google.android.material.chip.ChipGroup>
-
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutPurpose"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/activity_vertical_margin"
             android:hint="@string/select_purpose">
 
             <AutoCompleteTextView
@@ -115,10 +115,42 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
+                android:textSize="12dp"
                 app:layout_anchor="@+id/textInputLayout"
                 app:layout_anchorGravity="center" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/poppins"
+            android:text="What tags do you prefer?"
+            android:textColor="@color/black"
+            android:textSize="14dp" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupTag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin">
+
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/poppins"
+            android:text="What hobbies you've got?"
+            android:textColor="@color/black"
+            android:textSize="14dp" />
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroupHobbies"
@@ -126,91 +158,14 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_vertical_margin">
 
-            <!-- Chips can be declared here, or added dynamically. -->
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_1"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="@string/text_choice_1" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_2"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="@string/text_choice_2" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_3"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="@string/text_choice_3" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_4"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="@string/text_choice_4" />
 
         </com.google.android.material.chip.ChipGroup>
 
-
-        <com.doubtless.doubtless.theming.retro.RetroLayout
+        <com.doubtless.doubtless.theming.buttons.SecondaryButton
             android:id="@+id/btn_done"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="60dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/retro_text"
-                    style="@style/button_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="12dp"
-                    android:paddingEnd="0dp"
-                    android:text="Done"
-                    android:textColor="@color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <ProgressBar
-                    android:id="@+id/progress"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
-                    android:indeterminateTint="@color/white"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintStart_toEndOf="@id/retro_text"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.doubtless.doubtless.theming.retro.RetroLayout>
-
-
+            android:layout_margin="@dimen/activity_vertical_margin"
+            app:text="Okay, Let's get started!" />
     </LinearLayout>
-
 </ScrollView>

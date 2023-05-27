@@ -2,8 +2,7 @@ package com.doubtless.doubtless.navigation
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import com.doubtless.doubtless.OnBoardingActivity
+import com.doubtless.doubtless.screens.onboarding.OnBoardingActivity
 import com.doubtless.doubtless.screens.auth.LoginActivity
 import com.doubtless.doubtless.screens.main.MainActivity
 
@@ -20,7 +19,7 @@ class Router {
     }
 
     fun moveToOnBoardingActivity(activity: Activity) {
-        val i = Intent(activity, OnBoardingActivity::class.java) // fixme
+        val i = Intent(activity, OnBoardingActivity::class.java)
         activity.startActivity(i)
     }
 

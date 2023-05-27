@@ -41,5 +41,11 @@
             android:exported="true"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".screens.onboarding.OnBoardingActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Doubtless" />
+
     </application>
 </manifest>

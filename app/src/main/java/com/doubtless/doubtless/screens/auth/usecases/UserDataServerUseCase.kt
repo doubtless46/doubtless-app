@@ -14,13 +14,10 @@ class UserDataServerUseCase constructor(
     private val gson: Gson
 ) {
 
-    sealed class Result(
-        user: User? = null,
-        error: String? = null
-    ) {
-        class NewUser(val newUser: User) : Result(newUser, null)
-        class OldUser(val oldUser: User) : Result(oldUser, null)
-        class Error(val message: String) : Result(null, message)
+    sealed class Result{
+        class NewUser(val newUser: User) : Result()
+        class OldUser(val oldUser: User) : Result()
+        class Error(val message: String) : Result()
     }
 
     @WorkerThread
@@ -48,8 +45,11 @@ class UserDataServerUseCase constructor(
 
             // old user
             try {
-                serverUser =
+                val _serverUser =
                     it.documents[0].toObject(User::class.java) // make ServerUser and map to User
+
+                serverUser = _serverUser!!.copy(document_id = it.documents[0].id)
+
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
             }
@@ -74,9 +74,12 @@ class UserDataServerUseCase constructor(
 
         latch = CountDownLatch(1)
 
+        var createdUser: User = user
+
         firestore.collection(FirestoreCollection.USER)
             .add(user)
             .addOnSuccessListener {
+                createdUser = user.copy(document_id = it.id)
                 latch.countDown()
             }.addOnFailureListener {
                 errorMessage = it.message
@@ -88,7 +91,7 @@ class UserDataServerUseCase constructor(
         if (errorMessage != null)
             return Result.Error(errorMessage!!)
 
-        return Result.NewUser(user)
+        return Result.NewUser(createdUser)
     }
 
 }

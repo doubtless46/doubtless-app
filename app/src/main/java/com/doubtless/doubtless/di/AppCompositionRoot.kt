@@ -8,10 +8,13 @@ import com.amplitude.android.Configuration
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.navigation.Router
+import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserDataServerUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserDataStorageUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.home.network.FetchHomeFeedUseCase
+import com.doubtless.doubtless.screens.onboarding.usecases.AddOnBoardingDataUseCase
+import com.doubtless.doubtless.screens.onboarding.usecases.FetchOnBoardingDataUseCase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.*
@@ -48,6 +51,17 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
     fun getFetchHomeFeedUseCase(): FetchHomeFeedUseCase {
         return FetchHomeFeedUseCase(FirebaseFirestore.getInstance())
     }
+
+    // --------- OnBoarding ------------
+
+    fun getFetchOnBoardingDataUseCase(user: User): FetchOnBoardingDataUseCase {
+        return FetchOnBoardingDataUseCase(FirebaseFirestore.getInstance(), user)
+    }
+
+    fun getAddOnBoardingDataUseCase(user: User): AddOnBoardingDataUseCase {
+        return AddOnBoardingDataUseCase(FirebaseFirestore.getInstance(), user)
+    }
+
 
     // ------- User ---------
 
