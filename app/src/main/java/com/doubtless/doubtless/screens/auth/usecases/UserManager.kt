@@ -26,7 +26,15 @@ class UserManager constructor(
 
     private var cachedUserData: User? = null
 
-    fun getCachedUserData() = cachedUserData
+    fun getCachedUserData() = cachedUserData?.copy()
+
+    fun setNewCachedUserData(cachedUserData: User) {
+        this.cachedUserData = cachedUserData
+    }
+
+    fun storeCachedUserData() {
+        userDataStorageUseCase.setUserData(cachedUserData!!)
+    }
 
     /**
      * if null then user is not logged in
