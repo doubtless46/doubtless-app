@@ -1,5 +1,6 @@
 package com.doubtless.doubtless.screens.doubt
 
+import com.doubtless.doubtless.screens.home.HomeEntity
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.*
@@ -25,5 +26,9 @@ data class DoubtData(
                 null
             }
         }
+    }
+
+    fun toHomeEntity(): HomeEntity {
+        return HomeEntity(type = HomeEntity.TYPE_DOUBT, this)
     }
 }

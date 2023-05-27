@@ -1,63 +1,55 @@
 package com.doubtless.doubtless.screens.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.doubt.DoubtData
-import com.doubtless.doubtless.utils.Utils
-import java.util.Date
+import com.doubtless.doubtless.screens.doubt.view.viewholder.DoubtPreviewViewHolder
+import com.doubtless.doubtless.screens.home.HomeEntity
+import com.doubtless.doubtless.screens.home.viewholders.HomeSearchViewHolder
 
 class ViewDoubtsAdapter(
-    private val allDoubts: MutableList<DoubtData>,
-    private val user: User,
-    private val onLastItemReached: () -> Unit
-) : RecyclerView.Adapter<ViewDoubtsAdapter.ViewHolder>() {
+    private val homeEntities: MutableList<HomeEntity>,
+    private val onLastItemReached: () -> Unit,
+    private val interactionListener: InteractionListener,
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val userName: TextView
-        val time: TextView
-        val heading: TextView
-        val description: TextView
-        val ivDp: ImageView
-        val tvNetVotes: TextView
+    interface InteractionListener {
+        fun onSearchBarClicked()
+        fun onDoubtClicked(doubtData: DoubtData, position: Int)
+    }
 
-        init {
-            userName = view.findViewById(R.id.tv_username)
-            time = view.findViewById(R.id.user_doubt_timestamp)
-            heading = view.findViewById(R.id.user_doubt_heading)
-            description = view.findViewById(R.id.user_doubt_description)
-            ivDp = view.findViewById(R.id.iv_dp)
-            tvNetVotes = view.findViewById(R.id.tv_votes)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+
+        when (viewType) {
+            HomeEntity.TYPE_DOUBT -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.doubt_layout, parent, false)
+                return DoubtPreviewViewHolder(view, object: DoubtPreviewViewHolder.InteractionListener {
+                    override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
+                        interactionListener.onDoubtClicked(doubtData, position)
+                    }
+                })
+            }
+
+            HomeEntity.TYPE_SEARCH -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_home_search, parent, false)
+                return HomeSearchViewHolder(view, object : HomeSearchViewHolder.InteractionListener {
+                    override fun onLayoutClicked() {
+                        interactionListener.onSearchBarClicked()
+                    }
+                })
+            }
         }
+
+         throw Exception("type is not defined")
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.doubt_layout, parent, false)
-        return ViewHolder(view)
-    }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-    override fun getItemCount(): Int {
-        return allDoubts.size
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-        holder.userName.text = allDoubts[position].userName
-        holder.time.text = Utils.getTimeAgo(Date(allDoubts[position].date.toString()))
-        holder.heading.text = allDoubts[position].heading
-        holder.tvNetVotes.text = (allDoubts[position].netVotes.toInt()).toString()
-        holder.description.text = allDoubts[position].description
-        holder.description.isVisible = !allDoubts[position].description.isNullOrEmpty()
-
-        Glide.with(holder.ivDp).load(allDoubts[position].userPhotoUrl).circleCrop()
-            .into(holder.ivDp)
+        if (holder is DoubtPreviewViewHolder)
+            holder.setData(homeEntities[position].doubt!!)
 
         if (position == itemCount - 1) {
             onLastItemReached.invoke()
@@ -65,13 +57,21 @@ class ViewDoubtsAdapter(
     }
 
     fun clearCurrentList() {
-        allDoubts.clear()
+        homeEntities.clear()
         notifyDataSetChanged()
     }
 
-    fun appendDoubts(doubts: List<DoubtData>) {
-        val offset = allDoubts.size
-        allDoubts.addAll(doubts)
+    fun appendDoubts(doubts: List<HomeEntity>) {
+        val offset = homeEntities.size
+        homeEntities.addAll(doubts)
         notifyItemRangeChanged(offset, doubts.size)
+    }
+
+    override fun getItemCount(): Int {
+        return homeEntities.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return homeEntities[position].type
     }
 }

@@ -1,4 +1,4 @@
-package com.doubtless.doubtless.screens.doubt
+package com.doubtless.doubtless.screens.doubt.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +12,7 @@ import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentViewDoubtsBinding
 import com.doubtless.doubtless.screens.adapters.ViewDoubtsAdapter
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.doubt.DoubtData
 
 class ViewDoubtsFragment : Fragment() {
     private var _binding: FragmentViewDoubtsBinding? = null
@@ -52,22 +53,31 @@ class ViewDoubtsFragment : Fragment() {
 
             lastRefreshed = System.currentTimeMillis()
 
-            analyticsTracker.trackFeedRefresh()
-
             binding.layoutSwipe.isRefreshing = true
             viewModel.refreshList()
             adapter.clearCurrentList()
         }
 
-        adapter = ViewDoubtsAdapter(viewModel.allDoubts.toMutableList(), onLastItemReached = {
-            viewModel.fetchDoubts()
-        }, user = userManager.getCachedUserData()!!)
+        adapter = ViewDoubtsAdapter(
+            homeEntities = viewModel.homeEntities.toMutableList(),
+            onLastItemReached = {
+                viewModel.fetchDoubts()
+            },
+            interactionListener = object : ViewDoubtsAdapter.InteractionListener {
+                override fun onSearchBarClicked() {
+
+                }
+
+                override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
+
+                }
+            })
 
         // how is rv restoring its scroll pos when switching tabs?
         binding.doubtsRecyclerView.adapter = adapter
         binding.doubtsRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        viewModel.fetchedDoubts.observe(viewLifecycleOwner) {
+        viewModel.fetchedHomeEntities.observe(viewLifecycleOwner) {
             if (it == null) return@observe
             adapter.appendDoubts(it)
             viewModel.notifyFetchedDoubtsConsumed()
