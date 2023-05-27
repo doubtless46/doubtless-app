@@ -7,17 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.doubtless.doubtless.DoubtlessApp
-import com.doubtless.doubtless.screens.auth.LoginActivity
-import com.doubtless.doubtless.R
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentDashboardBinding
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -50,8 +45,17 @@ class DashboardFragment : Fragment() {
     ): View {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
+
         binding.tvName.text = userManager.getCachedUserData()!!.name
         binding.tvUserEmail.text = userManager.getCachedUserData()!!.email
+        binding.cvUserImage.setBackgroundColor(
+            resources.getColor(
+                android.R.color.transparent,
+                null
+            )
+        )
+        Glide.with(this).load(userManager.getCachedUserData()!!.photoUrl).circleCrop()
+            .into(binding.ivUserImage)
 
         binding.btnSignout.setOnClickListener {
 

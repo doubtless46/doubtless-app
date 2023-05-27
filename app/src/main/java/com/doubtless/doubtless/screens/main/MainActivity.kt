@@ -6,6 +6,7 @@ import com.amplitude.android.Amplitude
 import com.amplitude.android.Configuration
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.databinding.ActivityMainBinding
+import com.doubtless.doubtless.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 

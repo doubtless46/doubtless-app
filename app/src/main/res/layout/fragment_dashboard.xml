@@ -31,12 +31,12 @@
                 android:innerRadius="0dp"
                 android:shape="ring"
                 android:thicknessRatio="1.9"
-                app:cardCornerRadius="40dp">
+                app:cardCornerRadius="50dp">
 
                 <ImageView
                     android:id="@+id/iv_user_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
@@ -79,7 +79,7 @@
                 android:elevation="8dp"
                 android:text="Submit Feedback"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="10sp" />
 
 
         </LinearLayout>

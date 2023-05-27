@@ -1,9 +1,13 @@
 package com.doubtless.doubtless.screens.splash
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.doubtless.doubtless.BuildConfig
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
@@ -11,7 +15,10 @@ import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.utils.anims.animateFadeUp
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {
     private lateinit var userManager: UserManager
@@ -72,9 +79,14 @@ class SplashActivity : AppCompatActivity() {
     private fun showAppUpdateDialog() {
         val dialog = AlertDialog.Builder(this).apply {
             title = "New Version Available"
-            setMessage("Please, update app to new version to continue")
+            setMessage("Please update the app to continue")
             setPositiveButton("Update") { _, _ ->
-                moveToNextActivity()
+                val playStoreUrl = "https://play.google.com/store/apps"
+                try {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(playStoreUrl)))
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(context, "Play Store Not Available", Toast.LENGTH_SHORT).show()
+                }
             }
         }
         dialog.setCancelable(false)
