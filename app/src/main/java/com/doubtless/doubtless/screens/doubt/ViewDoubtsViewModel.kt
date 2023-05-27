@@ -3,8 +3,8 @@ package com.doubtless.doubtless.screens.doubt
 import androidx.lifecycle.*
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
-import com.doubtless.doubtless.screens.home.network.FetchHomeFeedUseCase
-import com.doubtless.doubtless.screens.home.network.FetchHomeFeedUseCase.*
+import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase
+import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

@@ -26,6 +26,7 @@ class ViewDoubtsAdapter(
         val heading: TextView
         val description: TextView
         val ivDp: ImageView
+        val tvNetVotes: TextView
 
         init {
             userName = view.findViewById(R.id.tv_username)
@@ -33,6 +34,7 @@ class ViewDoubtsAdapter(
             heading = view.findViewById(R.id.user_doubt_heading)
             description = view.findViewById(R.id.user_doubt_description)
             ivDp = view.findViewById(R.id.iv_dp)
+            tvNetVotes = view.findViewById(R.id.tv_votes)
         }
     }
 
@@ -46,19 +48,20 @@ class ViewDoubtsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.userName.text = allDoubts[position].userName
-        holder.time.text = Utils.getTimeAgo(Date(allDoubts[position].date))
-        holder.heading.text = allDoubts[position].heading
-        holder.description.text = allDoubts[position].description
 
+        holder.userName.text = allDoubts[position].userName
+        holder.time.text = Utils.getTimeAgo(Date(allDoubts[position].date.toString()))
+        holder.heading.text = allDoubts[position].heading
+        holder.tvNetVotes.text = (allDoubts[position].netVotes.toInt()).toString()
+        holder.description.text = allDoubts[position].description
         holder.description.isVisible = !allDoubts[position].description.isNullOrEmpty()
 
-        Glide.with(holder.ivDp).load(allDoubts[position].userPhotoUrl).circleCrop().into(holder.ivDp)
+        Glide.with(holder.ivDp).load(allDoubts[position].userPhotoUrl).circleCrop()
+            .into(holder.ivDp)
 
         if (position == itemCount - 1) {
             onLastItemReached.invoke()
         }
-
     }
 
     fun clearCurrentList() {
