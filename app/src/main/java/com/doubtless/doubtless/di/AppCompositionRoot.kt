@@ -2,7 +2,6 @@ package com.doubtless.doubtless.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.net.Uri
 import com.amplitude.android.Amplitude
 import com.amplitude.android.Configuration
 import com.doubtless.doubtless.DoubtlessApp
@@ -12,13 +11,14 @@ import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserDataServerUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserDataStorageUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
-import com.doubtless.doubtless.screens.home.network.FetchHomeFeedUseCase
 import com.doubtless.doubtless.screens.onboarding.usecases.AddOnBoardingDataUseCase
 import com.doubtless.doubtless.screens.onboarding.usecases.FetchOnBoardingDataUseCase
+import com.doubtless.doubtless.screens.home.usecases.FetchFeedByDateUseCase
+import com.doubtless.doubtless.screens.home.usecases.FetchFeedByPopularityUseCase
+import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.*
-import java.lang.reflect.Type
 
 class AppCompositionRoot(appContext: DoubtlessApp) {
 
@@ -49,7 +49,19 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
     // should be initialized after splash screen isLoggedIn check
     fun getFetchHomeFeedUseCase(): FetchHomeFeedUseCase {
-        return FetchHomeFeedUseCase(FirebaseFirestore.getInstance())
+        return FetchHomeFeedUseCase(
+            getFetchFeedByDataUseCase(),
+            getFetchFeedByPopularityUseCase(),
+            FirebaseFirestore.getInstance()
+        )
+    }
+
+    private fun getFetchFeedByPopularityUseCase(): FetchFeedByPopularityUseCase {
+        return FetchFeedByPopularityUseCase(FirebaseFirestore.getInstance())
+    }
+
+    private fun getFetchFeedByDataUseCase(): FetchFeedByDateUseCase {
+        return FetchFeedByDateUseCase(FirebaseFirestore.getInstance())
     }
 
     // --------- OnBoarding ------------

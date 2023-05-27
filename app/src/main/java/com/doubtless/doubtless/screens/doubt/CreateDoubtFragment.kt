@@ -14,6 +14,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.analytics.AnalyticsTracker
+import com.doubtless.doubtless.constants.FirestoreCollection
 import com.doubtless.doubtless.databinding.FragmentCreateDoubtBinding
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
@@ -114,16 +115,13 @@ class CreateDoubtFragment : Fragment() {
             userName = user.name,
             userId = user.id,
             userPhotoUrl = user.photoUrl,
-            date = Date().toString(),
             heading = heading.trim(),
             description = description.trim(),
-            upVotes = 0,
-            downVotes = 0,
-            score = (0..100).random().toLong(), // fixme : for testing
-            timeMillis = System.currentTimeMillis()
+            netVotes = (0..1000000).random().toFloat() / 1000000, // 10^6
+            score = (0..100).random().toLong() // fixme : for testing
         )
 
-        db.collection("AllDoubts").add(doubt).addOnSuccessListener {
+        db.collection(FirestoreCollection.AllDoubts).add(doubt).addOnSuccessListener {
             isButtonClicked = false
             binding.postButton.alpha = 1f
             Toast.makeText(context, "Posted Successfully!", Toast.LENGTH_SHORT).show()
