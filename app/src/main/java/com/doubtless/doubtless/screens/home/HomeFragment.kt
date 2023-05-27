@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
+import com.doubtless.doubtless.R
 import com.doubtless.doubtless.databinding.FragmentHomeBinding
+import com.doubtless.doubtless.screens.doubt.view.ViewDoubtsFragment
 
 class HomeFragment : Fragment() {
 
@@ -21,6 +24,12 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (savedInstanceState == null) {
+            childFragmentManager.commit {
+                replace(R.id.home_container, ViewDoubtsFragment())
+            }
+        }
+
         homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
     }
@@ -32,8 +41,6 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-
         return root
     }
 

@@ -21,8 +21,12 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.main_container, MainFragment(), null)
+                .add(R.id.main_container, MainFragment(), "MainFragment")
                 .commit()
         }
     }
+
+//    fun getMainFragManager(): Support {
+//
+//    }
 }

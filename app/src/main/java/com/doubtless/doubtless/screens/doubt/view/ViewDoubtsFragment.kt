@@ -10,11 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentViewDoubtsBinding
+import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.screens.adapters.ViewDoubtsAdapter
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.DoubtData
+import com.doubtless.doubtless.screens.main.MainFragment
 
 class ViewDoubtsFragment : Fragment() {
+
     private var _binding: FragmentViewDoubtsBinding? = null
     private val binding get() = _binding!!
 
@@ -22,12 +25,24 @@ class ViewDoubtsFragment : Fragment() {
     private lateinit var adapter: ViewDoubtsAdapter
     private lateinit var userManager: UserManager
     private lateinit var analyticsTracker: AnalyticsTracker
+    private lateinit var navigator: FragNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
         analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
+
+        val homeFrag =
+            (requireActivity().supportFragmentManager.findFragmentByTag("MainFragment") as MainFragment?)
+                ?.childFragmentManager?.findFragmentByTag("mainfrag_0")
+
+
+        if (homeFrag != null)
+            navigator = DoubtlessApp.getInstance().getAppCompRoot()
+                .getMainFragNestedFragNavigator(homeFrag.childFragmentManager)
+
         viewModel = getViewModel()
+
         viewModel.fetchDoubts()
     }
 
@@ -65,7 +80,7 @@ class ViewDoubtsFragment : Fragment() {
             },
             interactionListener = object : ViewDoubtsAdapter.InteractionListener {
                 override fun onSearchBarClicked() {
-
+                    navigator.moveToSearchFragment()
                 }
 
                 override fun onDoubtClicked(doubtData: DoubtData, position: Int) {

@@ -2,11 +2,13 @@ package com.doubtless.doubtless.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.fragment.app.FragmentManager
 import com.amplitude.android.Amplitude
 import com.amplitude.android.Configuration
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.analytics.AnalyticsTracker
+import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.navigation.Router
 import com.doubtless.doubtless.network.DoubtlessServer
 import com.doubtless.doubtless.screens.auth.User
@@ -20,6 +22,7 @@ import com.doubtless.doubtless.screens.home.usecases.FetchFeedByPopularityUseCas
 import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase
 import com.doubtless.doubtless.screens.onboarding.usecases.AddOnBoardingDataUseCase
 import com.doubtless.doubtless.screens.onboarding.usecases.FetchOnBoardingDataUseCase
+import com.doubtless.doubtless.screens.search.usecases.ExtractKeywordsUseCase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -70,6 +73,12 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
     private fun getFetchFeedByDataUseCase(): FetchFeedByDateUseCase {
         return FetchFeedByDateUseCase(FirebaseFirestore.getInstance())
+    }
+
+    // --------- Search ------------
+
+    fun getExtractKeywordsUseCase(): ExtractKeywordsUseCase {
+        return ExtractKeywordsUseCase()
     }
 
     // --------- OnBoarding ------------
@@ -136,6 +145,15 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
     // ---------- Navigation ----------
 
     val router = Router()
+
+    //private lateinit var mainFragNestedFragNavigator: MainFragNestedFragNavigator
+
+    fun getMainFragNestedFragNavigator(supportFragmentManager: FragmentManager): FragNavigator {
+        return FragNavigator(
+            R.id.home_container,
+            supportFragmentManager
+        )
+    }
 
     // -------- Shared Pref ---------
 
