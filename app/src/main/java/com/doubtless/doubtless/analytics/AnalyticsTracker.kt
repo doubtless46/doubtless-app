@@ -2,7 +2,6 @@ package com.doubtless.doubtless.analytics
 
 import com.amplitude.android.Amplitude
 import com.doubtless.doubtless.BuildConfig
-import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 
 class AnalyticsTracker constructor(
@@ -31,6 +30,11 @@ class AnalyticsTracker constructor(
 
     fun trackLogout() {
         amplitude.track("logout", getCommonAttrs())
+    }
+
+    fun trackFeedbackButtonClicked() {
+        amplitude.track("feedback_btn_click", getCommonAttrs())
+
     }
 
     fun trackPostDoubtButtonClicked() {

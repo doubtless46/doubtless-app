@@ -20,11 +20,11 @@ import com.doubtless.doubtless.constants.FirestoreCollection
 import com.doubtless.doubtless.databinding.FragmentCreateDoubtBinding
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.doubt.usecases.DoubtDataSharedPrefUseCase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
 import java.util.UUID
 import kotlin.properties.Delegates
@@ -39,7 +39,6 @@ class CreateDoubtFragment : Fragment() {
     private lateinit var analyticsTracker: AnalyticsTracker
 
     private lateinit var remoteConfig: FirebaseRemoteConfig
-    private lateinit var configSettings: FirebaseRemoteConfigSettings
     private var maxHeadingCharLimit by Delegates.notNull<Int>()
     private var maxDescriptionCharLimit by Delegates.notNull<Int>()
     private lateinit var sharedPreferences: SharedPreferences
@@ -62,10 +61,7 @@ class CreateDoubtFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        remoteConfig = FirebaseRemoteConfig.getInstance()
-        configSettings =
-            FirebaseRemoteConfigSettings.Builder().setMinimumFetchIntervalInSeconds(10).build()
-
+        remoteConfig = DoubtlessApp.getInstance().getAppCompRoot().getRemoteConfig()
         binding.doubtHeading.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_MULTI_LINE)
         binding.doubtHeading.requestFocus()
         val mgr = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -73,14 +69,14 @@ class CreateDoubtFragment : Fragment() {
 
         getMaxCharacterLimit()
 
-        sharedPreferences = requireContext().getSharedPreferences("post_data", Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences("doubt_data", Context.MODE_PRIVATE)
 
         binding.postButton.setOnClickListener {
             if (!isButtonClicked) {
                 checkText()
             }
         }
-        val (savedHeadingText, savedDescriptionText) = getSharedPreferencesData()
+        val (savedHeadingText, savedDescriptionText) = DoubtDataSharedPrefUseCase(sharedPreferences).getSavedDoubtData()
 
         savedHeadingText?.let {
             if (it.isNotEmpty()) {
@@ -99,22 +95,9 @@ class CreateDoubtFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        saveTextToSharedPreferences(
+        DoubtDataSharedPrefUseCase(sharedPreferences).saveDoubtData(
             binding.doubtHeading.text.toString(), binding.doubtDescription.text.toString()
         )
-    }
-
-    private fun getSharedPreferencesData(): Pair<String?, String?> {
-        val headingText = sharedPreferences.getString("headingText", null)
-        val descriptionText = sharedPreferences.getString("descriptionText", null)
-        return Pair(headingText, descriptionText)
-    }
-
-    private fun saveTextToSharedPreferences(headingText: String, descriptionText: String) {
-        val editor = sharedPreferences.edit()
-        editor.putString("headingText", headingText)
-        editor.putString("descriptionText", descriptionText)
-        editor.apply()
     }
 
 
@@ -153,7 +136,6 @@ class CreateDoubtFragment : Fragment() {
     }
 
     private fun getMaxCharacterLimit() {
-        remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.fetchAndActivate().addOnCompleteListener {
             if (it.isSuccessful) {
                 val maxCharLimit = remoteConfig.getString("max_character_limit")

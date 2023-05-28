@@ -87,6 +87,7 @@ class DashboardFragment : Fragment() {
         }
 
         binding.btnFeedback.setOnClickListener {
+            tracker.trackFeedbackButtonClicked()
             submitFeedback()
         }
 

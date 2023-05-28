@@ -5,20 +5,23 @@ import android.content.SharedPreferences
 import com.amplitude.android.Amplitude
 import com.amplitude.android.Configuration
 import com.doubtless.doubtless.DoubtlessApp
+import com.doubtless.doubtless.R
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.navigation.Router
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserDataServerUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserDataStorageUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
-import com.doubtless.doubtless.screens.onboarding.usecases.AddOnBoardingDataUseCase
-import com.doubtless.doubtless.screens.onboarding.usecases.FetchOnBoardingDataUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByDateUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByPopularityUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase
+import com.doubtless.doubtless.screens.onboarding.usecases.AddOnBoardingDataUseCase
+import com.doubtless.doubtless.screens.onboarding.usecases.FetchOnBoardingDataUseCase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.*
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import com.google.gson.Gson
 
 class AppCompositionRoot(appContext: DoubtlessApp) {
 
@@ -29,8 +32,7 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
     private val amplitude = Amplitude(
         Configuration(
-            apiKey = "9ccdf7b8da7390a82fd779a2de0c6b1b",
-            context = appContext
+            apiKey = "9ccdf7b8da7390a82fd779a2de0c6b1b", context = appContext
         )
     )
 
@@ -130,5 +132,14 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
     private fun getGson(): Gson {
         return Gson()
+    }
+
+    fun getRemoteConfig(): FirebaseRemoteConfig {
+        val remoteConfig = FirebaseRemoteConfig.getInstance()
+        val configSettings =
+            FirebaseRemoteConfigSettings.Builder().setMinimumFetchIntervalInSeconds(120).build()
+        remoteConfig.setConfigSettingsAsync(configSettings)
+        remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
+        return remoteConfig
     }
 }
