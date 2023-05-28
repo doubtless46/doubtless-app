@@ -11,6 +11,15 @@ class FragNavigator constructor(
     private val supportFragmentManager: FragmentManager
 ) {
 
+   fun onBackPress(): Boolean {
+       if (supportFragmentManager.backStackEntryCount > 0) {
+           supportFragmentManager.popBackStackImmediate()
+           return true
+       }
+
+       return false
+   }
+
     // TODO : make proper nav graphs
     fun moveToSearchFragment() {
 

@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.databinding.FragmentSearchBinding
 import com.doubtless.doubtless.databinding.LayoutHomeSearchBinding
+import com.doubtless.doubtless.navigation.BackPressDispatcher
+import com.doubtless.doubtless.navigation.OnBackPressListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,14 +31,6 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater)
-
-        requireActivity().onBackPressedDispatcher.addCallback {
-            if (parentFragmentManager.backStackEntryCount > 0 && !isStateSaved) {
-                parentFragmentManager.popBackStackImmediate()
-            }
-
-            this.isEnabled = false
-        }
 
         binding.etSearch.requestFocus()
         val mgr = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

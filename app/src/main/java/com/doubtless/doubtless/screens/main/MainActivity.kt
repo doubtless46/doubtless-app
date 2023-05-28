@@ -2,13 +2,12 @@ package com.doubtless.doubtless.screens.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.amplitude.android.Amplitude
-import com.amplitude.android.Configuration
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.databinding.ActivityMainBinding
-import com.doubtless.doubtless.main.MainFragment
+import com.doubtless.doubtless.navigation.BackPressDispatcher
+import com.doubtless.doubtless.navigation.OnBackPressListener
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BackPressDispatcher {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -26,7 +25,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    fun getMainFragManager(): Support {
-//
-//    }
+    // ----- backpress impl ------
+
+    private val backPressListeners: MutableList<OnBackPressListener> = mutableListOf()
+
+    override fun registerBackPress(listener: OnBackPressListener) {
+        backPressListeners.add(listener)
+    }
+
+    override fun unregisterBackPress(listener: OnBackPressListener) {
+        backPressListeners.remove(listener)
+    }
+
+    override fun onBackPressed() {
+        var backPressConsumed = false
+
+        for (backPressListener in backPressListeners) {
+            if (backPressListener.onBackPress()) {
+                backPressConsumed = true
+            }
+        }
+
+        if (!backPressConsumed)
+            super.onBackPressed()
+    }
+
 }

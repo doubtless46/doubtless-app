@@ -14,6 +14,7 @@ import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.screens.adapters.ViewDoubtsAdapter
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.DoubtData
+import com.doubtless.doubtless.screens.main.MainActivity
 import com.doubtless.doubtless.screens.main.MainFragment
 
 class ViewDoubtsFragment : Fragment() {
@@ -32,17 +33,12 @@ class ViewDoubtsFragment : Fragment() {
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
         analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
 
-        val homeFrag =
-            (requireActivity().supportFragmentManager.findFragmentByTag("MainFragment") as MainFragment?)
-                ?.childFragmentManager?.findFragmentByTag("mainfrag_0")
+        val _navigator = DoubtlessApp.getInstance().getAppCompRoot().getHomeFragNavigator(requireActivity() as MainActivity)
 
-
-        if (homeFrag != null)
-            navigator = DoubtlessApp.getInstance().getAppCompRoot()
-                .getMainFragNestedFragNavigator(homeFrag.childFragmentManager)
+        if (_navigator != null)
+            navigator = _navigator
 
         viewModel = getViewModel()
-
         viewModel.fetchDoubts()
     }
 

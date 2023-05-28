@@ -2,6 +2,7 @@ package com.doubtless.doubtless.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentManager
 import com.amplitude.android.Amplitude
 import com.amplitude.android.Configuration
@@ -22,6 +23,8 @@ import com.doubtless.doubtless.screens.home.usecases.FetchFeedByPopularityUseCas
 import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase
 import com.doubtless.doubtless.screens.onboarding.usecases.AddOnBoardingDataUseCase
 import com.doubtless.doubtless.screens.onboarding.usecases.FetchOnBoardingDataUseCase
+import com.doubtless.doubtless.screens.main.MainActivity
+import com.doubtless.doubtless.screens.main.MainFragment
 import com.doubtless.doubtless.screens.search.usecases.ExtractKeywordsUseCase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -146,11 +149,29 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
     val router = Router()
 
-    //private lateinit var mainFragNestedFragNavigator: MainFragNestedFragNavigator
+    // TODO : ig this should be home frag scoped.
+    private lateinit var homeFragNavigator: FragNavigator
 
-    fun getMainFragNestedFragNavigator(supportFragmentManager: FragmentManager): FragNavigator {
+    fun getHomeFragNavigator(mainActivity: MainActivity): FragNavigator? {
+
+        if (::homeFragNavigator.isInitialized) {
+            return homeFragNavigator
+        }
+
+        val homeFrag =
+            (mainActivity.supportFragmentManager.findFragmentByTag("MainFragment") as MainFragment?)
+                ?.childFragmentManager?.findFragmentByTag("mainfrag_0")
+
+        if (homeFrag != null)
+            return DoubtlessApp.getInstance().getAppCompRoot()
+                .getFragNavigator(homeFrag.childFragmentManager, R.id.home_container)
+
+        return null
+    }
+
+    private fun getFragNavigator(supportFragmentManager: FragmentManager, @IdRes containerId: Int ): FragNavigator {
         return FragNavigator(
-            R.id.home_container,
+            containerId,
             supportFragmentManager
         )
     }
