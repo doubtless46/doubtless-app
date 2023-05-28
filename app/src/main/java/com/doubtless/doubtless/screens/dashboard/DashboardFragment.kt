@@ -96,7 +96,7 @@ class DashboardFragment : Fragment() {
     private fun submitFeedback() {
         val intent = Intent(Intent.ACTION_SEND).apply {
             putExtra(Intent.EXTRA_EMAIL, arrayOf("doubtless46@gmail.com"))
-            putExtra(Intent.EXTRA_SUBJECT, "Feedback")
+            putExtra(Intent.EXTRA_SUBJECT, "Feedback by ${userManager.getCachedUserData()!!.name}")
             putExtra(Intent.EXTRA_TEXT, "Enter Feedback Here")
             selector = Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse("mailto:")
