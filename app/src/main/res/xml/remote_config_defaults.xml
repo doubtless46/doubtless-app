@@ -10,6 +10,6 @@
   </entry>
   <entry>
     <key>max_character_limit</key>
-    <value>{"max_heading_char_limit":50,"max_description_char_limit":100}</value>
+    <value>{"max_heading_char_limit":50,"max_description_char_limit":100,"keywords_limit":10}</value>
   </entry>
 </defaults>

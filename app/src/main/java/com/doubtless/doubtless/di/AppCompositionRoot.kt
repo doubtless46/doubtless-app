@@ -13,6 +13,7 @@ import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserDataServerUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserDataStorageUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.doubt.usecases.DoubtDataSharedPrefUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByDateUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByPopularityUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase
@@ -80,6 +81,12 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
         return AddOnBoardingDataUseCase(FirebaseFirestore.getInstance(), user)
     }
 
+
+    // ------- Create Doubt ---------
+
+    fun getDoubtDataSharedPrefUseCase(): DoubtDataSharedPrefUseCase {
+        return DoubtDataSharedPrefUseCase(getSharedPref())
+    }
 
     // ------- User ---------
 
