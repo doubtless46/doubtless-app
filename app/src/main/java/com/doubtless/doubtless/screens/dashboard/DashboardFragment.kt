@@ -1,22 +1,18 @@
 package com.doubtless.doubtless.screens.dashboard
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.doubtless.doubtless.DoubtlessApp
-import com.doubtless.doubtless.screens.auth.LoginActivity
-import com.doubtless.doubtless.R
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentDashboardBinding
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,8 +45,17 @@ class DashboardFragment : Fragment() {
     ): View {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
+
         binding.tvName.text = userManager.getCachedUserData()!!.name
         binding.tvUserEmail.text = userManager.getCachedUserData()!!.email
+        binding.cvUserImage.setBackgroundColor(
+            resources.getColor(
+                android.R.color.transparent,
+                null
+            )
+        )
+        Glide.with(this).load(userManager.getCachedUserData()!!.photoUrl).circleCrop()
+            .into(binding.ivUserImage)
 
         binding.btnSignout.setOnClickListener {
 
@@ -66,22 +71,40 @@ class DashboardFragment : Fragment() {
 
                 if (result is UserManager.Result.LoggedOut) {
 
-                    DoubtlessApp.getInstance().getAppCompRoot().router.moveToLoginActivity(requireActivity())
+                    DoubtlessApp.getInstance().getAppCompRoot().router.moveToLoginActivity(
+                        requireActivity()
+                    )
                     requireActivity().finish()
 
                 } else if (result is UserManager.Result.Error) {
 
                     Toast.makeText(
-                        this@DashboardFragment.requireContext(),
-                        result.message,
-                        Toast.LENGTH_LONG
+                        this@DashboardFragment.requireContext(), result.message, Toast.LENGTH_LONG
                     ).show() // encapsulate error ui handling
 
                 }
             }
         }
 
+        binding.btnFeedback.setOnClickListener {
+            tracker.trackFeedbackButtonClicked()
+            submitFeedback()
+        }
+
         return binding.root
+    }
+
+    private fun submitFeedback() {
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            putExtra(Intent.EXTRA_EMAIL, arrayOf("doubtless46@gmail.com"))
+            putExtra(Intent.EXTRA_SUBJECT, "Feedback by ${userManager.getCachedUserData()!!.name}")
+            putExtra(Intent.EXTRA_TEXT, "Enter Feedback Here")
+            selector = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:")
+            }
+        }
+        startActivity(intent)
+
     }
 
     override fun onDestroyView() {

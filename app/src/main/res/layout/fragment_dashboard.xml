@@ -8,57 +8,57 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/view"
-        app:cardBackgroundColor="@color/cream"
-        android:elevation="24dp"
         android:layout_width="match_parent"
-        android:layout_height="320dp"
+        android:layout_height="wrap_content"
+        android:elevation="24dp"
+        app:cardBackgroundColor="@color/cream"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_userImage"
-                android:layout_gravity="center"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="60dp"
                 android:elevation="12dp"
                 android:innerRadius="0dp"
                 android:shape="ring"
                 android:thicknessRatio="1.9"
-                app:cardCornerRadius="40dp"
-                android:layout_marginTop="60dp">
+                app:cardCornerRadius="50dp">
 
                 <ImageView
                     android:id="@+id/iv_user_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_user"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_user" />
             </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Krishna Rana"
                 android:layout_gravity="center"
+                android:layout_marginTop="4dp"
+                android:text="User Name"
                 android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_user_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="8dp"
-                android:text="krishna@gmail.com"
-                android:layout_gravity="center" />
+                android:text="user@gmail.com" />
 
             <com.doubtless.doubtless.theming.buttons.SecondaryButton
                 android:id="@+id/btn_signout"
@@ -66,7 +66,21 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="12dp"
+                android:minHeight="48dp"
                 app:text="SIGN OUT" />
+
+            <TextView
+                android:id="@+id/btnFeedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="16dp"
+                android:background="@android:color/transparent"
+                android:elevation="8dp"
+                android:text="Submit Feedback"
+                android:textColor="@color/black"
+                android:textSize="10sp" />
+
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
