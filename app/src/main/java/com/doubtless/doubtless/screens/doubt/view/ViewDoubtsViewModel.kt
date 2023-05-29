@@ -1,8 +1,9 @@
-package com.doubtless.doubtless.screens.doubt
+package com.doubtless.doubtless.screens.doubt.view
 
 import androidx.lifecycle.*
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.home.FeedEntity
 import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase.*
 import kotlinx.coroutines.Dispatchers
@@ -14,16 +15,17 @@ class ViewDoubtsViewModel constructor(
     private val userManager: UserManager
 ) : ViewModel() {
 
-    private val _allDoubts = mutableListOf<DoubtData>()
-    val allDoubts: List<DoubtData> = _allDoubts
+    private val _homeEntities = mutableListOf<FeedEntity>()
+    val homeEntities: List<FeedEntity> = _homeEntities
 
     private var isLoading = false
 
-    private val _fetchedDoubts = MutableLiveData<List<DoubtData>?>()
-    val fetchedDoubts: LiveData<List<DoubtData>?> = _fetchedDoubts // TODO : use Result here!
+    private val _fetchedHomeEntities = MutableLiveData<List<FeedEntity>?>()
+    val fetchedHomeEntities: LiveData<List<FeedEntity>?> =
+        _fetchedHomeEntities // TODO : use Result here!
 
     fun notifyFetchedDoubtsConsumed() {
-        _fetchedDoubts.postValue(null)
+        _fetchedHomeEntities.postValue(null)
     }
 
     fun fetchDoubts(isRefreshCall: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
@@ -40,23 +42,36 @@ class ViewDoubtsViewModel constructor(
         )
 
         if (result is Result.Success && result.data.isNotEmpty()) {
-            _fetchedDoubts.postValue(result.data)
 
-            if (isRefreshCall) {
-                analyticsTracker.trackFeedNextPage(allDoubts.size)
+            if (!isRefreshCall) {
+                analyticsTracker.trackFeedNextPage(homeEntities.size)
+            } else {
+                analyticsTracker.trackFeedRefresh()
             }
 
-            _allDoubts.addAll(result.data)
+            val homeEntitiesFromServer = mutableListOf<FeedEntity>()
+
+            result.data.forEach {
+                homeEntitiesFromServer.add(it.toHomeEntity())
+            }
+
+            // for page 1 call add search entity
+            if (_homeEntities.isEmpty())
+                _homeEntities.add(FeedEntity.getSearchEntity())
+
+            _homeEntities.addAll(homeEntitiesFromServer)
+            _fetchedHomeEntities.postValue(_homeEntities)
+
         } else {
             // ERROR CASE
-            _fetchedDoubts.postValue(null)
+            _fetchedHomeEntities.postValue(null)
         }
 
         isLoading = false
     }
 
     fun refreshList() {
-        _allDoubts.clear()
+        _homeEntities.clear()
         fetchDoubts(isRefreshCall = true)
     }
 

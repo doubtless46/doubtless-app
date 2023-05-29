@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="320dp"
         android:elevation="24dp"
         app:cardBackgroundColor="@color/cream"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +50,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="4dp"
                 android:text="User Name"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="14dp" />
 
             <TextView
                 android:id="@+id/tv_user_email"
@@ -58,15 +59,15 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"
-                android:text="user@gmail.com" />
+                android:text="user@gmail.com"
+                android:textSize="14dp" />
 
             <com.doubtless.doubtless.theming.buttons.SecondaryButton
                 android:id="@+id/btn_signout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="12dp"
-                android:minHeight="48dp"
+                android:layout_marginTop="16dp"
                 app:text="SIGN OUT" />
 
             <TextView

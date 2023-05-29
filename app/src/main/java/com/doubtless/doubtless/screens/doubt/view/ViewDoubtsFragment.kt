@@ -1,4 +1,4 @@
-package com.doubtless.doubtless.screens.doubt
+package com.doubtless.doubtless.screens.doubt.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,22 +10,33 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentViewDoubtsBinding
-import com.doubtless.doubtless.screens.adapters.ViewDoubtsAdapter
+import com.doubtless.doubtless.navigation.FragNavigator
+import com.doubtless.doubtless.screens.common.GenericFeedAdapter
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.doubt.DoubtData
+import com.doubtless.doubtless.screens.main.MainActivity
 
 class ViewDoubtsFragment : Fragment() {
+
     private var _binding: FragmentViewDoubtsBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var viewModel: ViewDoubtsViewModel
-    private lateinit var adapter: ViewDoubtsAdapter
+    private lateinit var adapter: GenericFeedAdapter
     private lateinit var userManager: UserManager
     private lateinit var analyticsTracker: AnalyticsTracker
+    private lateinit var navigator: FragNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
         analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
+
+        val _navigator = DoubtlessApp.getInstance().getAppCompRoot().getHomeFragNavigator(requireActivity() as MainActivity)
+
+        if (_navigator != null)
+            navigator = _navigator
+
         viewModel = getViewModel()
         viewModel.fetchDoubts()
     }
@@ -52,22 +63,31 @@ class ViewDoubtsFragment : Fragment() {
 
             lastRefreshed = System.currentTimeMillis()
 
-            analyticsTracker.trackFeedRefresh()
-
             binding.layoutSwipe.isRefreshing = true
             viewModel.refreshList()
             adapter.clearCurrentList()
         }
 
-        adapter = ViewDoubtsAdapter(viewModel.allDoubts.toMutableList(), onLastItemReached = {
-            viewModel.fetchDoubts()
-        }, user = userManager.getCachedUserData()!!)
+        adapter = GenericFeedAdapter(
+            homeEntities = viewModel.homeEntities.toMutableList(),
+            onLastItemReached = {
+                viewModel.fetchDoubts()
+            },
+            interactionListener = object : GenericFeedAdapter.InteractionListener {
+                override fun onSearchBarClicked() {
+                    navigator.moveToSearchFragment()
+                }
+
+                override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
+
+                }
+            })
 
         // how is rv restoring its scroll pos when switching tabs?
         binding.doubtsRecyclerView.adapter = adapter
         binding.doubtsRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        viewModel.fetchedDoubts.observe(viewLifecycleOwner) {
+        viewModel.fetchedHomeEntities.observe(viewLifecycleOwner) {
             if (it == null) return@observe
             adapter.appendDoubts(it)
             viewModel.notifyFetchedDoubtsConsumed()
