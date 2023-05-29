@@ -8,6 +8,7 @@ import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.navigation.Router
+import com.doubtless.doubtless.network.DoubtlessServer
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserDataServerUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserDataStorageUseCase
@@ -22,6 +23,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 class AppCompositionRoot(appContext: DoubtlessApp) {
 
@@ -128,16 +132,39 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
             .getSharedPreferences("doubtless_shared_pref", Context.MODE_PRIVATE)
     }
 
+    // --------- SERVER -----------
+
+    private val BASE_URL = "TODO"
+    private lateinit var doubtlessServer: DoubtlessServer
+
+    @Synchronized
+    fun getServer(): DoubtlessServer {
+
+        if (::doubtlessServer.isInitialized == false) {
+            doubtlessServer = Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(
+                    /* factory = */ GsonConverterFactory.create(getGson())
+                )
+                .build()
+                .create(DoubtlessServer::class.java)
+        }
+
+        return doubtlessServer
+    }
+
     // --------- GSON -----------
 
     private fun getGson(): Gson {
         return Gson()
     }
 
+    // --------- Remote Config -----------
+
     fun getRemoteConfig(): FirebaseRemoteConfig {
         val remoteConfig = FirebaseRemoteConfig.getInstance()
         val configSettings =
-            FirebaseRemoteConfigSettings.Builder().setMinimumFetchIntervalInSeconds(120).build()
+            FirebaseRemoteConfigSettings.Builder().setMinimumFetchIntervalInSeconds(10 * 60).build()
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         return remoteConfig
