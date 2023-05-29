@@ -28,7 +28,7 @@
             android:padding="12dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            android:textSize="14dp"
+            android:textSize="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

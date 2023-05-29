@@ -35,8 +35,6 @@ class MainFragment : Fragment() {
             override fun onNewSelectedIndex(newIndex: Int) {
                 val transaction = childFragmentManager.beginTransaction()
 
-                val transaction = childFragmentManager.beginTransaction()
-
                 // add fragments to fm if not already given this callback
                 // gets triggered for initial default element selection.
                 if (!areBottomNavFragmentsAdded) {

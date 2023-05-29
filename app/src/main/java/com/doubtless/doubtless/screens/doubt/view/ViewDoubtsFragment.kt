@@ -69,7 +69,7 @@ class ViewDoubtsFragment : Fragment() {
         }
 
         adapter = GenericFeedAdapter(
-            homeEntities = viewModel.homeEntities.toMutableList(),
+            genericFeedEntities = viewModel.homeEntities.toMutableList(),
             onLastItemReached = {
                 viewModel.fetchDoubts()
             },
