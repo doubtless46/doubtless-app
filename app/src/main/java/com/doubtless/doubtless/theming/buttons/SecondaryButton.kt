@@ -7,13 +7,13 @@ import android.view.Gravity
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import com.doubtless.doubtless.R
-import com.doubtless.doubtless.main.bottomNav.BottomIntractableElement
+import com.doubtless.doubtless.screens.main.bottomNav.BottomIntractableElement
 import com.doubtless.doubtless.utils.Utils.dpToPx
 
 class SecondaryButton constructor(
     context: Context,
     attributeSet: AttributeSet?
-) : CardView(context, attributeSet) {
+) : CardView(context, attributeSet), BottomIntractableElement {
 
     private var text = "" // create a separate data class for these.
 
@@ -65,5 +65,19 @@ class SecondaryButton constructor(
 
         // other properties
         isClickable = true
+    }
+
+    // bottom nav interaction
+
+    private var isCurrentlySelected = false
+
+    override fun onSelected() {
+        isCurrentlySelected = true
+        setCardBackgroundColor(resources.getColor(R.color.cream))
+    }
+
+    override fun onUnselected() {
+        setCardBackgroundColor(resources.getColor(R.color.cream))
+        isCurrentlySelected = false
     }
 }

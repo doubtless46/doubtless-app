@@ -1,4 +1,4 @@
-package com.doubtless.doubtless.main
+package com.doubtless.doubtless.screens.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,7 @@ import com.amplitude.android.Amplitude
 import com.amplitude.android.Configuration
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.databinding.ActivityMainBinding
+import com.doubtless.doubtless.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 

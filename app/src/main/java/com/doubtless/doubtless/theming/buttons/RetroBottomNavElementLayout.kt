@@ -2,7 +2,7 @@ package com.doubtless.doubtless.theming.buttons
 
 import android.content.Context
 import android.util.AttributeSet
-import com.doubtless.doubtless.main.bottomNav.BottomIntractableElement
+import com.doubtless.doubtless.screens.main.bottomNav.BottomIntractableElement
 import com.doubtless.doubtless.theming.retro.RetroLayout
 
 class RetroBottomNavElementLayout(context: Context, attributeSet: AttributeSet?) :

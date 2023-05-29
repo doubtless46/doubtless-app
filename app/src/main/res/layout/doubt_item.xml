@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="@drawable/doubt_item_border">
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        app:cardElevation="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.doubtless.doubtless.theming.retro.RetroLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="18dp"
+                app:isPlainStyled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_cancel"
+                    app:tint="@color/black" />
+
+            </com.doubtless.doubtless.theming.retro.RetroLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_userImage"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="22dp"
+                android:elevation="12dp"
+                android:innerRadius="0dp"
+                android:shape="ring"
+                android:thicknessRatio="1.9"
+                app:cardCornerRadius="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_user_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_user" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_name_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Krishna Rana "
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:layout_marginStart="8dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/cv_userImage"
+                app:layout_constraintTop_toTopOf="@id/cv_userImage"
+                app:layout_constraintBottom_toBottomOf="@id/cv_userImage"/>
+
+            <TextView
+                android:id="@+id/tv_reputation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="reputation:"
+                android:textSize="12sp"
+                android:visibility="gone"
+                android:layout_marginStart="4dp"
+                app:layout_constraintStart_toEndOf="@+id/cv_userImage"
+                app:layout_constraintTop_toBottomOf="@+id/tv_name_user" />
+
+            <TextView
+                android:id="@+id/tv_reputation_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="50K"
+                android:visibility="gone"
+                android:textColor="@color/purple"
+                android:textSize="8sp"
+                app:layout_constraintStart_toEndOf="@+id/tv_reputation"
+                app:layout_constraintTop_toBottomOf="@+id/tv_name_user" />
+
+            <View
+                android:id="@+id/view_purple_element"
+                android:layout_width="4dp"
+                android:layout_height="37dp"
+                android:background="@color/purple"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_doubt_question"
+                app:layout_constraintStart_toStartOf="@id/cv_userImage"
+                app:layout_constraintTop_toTopOf="@+id/tv_doubt_question" />
+
+            <TextView
+                android:id="@+id/tv_doubt_question"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="18dp"
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/view_purple_element"
+                app:layout_constraintTop_toBottomOf="@+id/cv_userImage"
+                tools:text="How much attendance does one need in MSIT? Please help!!" />
+
+            <TextView
+                android:id="@+id/tv_doubt_answer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="18dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_doubt_question"
+                app:layout_constraintTop_toBottomOf="@+id/tv_doubt_question"
+                tools:text="MSIT, or Master of Science in Information Technology, is a graduate program offered by various universities and institutions around the world." />
+
+            <com.doubtless.doubtless.theming.retro.RetroLayout
+                android:id="@+id/retroLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="32dp"
+                app:layout_constraintStart_toStartOf="@+id/tv_doubt_answer"
+                app:layout_constraintTop_toBottomOf="@id/parent_votes">
+
+                <TextView
+                    android:id="@+id/btn_answer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
+                    android:padding="14dp"
+                    android:text="Answer"
+                    android:textColor="@color/white" />
+            </com.doubtless.doubtless.theming.retro.RetroLayout>
+
+            <TextView
+                android:id="@+id/tv_total_answers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/poppins_bold"
+                android:text="5 Answers"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/retroLayout"
+                app:layout_constraintStart_toEndOf="@+id/retroLayout"
+                app:layout_constraintTop_toTopOf="@+id/retroLayout"
+                app:layout_constraintVertical_bias="0.409" />
+
+            <LinearLayout
+                android:id="@+id/parent_votes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="@+id/tv_doubt_answer"
+                app:layout_constraintTop_toBottomOf="@+id/tv_doubt_answer">
+
+                <ImageButton
+                    android:id="@+id/upvote_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="UpvoteButton"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_upvote"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <TextView
+                    android:id="@+id/vote_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <ImageButton
+                    android:id="@+id/downvote_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="DownvoteButton"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_downvote"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>
