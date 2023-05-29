@@ -78,8 +78,7 @@
                 android:background="@android:color/transparent"
                 android:elevation="8dp"
                 android:text="Submit Feedback"
-                android:textColor="@color/black"
-                android:textSize="10sp" />
+                android:textSize="12dp" />
 
 
         </LinearLayout>

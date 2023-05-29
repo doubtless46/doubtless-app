@@ -32,28 +32,37 @@ class MainFragment : Fragment() {
         binding.retroBottomNav.setOnSelectedItemChangedListener(object :
             OnSelectedItemChangedListener {
             override fun onNewSelectedIndex(newIndex: Int) {
+                val transaction = childFragmentManager.beginTransaction()
 
                 // add fragments to fm if not already given this callback
                 // gets triggered for initial default element selection.
                 if (!areBottomNavFragmentsAdded) {
-                    val transaction = childFragmentManager.beginTransaction()
 
                     bottomNavFragments.forEach {
-                        transaction.add(R.id.bottom_nav_fragment_container, it)
+                        transaction.add(
+                            R.id.bottom_nav_fragment_container, it,
+                            "mainfrag_$newIndex"
+                        )
                     }
 
-                    transaction.commit()
+                    bottomNavFragments.forEachIndexed { index, fragment ->
+                        if (index != newIndex)
+                            transaction.detach(fragment)
+                    }
+
+                    transaction.attach(bottomNavFragments[newIndex])
+                        .commit() // happens on click hence not need to allow state loss.
 
                     areBottomNavFragmentsAdded = true
+
+                    return
                 }
 
                 // TODO : support for animation
                 // detach unselected fragments and attach the selected one
 
-                val transaction = childFragmentManager.beginTransaction()
-
                 bottomNavFragments.forEachIndexed { index, fragment ->
-                    if (index != newIndex)
+                    if (index != newIndex && !fragment.isDetached)
                         transaction.detach(fragment)
                 }
 
