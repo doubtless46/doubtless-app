@@ -7,8 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class PostDoubtUseCase constructor(
-    private val server: DoubtlessServer,
-    private val user: User
+    private val server: DoubtlessServer
 ) {
 
     data class PostDoubtRequest(

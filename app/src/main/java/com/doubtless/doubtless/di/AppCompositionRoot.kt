@@ -14,6 +14,7 @@ import com.doubtless.doubtless.screens.auth.usecases.UserDataServerUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserDataStorageUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.usecases.DoubtDataSharedPrefUseCase
+import com.doubtless.doubtless.screens.doubt.usecases.PostDoubtUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByDateUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByPopularityUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase
@@ -88,6 +89,10 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
         return DoubtDataSharedPrefUseCase(getSharedPref())
     }
 
+    fun getPostDoubtUseCase(): PostDoubtUseCase {
+        return PostDoubtUseCase(getServer())
+    }
+
     // ------- User ---------
 
     private lateinit var userManager: UserManager
@@ -141,7 +146,7 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
     // --------- SERVER -----------
 
-    private val BASE_URL = "TODO"
+    private val BASE_URL = "https://TODO"
     private lateinit var doubtlessServer: DoubtlessServer
 
     @Synchronized

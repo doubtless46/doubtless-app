@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import com.doubtless.doubtless.constants.FirestoreCollection
 import com.doubtless.doubtless.screens.auth.User
+import com.doubtless.doubtless.screens.auth.UserAttributes
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
+import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -48,13 +50,26 @@ class UserDataServerUseCase constructor(
                 val _serverUser =
                     it.documents[0].toObject(User::class.java) // make ServerUser and map to User
 
-                serverUser = _serverUser!!.copy(document_id = it.documents[0].id)
+                firestore.collection(FirestoreCollection.USER)
+                    .document(it.documents[0].id)
+                    .collection(FirestoreCollection.USER_ATTR)
+                    .get().addOnSuccessListener {
+                        try {
+
+                            val attr = it.documents[0].toObject(UserAttributes::class.java)
+                            serverUser = _serverUser!!.copy(document_id = it.documents[0].id, local_user_attr = attr)
+
+                        } catch (e: Exception) {
+                            errorMessage = e.localizedMessage
+                        }
+
+                        latch.countDown()
+                    }
 
             } catch (e: Exception) {
                 errorMessage = e.localizedMessage
+                latch.countDown()
             }
-
-            latch.countDown()
 
         }.addOnFailureListener {
             errorMessage = it.message

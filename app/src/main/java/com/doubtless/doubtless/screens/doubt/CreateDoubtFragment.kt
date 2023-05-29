@@ -21,6 +21,7 @@ import com.doubtless.doubtless.databinding.FragmentCreateDoubtBinding
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.usecases.DoubtDataSharedPrefUseCase
+import com.doubtless.doubtless.screens.doubt.usecases.PostDoubtUseCase
 import com.doubtless.doubtless.screens.onboarding.OnBoardingAttributes
 import com.doubtless.doubtless.screens.onboarding.usecases.FetchOnBoardingDataUseCase
 import com.google.android.material.chip.Chip
@@ -43,7 +44,7 @@ class CreateDoubtFragment : Fragment() {
     private lateinit var db: FirebaseFirestore
     private lateinit var userManager: UserManager
     private lateinit var analyticsTracker: AnalyticsTracker
-
+    private lateinit var postDoubtUseCase: PostDoubtUseCase
     private lateinit var remoteConfig: FirebaseRemoteConfig
 
     private var maxHeadingCharLimit by Delegates.notNull<Int>()
@@ -67,6 +68,7 @@ class CreateDoubtFragment : Fragment() {
         onBoardingDataUseCase = DoubtlessApp.getInstance().getAppCompRoot()
             .getFetchOnBoardingDataUseCase(userManager.getCachedUserData()!!)
         remoteConfig = DoubtlessApp.getInstance().getAppCompRoot().getRemoteConfig()
+        postDoubtUseCase = DoubtlessApp.getInstance().getAppCompRoot().getPostDoubtUseCase()
     }
 
     override fun onCreateView(
@@ -176,7 +178,7 @@ class CreateDoubtFragment : Fragment() {
         binding.postButton.isClickable = false
         binding.postButton.alpha = 0.8f
 
-        showConfirmationDialog()
+        showConfirmationDialog(getSelectedTags(), keywordsEntered)
 
     }
 
@@ -193,7 +195,7 @@ class CreateDoubtFragment : Fragment() {
             return "keyword size is more than $maxKeywordsLimit"
         }
 
-        if( keywordsEntered.size == 0) {
+        if (keywordsEntered.size == 0) {
             return "Please enter a keyword!"
         }
 
@@ -202,7 +204,7 @@ class CreateDoubtFragment : Fragment() {
         if (size > 3)
             return "More than 3 Tags are not allowed!"
 
-        if (size ==0)
+        if (size == 0)
             return "Please select a tag!"
 
         return null
@@ -218,13 +220,14 @@ class CreateDoubtFragment : Fragment() {
         return checkedTags
     }
 
-    private fun showConfirmationDialog() {
+    private fun showConfirmationDialog(tags: List<String>, keywords: List<String>) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Confirmation").setMessage("Are you sure you want to post?")
             .setPositiveButton("Post") { dialogInterface: DialogInterface, _: Int ->
                 createDoubt(
                     binding.doubtHeading.text.toString(),
                     binding.doubtDescription.text.toString(),
+                    tags, keywords,
                     userManager.getCachedUserData()!!
                 )
                 dialogInterface.dismiss()
@@ -264,29 +267,45 @@ class CreateDoubtFragment : Fragment() {
             arrayOf<InputFilter>(InputFilter.LengthFilter(maxDescriptionCharLimit))
     }
 
-    private fun createDoubt(heading: String, description: String, user: User) {
-        val doubt = DoubtData(
-            id = UUID.randomUUID().toString(),
-            userName = user.name,
-            userId = user.id,
-            userPhotoUrl = user.photoUrl,
-            heading = heading.trim(),
-            description = description.trim(),
-            netVotes = (0..1000000).random().toFloat() / 1000000, // 10^6
-            score = (0..100).random().toLong() // fixme : for testing
-        )
+    private fun createDoubt(
+        heading: String,
+        description: String,
+        tags: List<String>,
+        keywords: List<String>,
+        user: User
+    ) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = postDoubtUseCase.post(
+                PostDoubtUseCase.PostDoubtRequest(
+                    author_id = user.id!!,
+                    author_name = user.name!!,
+                    author_photo_url = user.photoUrl!!,
+                    author_college = user.local_user_attr!!.college!!,
+                    heading = heading,
+                    description = description,
+                    net_votes = 0f,
+                    tags = tags,
+                    keywords = keywords
+                )
+            )
 
-        db.collection(FirestoreCollection.AllDoubts).add(doubt).addOnSuccessListener {
-            isButtonClicked = false
-            binding.postButton.alpha = 1f
-            binding.doubtHeading.setText("")
-            binding.doubtDescription.setText("")
+            if (!isAdded) return@launch
 
-            Toast.makeText(context, "Posted Successfully!", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener {
-            isButtonClicked = false
-            binding.postButton.alpha = 1f
-            Toast.makeText(context, "Failed to Post ${it.message}", Toast.LENGTH_SHORT).show()
+            if (result is PostDoubtUseCase.Result.Success) {
+                isButtonClicked = false
+                binding.postButton.alpha = 1f
+                binding.doubtHeading.setText("")
+                binding.doubtDescription.setText("")
+                Toast.makeText(context, "Posted Successfully!", Toast.LENGTH_SHORT).show()
+            } else {
+                isButtonClicked = false
+                binding.postButton.alpha = 1f
+                Toast.makeText(
+                    /* context = */ context,
+                    /* text = */ "Failed to Post ${(result as PostDoubtUseCase.Result.Error).message}",
+                    /* duration = */ Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
