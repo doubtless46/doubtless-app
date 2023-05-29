@@ -18,6 +18,7 @@ import com.doubtless.doubtless.screens.auth.usecases.UserDataStorageUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.usecases.DoubtDataSharedPrefUseCase
 import com.doubtless.doubtless.screens.doubt.usecases.PostDoubtUseCase
+import com.doubtless.doubtless.screens.home.entities.FeedConfig
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByDateUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByPopularityUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase
@@ -34,7 +35,6 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 class AppCompositionRoot(appContext: DoubtlessApp) {
 
@@ -63,11 +63,12 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
     // --------- HomeFeed ------------
 
     // should be initialized after splash screen isLoggedIn check
-    fun getFetchHomeFeedUseCase(): FetchHomeFeedUseCase {
+    fun getFetchHomeFeedUseCase(feedConfig: FeedConfig): FetchHomeFeedUseCase {
         return FetchHomeFeedUseCase(
             getFetchFeedByDataUseCase(),
             getFetchFeedByPopularityUseCase(),
-            FirebaseFirestore.getInstance()
+            FirebaseFirestore.getInstance(),
+            feedConfig
         )
     }
 
@@ -86,7 +87,7 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
     }
 
     fun getFetchSearchResultsUseCase(): FetchSearchResultsUseCase {
-        return FetchSearchResultsUseCase()
+        return FetchSearchResultsUseCase(getServer())
     }
 
     // --------- OnBoarding ------------
@@ -157,7 +158,7 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
     // TODO : ig this should be home frag scoped.
     private lateinit var homeFragNavigator: FragNavigator
 
-    fun getHomeFragNavigator(mainActivity: MainActivity): FragNavigator? {
+    fun getFragNavigator(mainActivity: MainActivity): FragNavigator? {
 
         if (::homeFragNavigator.isInitialized) {
             return homeFragNavigator
@@ -169,7 +170,7 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
         if (homeFrag != null)
             return DoubtlessApp.getInstance().getAppCompRoot()
-                .getFragNavigator(homeFrag.childFragmentManager, R.id.home_container)
+                .getFragNavigator(homeFrag.childFragmentManager, R.id.bottomNav_child_container)
 
         return null
     }
