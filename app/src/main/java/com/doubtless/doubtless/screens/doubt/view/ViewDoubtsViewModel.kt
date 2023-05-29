@@ -3,7 +3,7 @@ package com.doubtless.doubtless.screens.doubt.view
 import androidx.lifecycle.*
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
-import com.doubtless.doubtless.screens.home.HomeEntity
+import com.doubtless.doubtless.screens.home.FeedEntity
 import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase.*
 import kotlinx.coroutines.Dispatchers
@@ -15,13 +15,13 @@ class ViewDoubtsViewModel constructor(
     private val userManager: UserManager
 ) : ViewModel() {
 
-    private val _homeEntities = mutableListOf<HomeEntity>()
-    val homeEntities: List<HomeEntity> = _homeEntities
+    private val _homeEntities = mutableListOf<FeedEntity>()
+    val homeEntities: List<FeedEntity> = _homeEntities
 
     private var isLoading = false
 
-    private val _fetchedHomeEntities = MutableLiveData<List<HomeEntity>?>()
-    val fetchedHomeEntities: LiveData<List<HomeEntity>?> =
+    private val _fetchedHomeEntities = MutableLiveData<List<FeedEntity>?>()
+    val fetchedHomeEntities: LiveData<List<FeedEntity>?> =
         _fetchedHomeEntities // TODO : use Result here!
 
     fun notifyFetchedDoubtsConsumed() {
@@ -49,7 +49,7 @@ class ViewDoubtsViewModel constructor(
                 analyticsTracker.trackFeedRefresh()
             }
 
-            val homeEntitiesFromServer = mutableListOf<HomeEntity>()
+            val homeEntitiesFromServer = mutableListOf<FeedEntity>()
 
             result.data.forEach {
                 homeEntitiesFromServer.add(it.toHomeEntity())
@@ -57,7 +57,7 @@ class ViewDoubtsViewModel constructor(
 
             // for page 1 call add search entity
             if (_homeEntities.isEmpty())
-                _homeEntities.add(HomeEntity.getSearchEntity())
+                _homeEntities.add(FeedEntity.getSearchEntity())
 
             _homeEntities.addAll(homeEntitiesFromServer)
             _fetchedHomeEntities.postValue(_homeEntities)

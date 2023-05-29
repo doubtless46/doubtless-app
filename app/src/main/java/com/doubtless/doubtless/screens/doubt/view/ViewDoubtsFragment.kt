@@ -11,11 +11,10 @@ import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentViewDoubtsBinding
 import com.doubtless.doubtless.navigation.FragNavigator
-import com.doubtless.doubtless.screens.adapters.ViewDoubtsAdapter
+import com.doubtless.doubtless.screens.common.GenericFeedAdapter
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.main.MainActivity
-import com.doubtless.doubtless.screens.main.MainFragment
 
 class ViewDoubtsFragment : Fragment() {
 
@@ -23,7 +22,7 @@ class ViewDoubtsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: ViewDoubtsViewModel
-    private lateinit var adapter: ViewDoubtsAdapter
+    private lateinit var adapter: GenericFeedAdapter
     private lateinit var userManager: UserManager
     private lateinit var analyticsTracker: AnalyticsTracker
     private lateinit var navigator: FragNavigator
@@ -69,12 +68,12 @@ class ViewDoubtsFragment : Fragment() {
             adapter.clearCurrentList()
         }
 
-        adapter = ViewDoubtsAdapter(
+        adapter = GenericFeedAdapter(
             homeEntities = viewModel.homeEntities.toMutableList(),
             onLastItemReached = {
                 viewModel.fetchDoubts()
             },
-            interactionListener = object : ViewDoubtsAdapter.InteractionListener {
+            interactionListener = object : GenericFeedAdapter.InteractionListener {
                 override fun onSearchBarClicked() {
                     navigator.moveToSearchFragment()
                 }

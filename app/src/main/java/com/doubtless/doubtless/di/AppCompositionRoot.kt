@@ -26,6 +26,7 @@ import com.doubtless.doubtless.screens.onboarding.usecases.FetchOnBoardingDataUs
 import com.doubtless.doubtless.screens.main.MainActivity
 import com.doubtless.doubtless.screens.main.MainFragment
 import com.doubtless.doubtless.screens.search.usecases.ExtractKeywordsUseCase
+import com.doubtless.doubtless.screens.search.usecases.FetchSearchResultsUseCase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -82,6 +83,10 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
     fun getExtractKeywordsUseCase(): ExtractKeywordsUseCase {
         return ExtractKeywordsUseCase()
+    }
+
+    fun getFetchSearchResultsUseCase(): FetchSearchResultsUseCase {
+        return FetchSearchResultsUseCase()
     }
 
     // --------- OnBoarding ------------

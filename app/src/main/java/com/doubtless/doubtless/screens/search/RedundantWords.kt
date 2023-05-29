@@ -4,6 +4,7 @@ object RedundantWords {
     val nonNounWords = listOf(
         "a",
         "is",
+        "i",
         "an",
         "and",
         "are",
@@ -27,6 +28,7 @@ object RedundantWords {
         "to",
         "was",
         "what",
+        "this",
         "when",
         "where",
         "which",
