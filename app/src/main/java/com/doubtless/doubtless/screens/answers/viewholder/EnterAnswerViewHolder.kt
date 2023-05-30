@@ -1,10 +1,9 @@
-package com.doubtless.doubtless.screens.answers
+package com.doubtless.doubtless.screens.answers.viewholder
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-
-class AnswerViewHolder(itemView: View, private val interactionListener: InteractionListener) :
+class EnterAnswerViewHolder (itemView: View, private val interactionListener: InteractionListener) :
     RecyclerView.ViewHolder(itemView) {
 
     interface InteractionListener {
