@@ -8,35 +8,29 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.doubtless.doubtless.R
-import com.doubtless.doubtless.screens.answers.AnswerItem
-import com.doubtless.doubtless.screens.doubt.DoubtData
+import com.doubtless.doubtless.screens.answers.AnswerDoubtEntity
 
 class AnswerDoubtsAdapter(
-    private val allAnswers: MutableList<AnswerItem>,
+    private val allAnswers: MutableList<AnswerDoubtEntity>,
     private val onLastItemReached: () -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    companion object {
-        const val VIEW_TYPE_WRITE_ANSWER = 0
-        const val VIEW_TYPE_SHOW_ANSWER = 1
-        const val VIEW_TYPE_SHOW_QUESTION = 2
-    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            VIEW_TYPE_WRITE_ANSWER -> {
+            AnswerDoubtEntity.TYPE_DOUBT -> {
                 val writeAnswerView = inflater.inflate(R.layout.enter_answer_layout, parent, false)
                 WriteAnswerViewHolder(writeAnswerView)
             }
 
-            VIEW_TYPE_SHOW_ANSWER -> {
+            AnswerDoubtEntity.TYPE_ANSWER_ENTER -> {
                 val showAnswerView = inflater.inflate(R.layout.answer_layout, parent, false)
                 ShowAnswerViewHolder(showAnswerView)
             }
 
-            VIEW_TYPE_SHOW_QUESTION -> {
+            AnswerDoubtEntity.TYPE_ANSWER -> {
                 val showQuestionView = inflater.inflate(R.layout.doubt_layout, parent, false)
                 ViewDoubtsAdapter.ViewHolder(showQuestionView)
             }
@@ -51,6 +45,7 @@ class AnswerDoubtsAdapter(
         when (holder) {
             is WriteAnswerViewHolder -> {
 
+
             }
 
             is ShowAnswerViewHolder -> {
@@ -61,14 +56,17 @@ class AnswerDoubtsAdapter(
                 //Todo()
             }
         }
+        if (position == itemCount - 1) {
+            onLastItemReached.invoke()
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
         val answer = allAnswers[position]
         return when (answer) {
-            is AnswerItem.WriteAnswerItem -> VIEW_TYPE_WRITE_ANSWER
-            is AnswerItem.ShowAnswerItem -> VIEW_TYPE_SHOW_ANSWER
-            is AnswerItem.ShowQuestionItem -> VIEW_TYPE_SHOW_QUESTION
+            is AnswerDoubtEntity ->
+            is AnswerDoubtEntity ->
+            is AnswerDoubtEntity ->
             else -> throw IllegalArgumentException("Invalid item type")
         }
     }
