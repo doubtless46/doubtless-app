@@ -3,16 +3,21 @@ package com.doubtless.doubtless.screens.dashboard
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentDashboardBinding
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.common.GenericFeedAdapter
+import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +29,8 @@ class DashboardFragment : Fragment() {
     private lateinit var mAuth: FirebaseAuth
     private lateinit var userManager: UserManager
     private var _binding: FragmentDashboardBinding? = null
+    private lateinit var viewModel: DashboardViewModel
+    private lateinit var adapter: GenericFeedAdapter
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -36,6 +43,10 @@ class DashboardFragment : Fragment() {
         tracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
         mAuth = FirebaseAuth.getInstance()
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
+
+        viewModel = getViewModel()
+        viewModel.fetchDoubts(forPageOne = true)
+
     }
 
     override fun onCreateView(
@@ -50,8 +61,7 @@ class DashboardFragment : Fragment() {
         binding.tvUserEmail.text = userManager.getCachedUserData()!!.email
         binding.cvUserImage.setBackgroundColor(
             resources.getColor(
-                android.R.color.transparent,
-                null
+                android.R.color.transparent, null
             )
         )
         Glide.with(this).load(userManager.getCachedUserData()!!.photoUrl).circleCrop()
@@ -92,6 +102,66 @@ class DashboardFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        var lastRefreshed = System.currentTimeMillis()
+
+        binding.layoutSwipe.setOnRefreshListener {
+
+            if (System.currentTimeMillis() - lastRefreshed < 3 * 1000L) {
+                binding.layoutSwipe.isRefreshing = false
+                return@setOnRefreshListener
+            }
+
+            lastRefreshed = System.currentTimeMillis()
+
+            binding.layoutSwipe.isRefreshing = true
+            viewModel.refreshList()
+            adapter.clearCurrentList()
+        }
+
+        if(!::adapter.isInitialized) {
+            adapter = GenericFeedAdapter(genericFeedEntities = mutableListOf(),
+            onLastItemReached = {
+                viewModel.fetchDoubts()
+            },
+            interactionListener = object : GenericFeedAdapter.InteractionListener {
+                override fun onSearchBarClicked() {
+//                    navigator.moveToSearchFragment()
+                }
+
+                override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
+
+                }
+            })
+        }
+
+
+
+        binding.doubtsRecyclerView.adapter = adapter
+        binding.doubtsRecyclerView.layoutManager = LinearLayoutManager(context)
+
+        viewModel.fetchedHomeEntities.observe(viewLifecycleOwner) {
+            if (it == null) return@observe
+            adapter.appendDoubts(it)
+            Log.i("ObserveFeed", it.size.toString())
+            viewModel.notifyFetchedDoubtsConsumed()
+            binding.layoutSwipe.isRefreshing = false
+        }
+    }
+
+    private fun getViewModel(): DashboardViewModel {
+        return ViewModelProvider(
+            owner = this, factory = DashboardViewModel.Companion.Factory(
+                fetchUserDataUseCase = DoubtlessApp.getInstance().getAppCompRoot()
+                    .getFetchUserDataUseCase(),
+                analyticsTracker = tracker,
+                userManager = userManager
+            )
+        )[DashboardViewModel::class.java]
     }
 
     private fun submitFeedback() {

@@ -19,6 +19,8 @@ import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserDataServerUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserDataStorageUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.dashboard.usecases.FetchUserDataUseCase
+import com.doubtless.doubtless.screens.dashboard.usecases.FetchUserFeedByDateUseCase
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.usecases.DoubtDataSharedPrefUseCase
 import com.doubtless.doubtless.screens.doubt.usecases.PostDoubtUseCase
@@ -278,5 +280,12 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         return remoteConfig
+    }
+
+    fun getFetchUserDataUseCase(): FetchUserDataUseCase {
+        return FetchUserDataUseCase(
+            FetchUserFeedByDateUseCase(FirebaseFirestore.getInstance()),
+            FirebaseFirestore.getInstance()
+        )
     }
 }

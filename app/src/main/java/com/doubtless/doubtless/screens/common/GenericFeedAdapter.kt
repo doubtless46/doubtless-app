@@ -1,5 +1,6 @@
 package com.doubtless.doubtless.screens.common
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -91,6 +92,7 @@ class GenericFeedAdapter(
     }
 
     override fun getItemCount(): Int {
+        Log.i("AdapterItemCount", genericFeedEntities.size.toString())
         return genericFeedEntities.size
     }
 
