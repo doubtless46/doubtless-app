@@ -26,7 +26,7 @@ class FetchFeedByPopularityUseCase constructor(
 
             try {
                 var query = firestore.collection(FirestoreCollection.AllDoubts)
-                    .orderBy(FieldPath.of("netVotes"), Query.Direction.DESCENDING)
+                    .orderBy("netVotes", Query.Direction.DESCENDING)
 
                 if (lastDoubtData != null && request.fetchFromPage1 == false) {
                     query = query.startAfter(lastDoubtData!!.date)
@@ -34,10 +34,13 @@ class FetchFeedByPopularityUseCase constructor(
 
                 // if total size = 33 and docFetched = 30, then request only 3 more,
                 // else request page size.
-                query.limit(request.pageSize.toLong())
+                query = query.limit(request.pageSize.toLong())
 
                 val result = query.get().await()
                 val doubtDataList = getDoubtDataList(result)
+
+                if (doubtDataList.isNotEmpty())
+                    lastDoubtData = doubtDataList.last()
 
                 return@withContext Result.Success(doubtDataList)
 

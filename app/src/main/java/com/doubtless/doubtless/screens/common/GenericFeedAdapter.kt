@@ -63,7 +63,7 @@ class GenericFeedAdapter(
     fun appendDoubts(doubts: List<FeedEntity>) {
         val offset = genericFeedEntities.size
         genericFeedEntities.addAll(doubts)
-        notifyItemRangeChanged(offset, doubts.size)
+        notifyItemRangeInserted(offset, doubts.size)
     }
 
     override fun getItemCount(): Int {
