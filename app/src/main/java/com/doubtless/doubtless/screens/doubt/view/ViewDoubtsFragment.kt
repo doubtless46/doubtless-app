@@ -38,7 +38,7 @@ class ViewDoubtsFragment : Fragment() {
             navigator = _navigator
 
         viewModel = getViewModel()
-        viewModel.fetchDoubts()
+        viewModel.fetchDoubts(forPageOne = true)
     }
 
     override fun onCreateView(
