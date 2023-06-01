@@ -50,7 +50,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/author_doubt_timestamp"
+            android:id="@+id/author_doubt_timestamp_2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="-3dp"
@@ -63,7 +63,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_author_name" />
 
         <TextView
-            android:id="@+id/author_answer_description"
+            android:id="@+id/author_answer_description_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
@@ -82,7 +82,7 @@
             android:layout_marginTop="14dp"
             android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/author_answer_description"
+            app:layout_constraintTop_toBottomOf="@id/author_answer_description_2"
             app:tint="@color/grey" />
 
         <TextView

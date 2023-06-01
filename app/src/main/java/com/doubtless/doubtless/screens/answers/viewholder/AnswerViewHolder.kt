@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.answers.AnswerData
-import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.utils.Utils
 import java.util.Date
 
@@ -26,8 +25,8 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
 
     init {
         authorName = itemView.findViewById(R.id.tv_author_name)
-        time = itemView.findViewById(R.id.author_doubt_timestamp)
-        description = itemView.findViewById(R.id.author_answer_description)
+        time = itemView.findViewById(R.id.author_doubt_timestamp_2)
+        description = itemView.findViewById(R.id.author_answer_description_2)
         ivDp = itemView.findViewById(R.id.iv_dp_author)
     }
 

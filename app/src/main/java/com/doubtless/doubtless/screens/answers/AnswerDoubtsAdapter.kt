@@ -1,16 +1,13 @@
-package com.doubtless.doubtless.screens.adapters
+package com.doubtless.doubtless.screens.answers
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.doubtless.doubtless.R
-import com.doubtless.doubtless.screens.answers.AnswerDoubtEntity
-import com.doubtless.doubtless.screens.answers.AnswerData
 import com.doubtless.doubtless.screens.answers.viewholder.AnswerViewHolder
 import com.doubtless.doubtless.screens.answers.viewholder.EnterAnswerViewHolder
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.view.viewholder.DoubtPreviewViewHolder
-import com.doubtless.doubtless.screens.home.FeedEntity
 
 class AnswerDoubtsAdapter(
     private val doubtAnswerEntities: MutableList<AnswerDoubtEntity>,
