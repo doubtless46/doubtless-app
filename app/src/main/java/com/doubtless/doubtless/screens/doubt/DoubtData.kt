@@ -17,6 +17,7 @@ data class DoubtData(
     var no_answers: Int = 0,
     @ServerTimestamp
     var date: Date? = null,
+    var tags: List<String>? = null
 ) {
     companion object {
         fun parse(documentSnapshot: DocumentSnapshot?): DoubtData? {
