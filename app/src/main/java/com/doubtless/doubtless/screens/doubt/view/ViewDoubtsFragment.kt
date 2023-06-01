@@ -48,7 +48,7 @@ class ViewDoubtsFragment : Fragment() {
             )
 
         val _navigator = DoubtlessApp.getInstance().getAppCompRoot()
-            .getFragNavigator(requireActivity() as MainActivity)
+            .getHomeFragNavigator(requireActivity() as MainActivity)
 
         if (_navigator != null)
             navigator = _navigator

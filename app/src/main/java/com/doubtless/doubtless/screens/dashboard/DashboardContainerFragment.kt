@@ -7,7 +7,6 @@ import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.navigation.OnBackPressListener
-import com.doubtless.doubtless.screens.doubt.view.ViewDoubtsFragment
 import com.doubtless.doubtless.screens.main.MainActivity
 
 class DashboardContainerFragment : Fragment(R.layout.fragment_home) {
@@ -24,7 +23,7 @@ class DashboardContainerFragment : Fragment(R.layout.fragment_home) {
         }
 
         navigator = DoubtlessApp.getInstance().getAppCompRoot()
-            .getFragNavigator(requireActivity() as MainActivity)!!
+            .getDashboardFragNavigator(requireActivity() as MainActivity)!!
     }
 
     private val onBackPressListener = object : OnBackPressListener {

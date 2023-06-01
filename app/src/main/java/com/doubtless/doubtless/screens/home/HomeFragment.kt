@@ -35,7 +35,7 @@ class HomeFragment : Fragment() {
         }
 
         navigator = DoubtlessApp.getInstance().getAppCompRoot()
-            .getFragNavigator(requireActivity() as MainActivity)!!
+            .getHomeFragNavigator(requireActivity() as MainActivity)!!
 
         homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)

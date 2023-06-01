@@ -40,10 +40,10 @@ class MainFragment : Fragment() {
                 // gets triggered for initial default element selection.
                 if (!areBottomNavFragmentsAdded) {
 
-                    bottomNavFragments.forEach {
+                    bottomNavFragments.forEachIndexed { index, frag ->
                         transaction.add(
-                            R.id.bottom_nav_fragment_container, it,
-                            "mainfrag_$newIndex"
+                            R.id.bottom_nav_fragment_container, frag,
+                            "mainfrag_$index"
                         )
                     }
 
