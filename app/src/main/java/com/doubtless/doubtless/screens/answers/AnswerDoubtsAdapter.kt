@@ -21,8 +21,6 @@ class AnswerDoubtsAdapter(
         fun onAnswerClicked(answerData: AnswerData, position: Int)
     }
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
@@ -66,10 +64,6 @@ class AnswerDoubtsAdapter(
 
         if (holder is AnswerViewHolder)
             holder.setData(doubtAnswerEntities[position].answer!!)
-
-        if (position == itemCount - 1) {
-            onLastItemReached.invoke()
-        }
     }
 
     override fun getItemViewType(position: Int): Int {

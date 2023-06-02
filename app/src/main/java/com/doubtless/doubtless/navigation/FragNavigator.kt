@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
+import com.doubtless.doubtless.screens.answers.AnswersFragment
 import com.doubtless.doubtless.screens.dashboard.DashboardFragment
+import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.search.SearchFragment
 
 class FragNavigator constructor(
@@ -29,8 +31,11 @@ class FragNavigator constructor(
             .commit()
     }
 
-    fun moveDoubtDetailFragment() {
-
+    fun moveToDoubtDetailFragment(doubtData: DoubtData) {
+        supportFragmentManager.beginTransaction()
+            .replace(containerId, AnswersFragment.getInstance(doubtData))
+            .addToBackStack(null)
+            .commit()
     }
 
 }

@@ -96,7 +96,7 @@ class ViewDoubtsFragment : Fragment() {
                 }
 
                 override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
-                    navigator.moveDoubtDetailFragment()
+                    navigator.moveToDoubtDetailFragment(doubtData)
                 }
             })
 

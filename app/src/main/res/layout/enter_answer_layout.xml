@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#99B8B8B8" />
 
     <EditText
         android:id="@+id/enter_answer_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
         android:background="@android:color/transparent"
+        android:fontFamily="@font/poppins"
         android:hint="Enter the Answer"
         android:inputType="textMultiLine"
         android:padding="16dp"
-        android:textSize="16sp"
+        android:textSize="16dp"
         tools:ignore="Autofill,HardcodedText,LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
 
 </LinearLayout>

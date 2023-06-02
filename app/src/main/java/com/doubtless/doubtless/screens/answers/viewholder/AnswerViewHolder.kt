@@ -38,6 +38,7 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
         authorName.text = answerData.authorName
         time.text = Utils.getTimeAgo(Date(answerData.date.toString()))
         description.text = answerData.description
+
         Glide.with(ivDp).load(answerData.authorPhotoUrl).circleCrop()
             .into(ivDp)
 

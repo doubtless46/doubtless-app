@@ -1,10 +1,13 @@
 package com.doubtless.doubtless.screens.doubt
 
+import android.os.Parcelable
 import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ServerTimestamp
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
+@Parcelize
 data class DoubtData(
     var id: String? = null,
     var userName: String? = null,
@@ -19,7 +22,7 @@ data class DoubtData(
     @ServerTimestamp
     var date: Date? = null,
     var tags: List<String>? = null
-) {
+): Parcelable {
     companion object {
         fun parse(documentSnapshot: DocumentSnapshot?): DoubtData? {
             return try {

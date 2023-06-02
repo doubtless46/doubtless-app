@@ -17,7 +17,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/black" />
+        android:background="#99B8B8B8" />
 
     <!--    android:background="#99CCCCCC"-->
 
@@ -50,6 +50,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/tv_college"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="-2dp"
+            android:fontFamily="@font/poppins"
+            android:text="MSIT"
+            android:textSize="12dp"
+            app:layout_constraintStart_toEndOf="@id/tv_author_name"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/author_doubt_timestamp_2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -64,15 +76,17 @@
 
         <TextView
             android:id="@+id/author_answer_description_2"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp"
             android:fontFamily="@font/poppins"
             android:linksClickable="true"
             android:maxLines="5"
             android:text="Description"
             android:textColor="@color/black"
-            android:textSize="14dp"
-            app:layout_constraintStart_toStartOf="@+id/iv_dp_author"
+            android:textSize="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_author_name"
             app:layout_constraintTop_toBottomOf="@+id/iv_dp_author" />
 
         <ImageView
@@ -89,7 +103,7 @@
             android:id="@+id/tv_votes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="12dp"
             android:fontFamily="@font/poppins"
             android:text="211"
             android:textColor="@color/grey"
@@ -97,28 +111,16 @@
             app:layout_constraintStart_toEndOf="@id/iv_votes"
             app:layout_constraintTop_toTopOf="@id/iv_votes" />
 
-
         <ImageView
-            android:id="@+id/iv_answers"
+            android:id="@+id/iv_downvote"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginStart="12dp"
-            android:src="@drawable/ic_outline_short_text_24"
+            android:layout_marginTop="14dp"
+            android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
             app:layout_constraintStart_toEndOf="@id/tv_votes"
-            app:layout_constraintTop_toTopOf="@id/iv_votes"
+            app:layout_constraintTop_toBottomOf="@id/author_answer_description_2"
             app:tint="@color/grey" />
-
-        <TextView
-            android:id="@+id/tv_answers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:fontFamily="@font/poppins"
-            android:text="23"
-            android:textColor="@color/grey"
-            android:textSize="14dp"
-            app:layout_constraintStart_toEndOf="@id/iv_answers"
-            app:layout_constraintTop_toTopOf="@id/iv_answers" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

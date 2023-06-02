@@ -12,6 +12,7 @@ import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.navigation.Router
 import com.doubtless.doubtless.network.DoubtlessServer
+import com.doubtless.doubtless.screens.answers.usecases.FetchAnswerUseCase
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserDataServerUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserDataStorageUseCase
@@ -78,6 +79,12 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
     private fun getFetchFeedByDataUseCase(): FetchFeedByDateUseCase {
         return FetchFeedByDateUseCase(FirebaseFirestore.getInstance())
+    }
+
+    // --------- Answer Screen ------------
+
+    fun getFetchAnswerUseCase(doubtId: String): FetchAnswerUseCase {
+        return FetchAnswerUseCase(FirebaseFirestore.getInstance(), doubtId)
     }
 
     // --------- Search ------------

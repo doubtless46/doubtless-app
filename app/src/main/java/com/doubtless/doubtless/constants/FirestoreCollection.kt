@@ -13,6 +13,8 @@ class FirestoreCollection {
         } else {
             "AllDoubts"
         }
+
+        val DoubtAnswer = "Doubt_Answer"
     }
 
 }
