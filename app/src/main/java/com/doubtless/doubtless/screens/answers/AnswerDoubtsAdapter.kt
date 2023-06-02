@@ -16,7 +16,7 @@ class AnswerDoubtsAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface InteractionListener {
-        fun onEnterAnswerClicked()
+        fun onLayoutClicked()
         fun onDoubtClicked(doubtData: DoubtData, position: Int)
         fun onAnswerClicked(answerData: AnswerData, position: Int)
     }
@@ -28,6 +28,7 @@ class AnswerDoubtsAdapter(
         return when (viewType) {
             AnswerDoubtEntity.TYPE_DOUBT -> {
                 val view = inflater.inflate(R.layout.doubt_layout, parent, false)
+                //Todo("Only need one view")
                 return DoubtPreviewViewHolder(view, object: DoubtPreviewViewHolder.InteractionListener {
                     override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
                         interactionListener.onDoubtClicked(doubtData, position)
@@ -37,10 +38,9 @@ class AnswerDoubtsAdapter(
 
             AnswerDoubtEntity.TYPE_ANSWER_ENTER -> {
                 val view = inflater.inflate(R.layout.enter_answer_layout, parent, false)
-                //Todo("Only need one view")
                 return EnterAnswerViewHolder(view, object : EnterAnswerViewHolder.InteractionListener {
                     override fun onLayoutClicked() {
-                        interactionListener.onEnterAnswerClicked()
+                        interactionListener.onLayoutClicked()
                     }
                 })
             }

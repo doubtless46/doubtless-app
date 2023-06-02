@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentAnswersBinding
 import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.main.MainActivity
 
 class AnswersFragment : Fragment() {
@@ -31,19 +33,16 @@ class AnswersFragment : Fragment() {
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
         analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
 
-        val _navigator = DoubtlessApp.getInstance().getAppCompRoot().getHomeFragNavigator(requireActivity() as MainActivity)
+        val _navigator = DoubtlessApp.getInstance().getAppCompRoot()
+            .getHomeFragNavigator(requireActivity() as MainActivity)
 
         if (_navigator != null)
             navigator = _navigator
 
         viewModel = getViewModel()
-        viewModel.fetchDoubts()
+        //viewModel.fetchAnswers()
 
 
-    }
-
-    private fun getViewModel(): AnswersViewModel {
-        TODO("Not yet implemented")
     }
 
     override fun onCreateView(
@@ -70,10 +69,38 @@ class AnswersFragment : Fragment() {
             lastRefreshed = System.currentTimeMillis()
 
             binding.layoutSwipeAnswer.isRefreshing = true
-            viewModel.refreshList()
+            //viewModel.refreshList()
             adapter.clearCurrentList()
         }
 
+        adapter = AnswerDoubtsAdapter(
+            doubtAnswerEntities = viewModel.answerDoubtEntities.toMutableList(),
+            onLastItemReached = {
+                viewModel.fetchAnswers()
+            },
+            interactionListener = object : AnswerDoubtsAdapter.InteractionListener {
+                override fun onLayoutClicked() {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onAnswerClicked(answerData: AnswerData, position: Int) {
+                    TODO("Not yet implemented")
+                }
+
+            }
+        )
+
+        binding.answerRecyclerView.adapter = adapter
+        binding.answerRecyclerView.layoutManager = LinearLayoutManager(context)
+
+    }
+
+    private fun getViewModel(): AnswersViewModel {
+        TODO("Not yet implemented")
     }
 
     override fun onDestroyView() {
