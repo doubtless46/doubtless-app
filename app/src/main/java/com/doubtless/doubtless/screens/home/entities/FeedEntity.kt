@@ -12,6 +12,7 @@ data class FeedEntity(
         const val TYPE_DOUBT = 1
         const val TYPE_SEARCH = 2
         const val TYPE_SEARCH_RESULT = 3
+        const val TYPE_USER_PROFILE = 4
 
         fun getSearchEntity(): FeedEntity {
             return FeedEntity(TYPE_SEARCH, null, null)

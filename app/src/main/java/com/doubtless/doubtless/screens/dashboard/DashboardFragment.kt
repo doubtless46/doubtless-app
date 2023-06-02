@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentDashboardBinding
@@ -55,52 +54,6 @@ class DashboardFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
-
-
-        binding.tvName.text = userManager.getCachedUserData()!!.name
-        binding.tvUserEmail.text = userManager.getCachedUserData()!!.email
-        binding.cvUserImage.setBackgroundColor(
-            resources.getColor(
-                android.R.color.transparent, null
-            )
-        )
-        Glide.with(this).load(userManager.getCachedUserData()!!.photoUrl).circleCrop()
-            .into(binding.ivUserImage)
-
-        binding.btnSignout.setOnClickListener {
-
-            tracker.trackLogout()
-
-            CoroutineScope(Dispatchers.Main).launch {
-
-                val result = withContext(Dispatchers.IO) {
-                    DoubtlessApp.getInstance().getAppCompRoot().getUserManager().onUserLogoutSync()
-                }
-
-                if (!isAdded) return@launch
-
-                if (result is UserManager.Result.LoggedOut) {
-
-                    DoubtlessApp.getInstance().getAppCompRoot().router.moveToLoginActivity(
-                        requireActivity()
-                    )
-                    requireActivity().finish()
-
-                } else if (result is UserManager.Result.Error) {
-
-                    Toast.makeText(
-                        this@DashboardFragment.requireContext(), result.message, Toast.LENGTH_LONG
-                    ).show() // encapsulate error ui handling
-
-                }
-            }
-        }
-
-        binding.btnFeedback.setOnClickListener {
-            tracker.trackFeedbackButtonClicked()
-            submitFeedback()
-        }
-
         return binding.root
     }
 
@@ -123,20 +76,57 @@ class DashboardFragment : Fragment() {
             adapter.clearCurrentList()
         }
 
-        if(!::adapter.isInitialized) {
+        if (!::adapter.isInitialized) {
             adapter = GenericFeedAdapter(genericFeedEntities = mutableListOf(),
-            onLastItemReached = {
-                viewModel.fetchDoubts()
-            },
-            interactionListener = object : GenericFeedAdapter.InteractionListener {
-                override fun onSearchBarClicked() {
-//                    navigator.moveToSearchFragment()
-                }
+                onLastItemReached = {
+                    viewModel.fetchDoubts()
+                },
+                interactionListener = object : GenericFeedAdapter.InteractionListener {
+                    override fun onSearchBarClicked() {
+                    }
 
-                override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
 
-                }
-            })
+                    override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
+
+                    }
+
+                    override fun onSignOutClicked() {
+                        tracker.trackLogout()
+
+                        CoroutineScope(Dispatchers.Main).launch {
+
+                            val result = withContext(Dispatchers.IO) {
+                                DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
+                                    .onUserLogoutSync()
+                            }
+
+                            if (!isAdded) return@launch
+
+                            if (result is UserManager.Result.LoggedOut) {
+
+                                DoubtlessApp.getInstance()
+                                    .getAppCompRoot().router.moveToLoginActivity(
+                                        requireActivity()
+                                    )
+                                requireActivity().finish()
+
+                            } else if (result is UserManager.Result.Error) {
+
+                                Toast.makeText(
+                                    this@DashboardFragment.requireContext(),
+                                    result.message,
+                                    Toast.LENGTH_LONG
+                                ).show() // encapsulate error ui handling
+
+                            }
+                        }
+                    }
+
+                    override fun onSubmitFeedbackClicked() {
+                        tracker.trackFeedbackButtonClicked()
+                        submitFeedback()
+                    }
+                })
         }
 
 

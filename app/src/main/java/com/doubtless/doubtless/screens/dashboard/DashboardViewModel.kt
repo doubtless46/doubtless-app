@@ -63,16 +63,18 @@ class DashboardViewModel(
 
         result.data.forEach { doubtData ->
             // we got the data for page 2 (lets say) now check if these posts existed on page 1 and add only unique ones.
-            if (_homeEntitiesIds.contains(doubtData.id) == false) {
+            if (!_homeEntitiesIds.contains(doubtData.id)) {
                 entitiesFromServer.add(doubtData.toHomeEntity())
                 _homeEntitiesIds[doubtData.id!!] = 1
             }
         }
 
 
-//        // for page 1 call add search entity
-//        if (_homeEntities.isEmpty())
-//            entitiesFromServer.add(0, FeedEntity.getSearchEntity())
+        // for page 1 call add user profile entity
+        if (_homeEntities.isEmpty()) entitiesFromServer.add(
+            0,
+            FeedEntity(FeedEntity.TYPE_USER_PROFILE, null)
+        )
 
         _homeEntities.addAll(entitiesFromServer)
         _fetchedHomeEntities.postValue(entitiesFromServer)
@@ -82,28 +84,28 @@ class DashboardViewModel(
         )
         isLoading = false
 
-}
+    }
 
-fun refreshList() {
-    _homeEntities.clear()
+    fun refreshList() {
+        _homeEntities.clear()
         _homeEntitiesIds.clear()
         fetchDoubts(forPageOne = true)
-}
+    }
 
-companion object {
-    class Factory constructor(
-        private val fetchUserDataUseCase: FetchUserDataUseCase,
-        private val analyticsTracker: AnalyticsTracker,
-        private val userManager: UserManager
-    ) : ViewModelProvider.Factory {
+    companion object {
+        class Factory constructor(
+            private val fetchUserDataUseCase: FetchUserDataUseCase,
+            private val analyticsTracker: AnalyticsTracker,
+            private val userManager: UserManager
+        ) : ViewModelProvider.Factory {
 
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return DashboardViewModel(
-                fetchUserDataUseCase, analyticsTracker, userManager
-            ) as T
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return DashboardViewModel(
+                    fetchUserDataUseCase, analyticsTracker, userManager
+                ) as T
+            }
         }
     }
-}
 
 
 }

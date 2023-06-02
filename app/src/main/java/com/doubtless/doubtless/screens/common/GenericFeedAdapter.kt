@@ -4,7 +4,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
+import com.doubtless.doubtless.screens.dashboard.viewholder.UserProfileViewHolder
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.screens.doubt.view.viewholder.DoubtPreviewViewHolder
@@ -20,11 +22,27 @@ class GenericFeedAdapter(
     interface InteractionListener {
         fun onSearchBarClicked()
         fun onDoubtClicked(doubtData: DoubtData, position: Int)
+
+        fun onSignOutClicked()
+
+        fun onSubmitFeedbackClicked()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         when (viewType) {
+            FeedEntity.TYPE_USER_PROFILE -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.user_profile_layout, parent, false)
+                return UserProfileViewHolder(
+                    view,
+                    object : UserProfileViewHolder.InteractionListener {
+                        override fun onSignOutClicked() = interactionListener.onSignOutClicked()
+                        override fun onSubmitFeedbackClicked() =
+                            interactionListener.onSubmitFeedbackClicked()
+                    })
+            }
+
             FeedEntity.TYPE_DOUBT -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.doubt_layout, parent, false)
@@ -68,6 +86,9 @@ class GenericFeedAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is UserProfileViewHolder) holder.setData(
+            userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
+        )
 
         if (holder is DoubtPreviewViewHolder && getItemViewType(position) == FeedEntity.TYPE_DOUBT)
             holder.setData(genericFeedEntities[position].doubt!!)
