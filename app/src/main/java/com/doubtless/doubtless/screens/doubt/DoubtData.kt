@@ -12,6 +12,7 @@ data class DoubtData(
     var userPhotoUrl: String? = null,
     var heading: String? = null,
     var description: String? = null,
+    var college: String? = null,
     var netVotes: Float = 0f,
     var score: Long = 0,
     var no_answers: Int = 0,

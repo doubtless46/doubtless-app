@@ -60,13 +60,26 @@
             app:layout_constraintTop_toBottomOf="@id/tv_username" />
 
         <TextView
+            android:id="@+id/user_college"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/poppins"
+            android:text="MSIT"
+            android:textColor="@color/grey"
+            android:textSize="12dp"
+            app:layout_constraintStart_toEndOf="@id/tv_username"
+            app:layout_constraintTop_toTopOf="@id/tv_username" />
+
+        <TextView
             android:id="@+id/user_doubt_heading"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:maxLength="500"
             android:fontFamily="@font/poppins"
-            android:maxLength="40"
             android:text="Heading"
             android:textColor="@color/black"
             android:textSize="16dp"
@@ -80,13 +93,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:maxLength="500"
             android:autoLink="web"
-            android:ellipsize="marquee"
             android:fontFamily="@font/poppins"
             android:linksClickable="true"
-            android:maxLength="50"
             android:text="Description"
-            android:textColor="@color/black"
             android:textSize="12dp"
             app:layout_constraintTop_toBottomOf="@id/user_doubt_heading" />
 
@@ -117,7 +128,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:fontFamily="@font/poppins_bold"
+            android:fontFamily="@font/poppins"
             android:text="211"
             android:textSize="12dp"
             app:layout_constraintStart_toEndOf="@id/iv_votes"
@@ -139,7 +150,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:fontFamily="@font/poppins_bold"
+            android:fontFamily="@font/poppins"
             android:text="23"
             android:textColor="@color/grey"
             android:textSize="12dp"

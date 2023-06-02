@@ -26,6 +26,7 @@ class DoubtPreviewViewHolder(view: View, private val interactionListener: Intera
     private val tvNetVotes: TextView
     private val tvAnswers: TextView
     private val tvTags: TextView
+    private val tvCollege: TextView
 
     init {
         userName = view.findViewById(R.id.tv_username)
@@ -36,6 +37,7 @@ class DoubtPreviewViewHolder(view: View, private val interactionListener: Intera
         tvNetVotes = view.findViewById(R.id.tv_votes)
         tvAnswers = view.findViewById(R.id.tv_answers)
         tvTags = view.findViewById(R.id.tv_tags)
+        tvCollege = view.findViewById(R.id.user_college)
     }
 
     fun setData(doubtData: DoubtData) {
@@ -45,6 +47,8 @@ class DoubtPreviewViewHolder(view: View, private val interactionListener: Intera
         }
 
         userName.text = doubtData.userName!!.split(" ").first()
+
+        tvCollege.text = doubtData.college
 
         time.text = Utils.getTimeAgo(Date(doubtData.date.toString()))
 
