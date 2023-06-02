@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
+import com.doubtless.doubtless.screens.dashboard.DashboardFragment
 import com.doubtless.doubtless.screens.search.SearchFragment
 
 class FragNavigator constructor(
@@ -12,7 +13,7 @@ class FragNavigator constructor(
 ) {
 
    fun onBackPress(): Boolean {
-       if (supportFragmentManager.backStackEntryCount > 0) {
+       if (supportFragmentManager.backStackEntryCount > 0 && !supportFragmentManager.isStateSaved) {
            supportFragmentManager.popBackStackImmediate()
            return true
        }
@@ -22,13 +23,13 @@ class FragNavigator constructor(
 
     // TODO : make proper nav graphs
     fun moveToSearchFragment() {
-
-        Log.d("frag manager",  supportFragmentManager.backStackEntryCount.toString())
-
         supportFragmentManager.beginTransaction()
             .replace(containerId, SearchFragment())
             .addToBackStack(null)
             .commit()
+    }
+
+    fun moveDoubtDetailFragment() {
 
     }
 

@@ -5,6 +5,7 @@ import androidx.annotation.WorkerThread
 import com.doubtless.doubtless.constants.FirestoreCollection
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.doubt.DoubtData
+import com.doubtless.doubtless.screens.home.entities.FeedConfig
 import com.google.firebase.firestore.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -15,7 +16,8 @@ import java.util.concurrent.TimeUnit
 class FetchHomeFeedUseCase constructor(
     private val fetchFeedByDateUseCase: FetchFeedByDateUseCase,
     private val fetchFeedByPopularityUseCase: FetchFeedByPopularityUseCase,
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val feedConfig: FeedConfig
 ) {
 
     data class FetchHomeFeedRequest(
@@ -41,6 +43,8 @@ class FetchHomeFeedUseCase constructor(
     @WorkerThread
     suspend fun fetchFeedSync(request: FetchHomeFeedRequest): Result = withContext(Dispatchers.IO) {
 
+        val _request = request.copy(pageSize = feedConfig.pageSize)
+
         // if this is a refresh call then reset all the params,
         // though for now, we don't reset collection count.
         if (request.fetchFromPage1) {
@@ -60,16 +64,17 @@ class FetchHomeFeedUseCase constructor(
 
         // if total size = 33 and docFetched = 30, then request only 3 more,
         // else request page size.
-        val size: Int = if (collectionCount - docFetched < request.pageSize)
+        val size: Int = if (collectionCount - docFetched < _request.pageSize)
             (collectionCount - docFetched).toInt()
         else
-            request.pageSize
+            _request.pageSize
 
         val feedByDateJob = async {
-            fetchFeedByDateUseCase.getFeedData(request.copy(pageSize = size / 2)) // ratio
+            fetchFeedByDateUseCase.getFeedData(request.copy(pageSize = feedConfig.recentPostsCount))
         }
+
         val feedByPopularityJob = async {
-            fetchFeedByPopularityUseCase.getFeedData(request.copy(pageSize = size / 2))
+            fetchFeedByPopularityUseCase.getFeedData(request.copy(pageSize = size - feedConfig.recentPostsCount))
         }
 
         val resultDate = feedByDateJob.await()

@@ -1,11 +1,14 @@
 package com.doubtless.doubtless.screens.search.usecases
 
+import com.doubtless.doubtless.network.DoubtlessServer
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.*
 
-class FetchSearchResultsUseCase {
+class FetchSearchResultsUseCase constructor(
+    private val server: DoubtlessServer
+) {
 
     sealed class Result {
         class Success(val searchResult: List<DoubtData>) : Result()

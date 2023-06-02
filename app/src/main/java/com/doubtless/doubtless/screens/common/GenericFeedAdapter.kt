@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.view.viewholder.DoubtPreviewViewHolder
-import com.doubtless.doubtless.screens.home.FeedEntity
+import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import com.doubtless.doubtless.screens.home.viewholders.HomeSearchViewHolder
 
 class GenericFeedAdapter(
