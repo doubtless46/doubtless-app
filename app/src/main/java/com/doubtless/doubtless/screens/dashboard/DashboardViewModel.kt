@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.dashboard.usecases.FetchUserDataUseCase
-import com.doubtless.doubtless.screens.home.FeedEntity
+import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
