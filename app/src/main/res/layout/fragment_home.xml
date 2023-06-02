@@ -7,7 +7,7 @@
     tools:context="com.doubtless.doubtless.screens.home.HomeFragment">
 
     <FrameLayout
-        android:id="@+id/home_container"
+        android:id="@+id/bottomNav_child_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

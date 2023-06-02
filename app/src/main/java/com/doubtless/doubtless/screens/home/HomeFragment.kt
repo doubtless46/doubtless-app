@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
@@ -31,7 +30,7 @@ class HomeFragment : Fragment() {
 
         if (savedInstanceState == null) {
             childFragmentManager.commit {
-                replace(R.id.home_container, ViewDoubtsFragment())
+                replace(R.id.bottomNav_child_container, ViewDoubtsFragment())
             }
         }
 
@@ -58,13 +57,13 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         (requireActivity() as MainActivity).registerBackPress(onBackPressListener)
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         (requireActivity() as MainActivity).unregisterBackPress(onBackPressListener)
     }
 

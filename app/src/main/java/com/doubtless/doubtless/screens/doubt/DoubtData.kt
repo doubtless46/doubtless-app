@@ -1,6 +1,6 @@
 package com.doubtless.doubtless.screens.doubt
 
-import com.doubtless.doubtless.screens.home.FeedEntity
+import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.*
@@ -12,11 +12,13 @@ data class DoubtData(
     var userPhotoUrl: String? = null,
     var heading: String? = null,
     var description: String? = null,
+    var college: String? = null,
     var netVotes: Float = 0f,
     var score: Long = 0,
     var no_answers: Int = 0,
     @ServerTimestamp
     var date: Date? = null,
+    var tags: List<String>? = null
 ) {
     companion object {
         fun parse(documentSnapshot: DocumentSnapshot?): DoubtData? {

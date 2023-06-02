@@ -1,6 +1,7 @@
 package com.doubtless.doubtless.screens.doubt.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,10 @@ import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.screens.common.GenericFeedAdapter
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.DoubtData
+import com.doubtless.doubtless.screens.home.entities.FeedConfig
 import com.doubtless.doubtless.screens.main.MainActivity
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.gson.Gson
 
 class ViewDoubtsFragment : Fragment() {
 
@@ -26,13 +30,25 @@ class ViewDoubtsFragment : Fragment() {
     private lateinit var userManager: UserManager
     private lateinit var analyticsTracker: AnalyticsTracker
     private lateinit var navigator: FragNavigator
+    private lateinit var remoteConfig: FirebaseRemoteConfig
+    private lateinit var feedConfig: FeedConfig
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
         analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
+        remoteConfig = DoubtlessApp.getInstance().getAppCompRoot().getRemoteConfig()
+        feedConfig = FeedConfig.parse(Gson(), remoteConfig)
+            ?: FeedConfig(
+                pageSize = 10,
+                recentPostsCount = 6,
+                feedDebounce = 3000,
+                searchDebounce = 600
+            )
 
-        val _navigator = DoubtlessApp.getInstance().getAppCompRoot().getHomeFragNavigator(requireActivity() as MainActivity)
+        val _navigator = DoubtlessApp.getInstance().getAppCompRoot()
+            .getHomeFragNavigator(requireActivity() as MainActivity)
 
         if (_navigator != null)
             navigator = _navigator
@@ -56,7 +72,8 @@ class ViewDoubtsFragment : Fragment() {
 
         binding.layoutSwipe.setOnRefreshListener {
 
-            if (System.currentTimeMillis() - lastRefreshed < 3 * 1000L) {
+            if (System.currentTimeMillis() - lastRefreshed < feedConfig.feedDebounce) {
+                Log.d("feed debounced", feedConfig.feedDebounce.toString())
                 binding.layoutSwipe.isRefreshing = false
                 return@setOnRefreshListener
             }
@@ -79,7 +96,7 @@ class ViewDoubtsFragment : Fragment() {
                 }
 
                 override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
-
+                    navigator.moveDoubtDetailFragment()
                 }
             })
 
@@ -105,7 +122,7 @@ class ViewDoubtsFragment : Fragment() {
             owner = this,
             factory = ViewDoubtsViewModel.Companion.Factory(
                 fetchHomeFeedUseCase = DoubtlessApp.getInstance().getAppCompRoot()
-                    .getFetchHomeFeedUseCase(),
+                    .getFetchHomeFeedUseCase(feedConfig),
                 analyticsTracker = analyticsTracker,
                 userManager = userManager
             )

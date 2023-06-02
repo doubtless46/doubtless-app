@@ -25,4 +25,15 @@ object Utils {
         }
     }
 
+    fun List<String>.flatten(): String {
+        var string = ""
+
+        this.forEach {
+            string += it
+            string += " "
+        }
+
+        return string
+    }
+
 }

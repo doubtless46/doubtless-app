@@ -1,4 +1,4 @@
-package com.doubtless.doubtless.screens.home
+package com.doubtless.doubtless.screens.home.entities
 
 import com.doubtless.doubtless.screens.doubt.DoubtData
 
@@ -11,7 +11,7 @@ data class FeedEntity(
         const val TYPE_SEARCH = 2
 
         fun getSearchEntity(): FeedEntity {
-            return FeedEntity(FeedEntity.TYPE_SEARCH, null)
+            return FeedEntity(TYPE_SEARCH, null)
         }
     }
 }
