@@ -60,9 +60,10 @@ class SearchFragment : Fragment() {
 
                 delay(500L)
 
-                val keywords =
-                    extractKeywordsUseCase.notifyNewInput(binding.etSearch.text.toString())
-                val results = fetchSearchResultsUseCase.getSearchResult(keywords)
+//                val keywords =
+//                    extractKeywordsUseCase.notifyNewInput(binding.etSearch.text.toString())
+
+                val results = fetchSearchResultsUseCase.getSearchResult(binding.etSearch.text.toString())
 
                 if (results is FetchSearchResultsUseCase.Result.Error) return@launch
 
@@ -78,9 +79,9 @@ class SearchFragment : Fragment() {
 
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    val keywords =
-                        extractKeywordsUseCase.notifyNewInput(binding.etSearch.text.toString())
-                    val results = fetchSearchResultsUseCase.getSearchResult(keywords)
+//                    val keywords =
+//                        extractKeywordsUseCase.notifyNewInput()
+                    val results = fetchSearchResultsUseCase.getSearchResult(binding.etSearch.text.toString())
 
                     if (results is FetchSearchResultsUseCase.Result.Error) return@launch
 

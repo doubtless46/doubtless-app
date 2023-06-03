@@ -15,28 +15,15 @@ class FetchSearchResultsUseCase constructor(
         class Error(val message: String) : Result()
     }
 
-    suspend fun getSearchResult(keywords: List<String>): Result = withContext(Dispatchers.IO) {
-
-        val list = mutableListOf<DoubtData>()
-
-        repeat(15) {
-            if (keywords.isNotEmpty())
-                list.add(
-                    DoubtData(
-                        id = "1audoausdouas",
-                        userName = "Siddharth",
-                        userId = "12830128301",
-                        userPhotoUrl = null,
-                        heading = keywords.toString(),
-                        description = "I am siddharth sharma, And I need " + keywords.last(),
-                        netVotes = (0..10).random().toFloat(),
-                        no_answers = (0..20).random(),
-                        date = Date()
-                    )
-                )
+    suspend fun getSearchResult(query: String): Result = withContext(Dispatchers.IO) {
+        return@withContext try {
+            val result = server.searchDoubts(query)
+            Result.Success(listOf())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.Error(e.message ?: "some error occurred")
         }
 
-        return@withContext Result.Success(list)
     }
 
 }
