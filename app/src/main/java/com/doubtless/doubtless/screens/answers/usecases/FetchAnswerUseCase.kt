@@ -2,7 +2,9 @@ package com.doubtless.doubtless.screens.answers.usecases
 
 import com.doubtless.doubtless.constants.FirestoreCollection
 import com.doubtless.doubtless.screens.answers.AnswerData
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -23,6 +25,7 @@ class FetchAnswerUseCase constructor(
             val result = firestore.collection(FirestoreCollection.AllDoubts)
                 .document(doubtId)
                 .collection(FirestoreCollection.DoubtAnswer)
+                .orderBy("netVotes", Query.Direction.DESCENDING)
                 .get().await()
 
             Result.Success(AnswerData.parse(result)!!)

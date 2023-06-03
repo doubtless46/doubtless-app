@@ -1,19 +1,18 @@
 package com.doubtless.doubtless.screens.answers
 
 import androidx.lifecycle.*
-import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.screens.answers.usecases.FetchAnswerUseCase
+import com.doubtless.doubtless.screens.answers.usecases.PublishAnswerUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.DoubtData
-import com.doubtless.doubtless.screens.doubt.view.ViewDoubtsViewModel
-import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class AnswersViewModel(
     private val fetchAnswerUseCase: FetchAnswerUseCase,
+    private val publishAnswerUseCase: PublishAnswerUseCase,
     private val userManager: UserManager,
-    doubtData: DoubtData
+    private val doubtData: DoubtData
 ) : ViewModel() {
 
     private val _answerDoubtEntities = MutableLiveData(
@@ -23,7 +22,10 @@ class AnswersViewModel(
         )
     )
 
-    val answerDoubtEntities: LiveData<List<AnswerDoubtEntity>> = _answerDoubtEntities
+    val answerDoubtEntities: LiveData<List<AnswerDoubtEntity>?> = _answerDoubtEntities
+
+    private val _publishAnswerStatus = MutableLiveData<PublishAnswerUseCase.Result>()
+    val publishAnswerStatus: LiveData<PublishAnswerUseCase.Result> = _publishAnswerStatus
 
     fun fetchAnswers() = viewModelScope.launch(Dispatchers.IO) {
         val result = fetchAnswerUseCase.fetchAnswers()
@@ -37,15 +39,27 @@ class AnswersViewModel(
         }
     }
 
+    fun publishAnswer(publishAnswerRequest: PublishAnswerRequest) =
+        viewModelScope.launch(Dispatchers.Main) {
+            val result = publishAnswerUseCase.publish(publishAnswerRequest)
+            // get from result instead
+            _publishAnswerStatus.postValue(result)
+        }
+
+    fun notifyAnswersConsumed() {
+        _answerDoubtEntities.postValue(null)
+    }
+
     companion object {
         class Factory constructor(
             private val fetchAnswerUseCase: FetchAnswerUseCase,
+            private val publishAnswerUseCase: PublishAnswerUseCase,
             private val userManager: UserManager,
             private val doubtData: DoubtData
         ) : ViewModelProvider.Factory {
 
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return AnswersViewModel(fetchAnswerUseCase, userManager, doubtData) as T
+                return AnswersViewModel(fetchAnswerUseCase, publishAnswerUseCase, userManager, doubtData) as T
             }
         }
     }

@@ -12,7 +12,8 @@ import com.doubtless.doubtless.utils.Utils
 import com.doubtless.doubtless.utils.Utils.flatten
 import java.util.*
 
-class DoubtPreviewViewHolder(view: View, private val interactionListener: InteractionListener) : RecyclerView.ViewHolder(view) {
+class DoubtPreviewViewHolder(view: View, private val interactionListener: InteractionListener) :
+    RecyclerView.ViewHolder(view) {
 
     interface InteractionListener {
         fun onDoubtClicked(doubtData: DoubtData, position: Int)
@@ -62,7 +63,7 @@ class DoubtPreviewViewHolder(view: View, private val interactionListener: Intera
         tvAnswers.text = doubtData.no_answers.toString()
 
         if (!doubtData.tags.isNullOrEmpty())
-            tvTags.text = doubtData.tags!!.flatten()
+            tvTags.text = "Related to : " + doubtData.tags!!.flatten()
         else
             tvTags.isVisible = false
 

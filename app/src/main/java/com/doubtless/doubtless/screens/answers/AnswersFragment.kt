@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionInflater
@@ -13,6 +14,8 @@ import com.doubtless.doubtless.R
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentAnswersBinding
 import com.doubtless.doubtless.navigation.FragNavigator
+import com.doubtless.doubtless.screens.answers.usecases.PublishAnswerUseCase
+import com.doubtless.doubtless.screens.answers.viewholder.EnterAnswerViewHolder
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.view.ViewDoubtsViewModel
@@ -74,9 +77,10 @@ class AnswersFragment : Fragment() {
 
         if (!::adapter.isInitialized) {
             adapter = AnswerDoubtsAdapter(
+                user = userManager.getCachedUserData()!!,
                 doubtAnswerEntities = mutableListOf(),
                 onLastItemReached = {
-
+                    /* no-op */
                 },
                 interactionListener = object : AnswerDoubtsAdapter.InteractionListener {
                     override fun onLayoutClicked() {
@@ -91,6 +95,19 @@ class AnswersFragment : Fragment() {
 
                     }
 
+                    override fun onAnswerPublish(publishAnswerDTO: EnterAnswerViewHolder.PublishAnswerDTO) {
+                        viewModel.publishAnswer(
+                            PublishAnswerRequest(
+                                doubtId = doubtData.id,
+                                authorId = userManager.getCachedUserData()!!.id,
+                                authorName = userManager.getCachedUserData()!!.name,
+                                authorPhotoUrl = userManager.getCachedUserData()!!.photoUrl,
+                                authorCollege = userManager.getCachedUserData()!!.local_user_attr!!.college,
+                                description = publishAnswerDTO.description
+                            )
+                        )
+                    }
+
                 }
             )
         }
@@ -99,7 +116,20 @@ class AnswersFragment : Fragment() {
         binding.answerRecyclerView.layoutManager = LinearLayoutManager(context)
 
         viewModel.answerDoubtEntities.observe(viewLifecycleOwner) {
+            if (it == null) return@observe
             adapter.appendAnswer(it)
+            viewModel.notifyAnswersConsumed()
+        }
+
+        viewModel.publishAnswerStatus.observe(viewLifecycleOwner) {
+
+            if (it is PublishAnswerUseCase.Result.Success) {
+                Toast.makeText(requireContext(), "Successfully posted!", Toast.LENGTH_SHORT).show()
+                adapter.appendAnswerAtFirst(PublishAnswerRequest.toAnswerData(it.publishAnswerRequest))
+            }
+
+            if (it is PublishAnswerUseCase.Result.Error)
+                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -110,7 +140,9 @@ class AnswersFragment : Fragment() {
                 userManager = userManager,
                 fetchAnswerUseCase = DoubtlessApp.getInstance().getAppCompRoot()
                     .getFetchAnswerUseCase(doubtData.id!!),
-                doubtData = doubtData
+                doubtData = doubtData,
+                publishAnswerUseCase = DoubtlessApp.getInstance().getAppCompRoot()
+                    .getPublishAnswerUseCase()
             )
         )[AnswersViewModel::class.java]
     }

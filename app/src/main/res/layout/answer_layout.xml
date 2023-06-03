@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="0dp"
     android:layout_marginEnd="0dp"
-    android:layout_marginBottom="8dp"
+    android:layout_marginBottom="0dp"
     android:padding="10dp"
     app:cardBackgroundColor="@color/cream"
     app:cardCornerRadius="0dp"
@@ -68,7 +68,7 @@
             android:layout_marginTop="-3dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/poppins"
-            android:text="2 hours ago"
+            android:text="Just now"
             android:textColor="@color/grey"
             android:textSize="12dp"
             app:layout_constraintStart_toStartOf="@id/tv_author_name"
@@ -84,7 +84,7 @@
             android:maxLines="5"
             android:text="Description"
             android:textColor="@color/black"
-            android:textSize="12dp"
+            android:textSize="14dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_author_name"
             app:layout_constraintTop_toBottomOf="@+id/iv_dp_author" />
@@ -93,7 +93,7 @@
             android:id="@+id/iv_votes"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="8dp"
             android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/author_answer_description_2"
@@ -116,10 +116,10 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="14dp"
+            android:rotation="180"
             android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
             app:layout_constraintStart_toEndOf="@id/tv_votes"
-            app:layout_constraintTop_toBottomOf="@id/author_answer_description_2"
+            app:layout_constraintTop_toTopOf="@id/iv_votes"
             app:tint="@color/grey" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,7 +30,6 @@ class FetchSearchResultsUseCase constructor(
                         heading = keywords.toString(),
                         description = "I am siddharth sharma, And I need " + keywords.last(),
                         netVotes = (0..10).random().toFloat(),
-                        score = (0..200).random().toLong(),
                         no_answers = (0..20).random(),
                         date = Date()
                     )
