@@ -31,15 +31,19 @@ data class AnswerData(
     @get:PropertyName("author_college")
     @set:PropertyName("author_college")
     var authorCollege: String? = null,
+    @SerializedName("author_year")
+    @get:PropertyName("author_year")
+    @set:PropertyName("author_year")
+    var authorYear: String? = null,
     var description: String? = null,
-    @SerializedName("netVotes")
-    @get:PropertyName("netVotes")
-    @set:PropertyName("netVotes")
+    @SerializedName("net_votes")
+    @get:PropertyName("net_votes")
+    @set:PropertyName("net_votes")
     var netVotes: Float = 0f,
     @ServerTimestamp
-    @SerializedName("createdOn")
-    @get:PropertyName("createdOn")
-    @set:PropertyName("createdOn")
+    @SerializedName("created_on")
+    @get:PropertyName("created_on")
+    @set:PropertyName("created_on")
     var date: Date? = null,
 ) {
 
@@ -80,6 +84,8 @@ data class PublishAnswerRequest(
     var authorName: String? = null,
     @SerializedName("author_college")
     var authorCollege: String? = null,
+    @SerializedName("author_year")
+    var authorYear: String? = null,
     @SerializedName("description")
     var description: String? = null
 ) {
@@ -94,6 +100,7 @@ data class PublishAnswerRequest(
                 authorPhotoUrl = publishAnswerRequest.authorPhotoUrl,
                 authorName = publishAnswerRequest.authorName,
                 authorCollege = publishAnswerRequest.authorCollege,
+                authorYear = publishAnswerRequest.authorYear,
                 description = publishAnswerRequest.description,
                 netVotes = 0f,
                 date = Date()

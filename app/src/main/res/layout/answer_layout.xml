@@ -50,6 +50,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/user_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/poppins"
+            android:text="| 1st year |"
+            android:textColor="@color/grey"
+            android:textSize="12dp"
+            app:layout_constraintStart_toEndOf="@id/tv_author_name"
+            app:layout_constraintTop_toTopOf="@id/tv_author_name" />
+
+        <TextView
             android:id="@+id/tv_college"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,7 +70,7 @@
             android:fontFamily="@font/poppins"
             android:text="MSIT"
             android:textSize="12dp"
-            app:layout_constraintStart_toEndOf="@id/tv_author_name"
+            app:layout_constraintStart_toEndOf="@id/user_year"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -81,6 +93,7 @@
             android:layout_marginEnd="14dp"
             android:fontFamily="@font/poppins"
             android:linksClickable="true"
+            android:autoLink="web"
             android:maxLines="5"
             android:text="Description"
             android:textColor="@color/black"

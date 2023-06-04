@@ -305,6 +305,7 @@ class CreateDoubtFragment : Fragment() {
                 userName = user.name!!,
                 userPhotoUrl = user.photoUrl!!,
                 college = user.local_user_attr!!.college!!,
+                year = user.local_user_attr.year!!,
                 heading = heading,
                 description = description,
                 netVotes = 0f,

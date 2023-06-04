@@ -15,19 +15,21 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
     RecyclerView.ViewHolder(itemView) {
 
     interface InteractionListener {
-        fun onAnswerClicked(answerData: AnswerData, position:Int)
+        fun onAnswerClicked(answerData: AnswerData, position: Int)
     }
 
-    val authorName: TextView
-    val time: TextView
-    val description: TextView
-    val ivDp: ImageView
+    private val authorName: TextView
+    private val time: TextView
+    private val description: TextView
+    private val ivDp: ImageView
+    private val tvYear: TextView
 
     init {
         authorName = itemView.findViewById(R.id.tv_author_name)
         time = itemView.findViewById(R.id.author_doubt_timestamp_2)
         description = itemView.findViewById(R.id.author_answer_description_2)
         ivDp = itemView.findViewById(R.id.iv_dp_author)
+        tvYear = itemView.findViewById(R.id.user_year)
     }
 
     fun setData(answerData: AnswerData) {
@@ -35,9 +37,11 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
         itemView.setOnClickListener {
             interactionListener.onAnswerClicked(answerData, adapterPosition)
         }
+
         authorName.text = answerData.authorName
         time.text = Utils.getTimeAgo(Date(answerData.date.toString()))
         description.text = answerData.description
+        tvYear.text = "| ${answerData.authorYear} Year |"
 
         Glide.with(ivDp).load(answerData.authorPhotoUrl).circleCrop()
             .into(ivDp)

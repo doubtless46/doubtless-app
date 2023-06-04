@@ -20,6 +20,7 @@ import com.doubtless.doubtless.screens.auth.usecases.UserDataStorageUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.usecases.DoubtDataSharedPrefUseCase
 import com.doubtless.doubtless.screens.doubt.usecases.PostDoubtUseCase
+import com.doubtless.doubtless.screens.doubt.usecases.VotingDoubtUseCase
 import com.doubtless.doubtless.screens.home.entities.FeedConfig
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByDateUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByPopularityUseCase
@@ -124,6 +125,20 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
     fun getPostDoubtUseCase(): PostDoubtUseCase {
         return PostDoubtUseCase(getServer())
+    }
+
+    // ------- Common --------
+
+    private lateinit var votingDoubtUseCase: VotingDoubtUseCase
+
+    @Synchronized
+    fun getVotingDoubtCase(): VotingDoubtUseCase {
+
+        if (!::votingDoubtUseCase.isInitialized) {
+            votingDoubtUseCase = VotingDoubtUseCase(FirebaseFirestore.getInstance(), getUserManager().getCachedUserData()!!)
+        }
+
+        return votingDoubtUseCase
     }
 
     // ------- User ---------

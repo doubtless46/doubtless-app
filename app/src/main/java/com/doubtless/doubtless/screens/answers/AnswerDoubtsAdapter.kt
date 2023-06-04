@@ -8,10 +8,12 @@ import com.doubtless.doubtless.screens.answers.viewholder.AnswerViewHolder
 import com.doubtless.doubtless.screens.answers.viewholder.EnterAnswerViewHolder
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.doubt.DoubtData
+import com.doubtless.doubtless.screens.doubt.usecases.VotingDoubtUseCase
 import com.doubtless.doubtless.screens.doubt.view.viewholder.DoubtPreviewViewHolder
 
 class AnswerDoubtsAdapter(
     private val doubtAnswerEntities: MutableList<AnswerDoubtEntity>,
+    private val votingDoubtUseCase: VotingDoubtUseCase,
     private val user: User,
     private val onLastItemReached: () -> Unit,
     private val interactionListener: InteractionListener
@@ -29,25 +31,31 @@ class AnswerDoubtsAdapter(
         return when (viewType) {
             AnswerDoubtEntity.TYPE_DOUBT -> {
                 val view = inflater.inflate(R.layout.doubt_layout, parent, false)
-                return DoubtPreviewViewHolder(view, object: DoubtPreviewViewHolder.InteractionListener {
-                    override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
-                        interactionListener.onDoubtClicked(doubtData, position)
-                    }
-                })
+                return DoubtPreviewViewHolder(
+                    view = view,
+                    votingDoubtUseCase = votingDoubtUseCase,
+                    interactionListener = object : DoubtPreviewViewHolder.InteractionListener {
+                        override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
+                            interactionListener.onDoubtClicked(doubtData, position)
+                        }
+                    }, showVotingLayout = true
+                )
             }
 
             AnswerDoubtEntity.TYPE_ANSWER_ENTER -> {
                 val view = inflater.inflate(R.layout.enter_answer_layout, parent, false)
-                return EnterAnswerViewHolder(view, object : EnterAnswerViewHolder.InteractionListener {
-                    override fun onAnswerPublish(publishAnswerDTO: EnterAnswerViewHolder.PublishAnswerDTO) {
-                        interactionListener.onAnswerPublish(publishAnswerDTO)
-                    }
-                })
+                return EnterAnswerViewHolder(
+                    view,
+                    object : EnterAnswerViewHolder.InteractionListener {
+                        override fun onAnswerPublish(publishAnswerDTO: EnterAnswerViewHolder.PublishAnswerDTO) {
+                            interactionListener.onAnswerPublish(publishAnswerDTO)
+                        }
+                    })
             }
 
             AnswerDoubtEntity.TYPE_ANSWER -> {
                 val view = inflater.inflate(R.layout.answer_layout, parent, false)
-                return AnswerViewHolder(view, object: AnswerViewHolder.InteractionListener {
+                return AnswerViewHolder(view, object : AnswerViewHolder.InteractionListener {
                     override fun onAnswerClicked(answerData: AnswerData, position: Int) {
                         interactionListener.onAnswerClicked(answerData, position)
                     }
@@ -82,7 +90,10 @@ class AnswerDoubtsAdapter(
     }
 
     fun appendAnswerAtFirst(answerData: AnswerData) {
-        doubtAnswerEntities.add(2, AnswerData.toAnswerDoubtEntity(answerData)) // first 2 are doubts and enter views
+        doubtAnswerEntities.add(
+            2,
+            AnswerData.toAnswerDoubtEntity(answerData)
+        ) // first 2 are doubts and enter views
         notifyItemInserted(0)
     }
 

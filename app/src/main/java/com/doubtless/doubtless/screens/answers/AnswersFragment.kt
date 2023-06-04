@@ -79,6 +79,8 @@ class AnswersFragment : Fragment() {
             adapter = AnswerDoubtsAdapter(
                 user = userManager.getCachedUserData()!!,
                 doubtAnswerEntities = mutableListOf(),
+                votingDoubtUseCase = DoubtlessApp.getInstance().getAppCompRoot()
+                    .getVotingDoubtCase(),
                 onLastItemReached = {
                     /* no-op */
                 },
@@ -103,6 +105,7 @@ class AnswersFragment : Fragment() {
                                 authorName = userManager.getCachedUserData()!!.name,
                                 authorPhotoUrl = userManager.getCachedUserData()!!.photoUrl,
                                 authorCollege = userManager.getCachedUserData()!!.local_user_attr!!.college,
+                                authorYear = userManager.getCachedUserData()!!.local_user_attr!!.year,
                                 description = publishAnswerDTO.description
                             )
                         )

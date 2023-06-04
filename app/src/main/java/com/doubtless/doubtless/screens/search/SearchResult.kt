@@ -1,6 +1,7 @@
-package com.doubtless.doubtless.screens.doubt
+package com.doubtless.doubtless.screens.search
 
 import android.os.Parcelable
+import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.PropertyName
@@ -10,7 +11,7 @@ import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Parcelize
-data class DoubtData(
+data class SearchResult(
     @get:PropertyName("doubt_id")
     @set:PropertyName("doubt_id")
     @SerializedName("doubt_id")
@@ -45,50 +46,29 @@ data class DoubtData(
     @get:PropertyName("count_answers")
     @set:PropertyName("count_answers")
     var no_answers: Int = 0,
-    @ServerTimestamp
-    @SerializedName("created_on")
-    @get:PropertyName("created_on")
-    @set:PropertyName("created_on")
-    var date: Date? = null,
     @SerializedName("tags")
     @get:PropertyName("tags")
     @set:PropertyName("tags")
     var tags: List<String>? = null
 ): Parcelable {
-    companion object {
-        fun parse(documentSnapshot: DocumentSnapshot?): DoubtData? {
-            return try {
-                documentSnapshot!!.toObject(DoubtData::class.java)
-            } catch (e: Exception) {
-                null
-            }
-        }
+    fun toGenericEntity(): FeedEntity {
+        return FeedEntity(type = FeedEntity.TYPE_SEARCH_RESULT, null, this)
     }
 
-    fun toHomeEntity(): FeedEntity {
-        return FeedEntity(type = FeedEntity.TYPE_DOUBT, this)
+    fun toDoubtData() : DoubtData {
+        return DoubtData(
+            id = this.id,
+            userName = this.userName,
+            userId = this.userId,
+            userPhotoUrl = this.userPhotoUrl,
+            heading = this.heading,
+            description = this.description,
+            college = this.college,
+            year = this.year,
+            netVotes = this.netVotes,
+            no_answers = this.no_answers,
+            date = null,
+            tags = this.tags
+        )
     }
 }
-
-data class PublishDoubtRequest(
-    @SerializedName("author_name")
-    var userName: String? = null,
-    @SerializedName("author_id")
-    var userId: String? = null,
-    @SerializedName("author_photo_url")
-    var userPhotoUrl: String? = null,
-    @SerializedName("heading")
-    var heading: String? = null,
-    @SerializedName("description")
-    var description: String? = null,
-    @SerializedName("author_college")
-    var college: String? = null,
-    @SerializedName("author_year")
-    var year: String? = null,
-    @SerializedName("net_votes")
-    var netVotes: Float = 0f,
-    @SerializedName("tags")
-    var tags: List<String>? = null,
-    @SerializedName("keywords")
-    var keywords: List<String>? = null
-)
