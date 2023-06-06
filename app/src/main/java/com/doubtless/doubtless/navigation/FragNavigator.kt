@@ -35,11 +35,6 @@ class FragNavigator constructor(
 
     fun moveToDoubtDetailFragment(doubtData: DoubtData) {
         supportFragmentManager.beginTransaction()
-            //.setTransition( FragmentTransaction.TRANSIT_FRAGMENT_FADE )
-//            .setCustomAnimations(
-//                /* enter = */ R.anim.enter_right,
-//                /* exit = */ R.anim.exit_left
-//            )
             .replace(containerId, AnswersFragment.getInstance(doubtData))
             .addToBackStack(null)
             .commit()

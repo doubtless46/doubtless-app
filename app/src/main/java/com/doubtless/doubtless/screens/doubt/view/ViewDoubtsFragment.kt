@@ -102,6 +102,9 @@ class ViewDoubtsFragment : Fragment() {
                 }
 
                 override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
+                    // note that this we are not sending a copy of doubtData here,
+                    // hence if netVotes are changed on the other screen then it will change here too.
+                    // this solves our problem but can cause complications on long term.
                     navigator.moveToDoubtDetailFragment(doubtData)
                 }
             }

@@ -37,10 +37,15 @@ data class DoubtData(
     @get:PropertyName("author_year")
     @set:PropertyName("author_year")
     var year: String? = null,
+
     @SerializedName("net_votes")
     @get:PropertyName("net_votes")
     @set:PropertyName("net_votes")
+
+    // this is var as netVotes are changed on upvote and downvote.
     var netVotes: Float = 0f,
+
+
     @SerializedName("count_answers")
     @get:PropertyName("count_answers")
     @set:PropertyName("count_answers")

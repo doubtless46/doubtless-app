@@ -136,7 +136,7 @@ class DoubtPreviewViewHolder(
     private fun setVotesUi(doubtData: DoubtData, votingUseCase: VotingUseCase) {
         ivDownvotes.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_baseline_thumb_up_off_alt_24))
         ivUpvotes.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_baseline_thumb_up_off_alt_24))
-        tvNetVotes.text = floor(doubtData.netVotes).toString()
+        tvNetVotes.text = floor(doubtData.netVotes).toInt().toString()
 
         CoroutineScope(Dispatchers.Main).launch {
             val currentState = votingUseCase.getUserCurrentState()
