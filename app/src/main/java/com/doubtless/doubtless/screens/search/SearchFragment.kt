@@ -50,8 +50,6 @@ class SearchFragment : Fragment() {
             adapter =
                 GenericFeedAdapter(
                     genericFeedEntities = mutableListOf(),
-                    votingDoubtUseCase = DoubtlessApp.getInstance().getAppCompRoot()
-                        .getVotingDoubtCase(),
                     onLastItemReached = {},
                     interactionListener = object : GenericFeedAdapter.InteractionListener {
                         override fun onSearchBarClicked() {

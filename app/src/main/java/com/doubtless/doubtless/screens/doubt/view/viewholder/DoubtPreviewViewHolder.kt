@@ -8,21 +8,21 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.doubt.DoubtData
-import com.doubtless.doubtless.screens.doubt.usecases.VotingDoubtUseCase
+import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.utils.Utils
 import com.doubtless.doubtless.utils.Utils.flatten
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Math.ceil
 import java.util.*
+import kotlin.math.floor
 
 class DoubtPreviewViewHolder(
     view: View,
     private val showVotingLayout: Boolean,
-    private val votingDoubtUseCase: VotingDoubtUseCase,
     private val interactionListener: InteractionListener
 ) :
     RecyclerView.ViewHolder(view) {
@@ -97,33 +97,55 @@ class DoubtPreviewViewHolder(
             .into(ivDp)
 
 
-        var lastClicked = System.currentTimeMillis()
+        val votingUseCase = DoubtlessApp.getInstance().getAppCompRoot()
+            .getDoubtVotingDoubtCase(doubtData.copy())
+
+        setVotesUi(doubtData, votingUseCase)
 
         ivUpvotes.setOnClickListener {
-
-            if (System.currentTimeMillis() - lastClicked < 3000L) {
-                Toast.makeText(itemView.context, "Please read properly first!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            lastClicked = System.currentTimeMillis()
-
-            // If result comes after a while and this viewholder is used for another item, things can go wrong.
             CoroutineScope(Dispatchers.Main).launch {
-                val result = votingDoubtUseCase.upvoteDoubt(doubtId = doubtData.id!!)
 
-                if (result is VotingDoubtUseCase.Result.UpVoted) {
-                    doubtData.netVotes += 1 // looks bad :/
-                    Log.d("voting", "102 " + doubtData.netVotes + " " + doubtData.netVotes.toInt())
-                    tvNetVotes.text = kotlin.math.floor(doubtData.netVotes).toInt().toString()
+                val result = votingUseCase.upvoteDoubt()
+
+                if (result is VotingUseCase.Result.UpVoted) {
+                    doubtData.netVotes += 1
+                } else if (result is VotingUseCase.Result.UndoneUpVote) {
+                    doubtData.netVotes -= 1
                 }
 
-                if (result is VotingDoubtUseCase.Result.UndoneUpVote) {
-                    doubtData.netVotes -= 1 // looks bad :/
-                    Log.d("voting", "107 " + doubtData.netVotes  + " " + doubtData.netVotes.toInt())
-                    tvNetVotes.text = kotlin.math.floor(doubtData.netVotes).toInt().toString()
-                }
+                setVotesUi(doubtData, votingUseCase)
             }
+        }
+
+        ivDownvotes.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+
+                val result = votingUseCase.downVoteDoubt()
+
+                if (result is VotingUseCase.Result.DownVoted) {
+                    doubtData.netVotes -= 1
+                } else if (result is VotingUseCase.Result.UndoneDownVote) {
+                    doubtData.netVotes += 1
+                }
+
+                setVotesUi(doubtData, votingUseCase)
+            }
+        }
+    }
+
+    private fun setVotesUi(doubtData: DoubtData, votingUseCase: VotingUseCase) {
+        ivDownvotes.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_baseline_thumb_up_off_alt_24))
+        ivUpvotes.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_baseline_thumb_up_off_alt_24))
+        tvNetVotes.text = floor(doubtData.netVotes).toString()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val currentState = votingUseCase.getUserCurrentState()
+
+            if (currentState == VotingUseCase.UPVOTED)
+                ivUpvotes.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_baseline_thumb_up_filled))
+
+            if (currentState == VotingUseCase.DOWNVOTED)
+                ivDownvotes.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_baseline_thumb_up_filled))
         }
     }
 }

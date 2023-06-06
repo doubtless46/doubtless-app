@@ -79,8 +79,6 @@ class AnswersFragment : Fragment() {
             adapter = AnswerDoubtsAdapter(
                 user = userManager.getCachedUserData()!!,
                 doubtAnswerEntities = mutableListOf(),
-                votingDoubtUseCase = DoubtlessApp.getInstance().getAppCompRoot()
-                    .getVotingDoubtCase(),
                 onLastItemReached = {
                     /* no-op */
                 },

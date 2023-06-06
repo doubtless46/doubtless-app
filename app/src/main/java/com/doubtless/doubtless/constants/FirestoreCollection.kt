@@ -9,7 +9,7 @@ class FirestoreCollection {
         const val USER_ATTR = "user_attr"
         const val MiscAppData = "misc_app_data"
 
-        val AllDoubts = if (BuildConfig.DEBUG) {
+        val AllDoubts = if (false) {
             "AllDoubts_Test"
         } else {
             "AllDoubts"
@@ -17,10 +17,16 @@ class FirestoreCollection {
 
         val DoubtAnswer = "Answer"
 
-        val VOTING_DATA = if (BuildConfig.DEBUG) {
-            "voting_data_test"
+        val DOUBT_VOTING_DATA = if (false) {
+            "doubt_voting_data_test"
         } else {
-            "voting_data"
+            "doubt_voting_data"
+        }
+
+        val ANSWER_VOTING_DATA = if (false) {
+            "answer_voting_data_test"
+        } else {
+            "answer_voting_data"
         }
 
         val UPVOTE_DATA_USERS = "upvoted_users"

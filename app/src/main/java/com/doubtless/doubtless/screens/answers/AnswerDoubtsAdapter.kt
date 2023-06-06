@@ -8,12 +8,11 @@ import com.doubtless.doubtless.screens.answers.viewholder.AnswerViewHolder
 import com.doubtless.doubtless.screens.answers.viewholder.EnterAnswerViewHolder
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.doubt.DoubtData
-import com.doubtless.doubtless.screens.doubt.usecases.VotingDoubtUseCase
+import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.screens.doubt.view.viewholder.DoubtPreviewViewHolder
 
 class AnswerDoubtsAdapter(
     private val doubtAnswerEntities: MutableList<AnswerDoubtEntity>,
-    private val votingDoubtUseCase: VotingDoubtUseCase,
     private val user: User,
     private val onLastItemReached: () -> Unit,
     private val interactionListener: InteractionListener
@@ -33,7 +32,6 @@ class AnswerDoubtsAdapter(
                 val view = inflater.inflate(R.layout.doubt_layout, parent, false)
                 return DoubtPreviewViewHolder(
                     view = view,
-                    votingDoubtUseCase = votingDoubtUseCase,
                     interactionListener = object : DoubtPreviewViewHolder.InteractionListener {
                         override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
                             interactionListener.onDoubtClicked(doubtData, position)

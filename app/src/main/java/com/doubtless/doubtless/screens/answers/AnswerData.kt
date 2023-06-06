@@ -8,8 +8,9 @@ import com.google.gson.annotations.SerializedName
 import java.util.Date
 
 data class AnswerData(
-    @get:PropertyName("id")
-    @SerializedName("id")
+    @get:PropertyName("answer_id")
+    @set:PropertyName("answer_id")
+    @SerializedName("answer_id")
     var id: String? = null,
     @SerializedName("doubt_id")
     @get:PropertyName("doubt_id")

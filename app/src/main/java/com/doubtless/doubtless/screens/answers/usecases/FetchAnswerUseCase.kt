@@ -25,7 +25,7 @@ class FetchAnswerUseCase constructor(
             val result = firestore.collection(FirestoreCollection.AllDoubts)
                 .document(doubtId)
                 .collection(FirestoreCollection.DoubtAnswer)
-                .orderBy("netVotes", Query.Direction.DESCENDING)
+                .orderBy("net_votes", Query.Direction.DESCENDING)
                 .get().await()
 
             Result.Success(AnswerData.parse(result)!!)

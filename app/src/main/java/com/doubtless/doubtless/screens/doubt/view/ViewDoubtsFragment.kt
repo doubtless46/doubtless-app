@@ -104,8 +104,7 @@ class ViewDoubtsFragment : Fragment() {
                 override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
                     navigator.moveToDoubtDetailFragment(doubtData)
                 }
-            },
-            votingDoubtUseCase = DoubtlessApp.getInstance().getAppCompRoot().getVotingDoubtCase()
+            }
         )
 
         // how is rv restoring its scroll pos when switching tabs?

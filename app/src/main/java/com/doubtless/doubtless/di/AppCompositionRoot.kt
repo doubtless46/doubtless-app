@@ -12,15 +12,17 @@ import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.navigation.Router
 import com.doubtless.doubtless.network.DoubtlessServer
+import com.doubtless.doubtless.screens.answers.AnswerData
 import com.doubtless.doubtless.screens.answers.usecases.FetchAnswerUseCase
 import com.doubtless.doubtless.screens.answers.usecases.PublishAnswerUseCase
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserDataServerUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserDataStorageUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.usecases.DoubtDataSharedPrefUseCase
 import com.doubtless.doubtless.screens.doubt.usecases.PostDoubtUseCase
-import com.doubtless.doubtless.screens.doubt.usecases.VotingDoubtUseCase
+import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.screens.home.entities.FeedConfig
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByDateUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByPopularityUseCase
@@ -129,16 +131,12 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
     // ------- Common --------
 
-    private lateinit var votingDoubtUseCase: VotingDoubtUseCase
+    fun getAnswerVotingDoubtCase(answerData: AnswerData): VotingUseCase {
+        return VotingUseCase(FirebaseFirestore.getInstance(), getUserManager().getCachedUserData()!!, true, answerData, null)
+    }
 
-    @Synchronized
-    fun getVotingDoubtCase(): VotingDoubtUseCase {
-
-        if (!::votingDoubtUseCase.isInitialized) {
-            votingDoubtUseCase = VotingDoubtUseCase(FirebaseFirestore.getInstance(), getUserManager().getCachedUserData()!!)
-        }
-
-        return votingDoubtUseCase
+    fun getDoubtVotingDoubtCase(doubtData: DoubtData): VotingUseCase {
+        return VotingUseCase(FirebaseFirestore.getInstance(), getUserManager().getCachedUserData()!!, false, null, doubtData)
     }
 
     // ------- User ---------

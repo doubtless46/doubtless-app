@@ -28,7 +28,7 @@ interface DoubtlessServer {
         @Header("app_version") appVersion: String = BuildConfig.VERSION_NAME,
     )
 
-    @POST("search/search")
+    @POST("search")
     suspend fun searchDoubts(
         @Body query: String,
         @Header("Content-Type") contentType: String = "text/plain"

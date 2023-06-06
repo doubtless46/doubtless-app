@@ -5,14 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.doubt.DoubtData
-import com.doubtless.doubtless.screens.doubt.usecases.VotingDoubtUseCase
+import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.screens.doubt.view.viewholder.DoubtPreviewViewHolder
 import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import com.doubtless.doubtless.screens.home.viewholders.HomeSearchViewHolder
 
 class GenericFeedAdapter(
     private val genericFeedEntities: MutableList<FeedEntity>,
-    private val votingDoubtUseCase: VotingDoubtUseCase,
     private val onLastItemReached: () -> Unit,
     private val interactionListener: InteractionListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -31,7 +30,6 @@ class GenericFeedAdapter(
                 return DoubtPreviewViewHolder(
                     view = view,
                     showVotingLayout = false,
-                    votingDoubtUseCase = votingDoubtUseCase,
                     interactionListener = object : DoubtPreviewViewHolder.InteractionListener {
                         override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
                             interactionListener.onDoubtClicked(doubtData, position)
@@ -57,7 +55,6 @@ class GenericFeedAdapter(
                 return DoubtPreviewViewHolder(
                     view = view,
                     showVotingLayout = false,
-                    votingDoubtUseCase = votingDoubtUseCase,
                     interactionListener = object : DoubtPreviewViewHolder.InteractionListener {
                         override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
                             interactionListener.onDoubtClicked(doubtData, position)
