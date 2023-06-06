@@ -88,7 +88,7 @@ class FetchUserDataUseCase constructor(
             val latch = CountDownLatch(1)
 
             firestore.collection(FirestoreCollection.AllDoubts).whereEqualTo(
-                "userId", userManager.getCachedUserData()!!.id
+                "author_id", userManager.getCachedUserData()!!.id
             )
                 .count()
                 .get(AggregateSource.SERVER).addOnSuccessListener {

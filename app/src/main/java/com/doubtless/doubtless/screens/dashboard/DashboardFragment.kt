@@ -61,8 +61,6 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var lastRefreshed = System.currentTimeMillis()
-
         val feedList = mutableListOf<FeedEntity>()
         feedList.add(FeedEntity(FeedEntity.TYPE_USER_PROFILE, null))
 

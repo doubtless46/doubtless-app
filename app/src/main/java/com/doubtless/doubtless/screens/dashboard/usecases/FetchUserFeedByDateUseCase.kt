@@ -1,5 +1,6 @@
 package com.doubtless.doubtless.screens.dashboard.usecases
 
+import android.util.Log
 import com.doubtless.doubtless.constants.FirestoreCollection
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.DoubtData
@@ -28,8 +29,8 @@ class FetchUserFeedByDateUseCase constructor(
 
         try {
             var query = firestore.collection(FirestoreCollection.AllDoubts).whereEqualTo(
-                "userId", userManager.getCachedUserData()!!.id
-            ).orderBy("date", Query.Direction.DESCENDING)
+                "author_id", userManager.getCachedUserData()!!.id
+            ).orderBy("created_on", Query.Direction.DESCENDING)
 
             if (lastDoubtData != null && request.fetchFromPage1 == false) {
                 query = query.startAfter(lastDoubtData!!.date)
@@ -41,7 +42,7 @@ class FetchUserFeedByDateUseCase constructor(
 
             val result = query.get().await()
             val doubtDataList = getDoubtDataList(result)
-
+            Log.i("DoubtDataList", doubtDataList.toTypedArray().contentToString())
             if (doubtDataList.isNotEmpty())
                 lastDoubtData = doubtDataList.last()
 
