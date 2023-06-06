@@ -26,7 +26,7 @@ class FetchFeedByDateUseCase constructor(
 
             try {
                 var query = firestore.collection(FirestoreCollection.AllDoubts)
-                    .orderBy("createdOn", Query.Direction.DESCENDING)
+                    .orderBy("created_on", Query.Direction.DESCENDING)
 
                 if (lastDoubtData != null && request.fetchFromPage1 == false) {
                     query = query.startAfter(lastDoubtData!!.date)
