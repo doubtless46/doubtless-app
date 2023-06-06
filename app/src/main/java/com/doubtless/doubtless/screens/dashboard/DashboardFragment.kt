@@ -17,6 +17,7 @@ import com.doubtless.doubtless.databinding.FragmentDashboardBinding
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.common.GenericFeedAdapter
 import com.doubtless.doubtless.screens.doubt.DoubtData
+import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -62,22 +63,11 @@ class DashboardFragment : Fragment() {
 
         var lastRefreshed = System.currentTimeMillis()
 
-        binding.layoutSwipe.setOnRefreshListener {
-
-            if (System.currentTimeMillis() - lastRefreshed < 3 * 1000L) {
-                binding.layoutSwipe.isRefreshing = false
-                return@setOnRefreshListener
-            }
-
-            lastRefreshed = System.currentTimeMillis()
-
-            binding.layoutSwipe.isRefreshing = true
-            viewModel.refreshList()
-            adapter.clearCurrentList()
-        }
+        val feedList = mutableListOf<FeedEntity>()
+        feedList.add(FeedEntity(FeedEntity.TYPE_USER_PROFILE, null))
 
         if (!::adapter.isInitialized) {
-            adapter = GenericFeedAdapter(genericFeedEntities = mutableListOf(),
+            adapter = GenericFeedAdapter(genericFeedEntities = feedList,
                 onLastItemReached = {
                     viewModel.fetchDoubts()
                 },
@@ -137,9 +127,8 @@ class DashboardFragment : Fragment() {
         viewModel.fetchedHomeEntities.observe(viewLifecycleOwner) {
             if (it == null) return@observe
             adapter.appendDoubts(it)
-            Log.i("ObserveFeed", it.size.toString())
+            Log.i("ObserveFeed", it.toTypedArray().contentToString())
             viewModel.notifyFetchedDoubtsConsumed()
-            binding.layoutSwipe.isRefreshing = false
         }
     }
 

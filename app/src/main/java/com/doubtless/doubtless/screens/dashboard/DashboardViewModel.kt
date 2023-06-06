@@ -71,10 +71,10 @@ class DashboardViewModel(
 
 
         // for page 1 call add user profile entity
-        if (_homeEntities.isEmpty()) entitiesFromServer.add(
-            0,
-            FeedEntity(FeedEntity.TYPE_USER_PROFILE, null)
-        )
+//        if (_homeEntities.isEmpty()) entitiesFromServer.add(
+//            0,
+//            FeedEntity(FeedEntity.TYPE_USER_PROFILE, null)
+//        )
 
         _homeEntities.addAll(entitiesFromServer)
         _fetchedHomeEntities.postValue(entitiesFromServer)
@@ -83,13 +83,6 @@ class DashboardViewModel(
 //                    - /* subtract one for search entity, ideally should have counted Type = Doubt size */ 1
         )
         isLoading = false
-
-    }
-
-    fun refreshList() {
-        _homeEntities.clear()
-        _homeEntitiesIds.clear()
-        fetchDoubts(forPageOne = true)
     }
 
     companion object {
