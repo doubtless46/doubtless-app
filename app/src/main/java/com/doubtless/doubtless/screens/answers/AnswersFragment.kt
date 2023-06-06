@@ -126,7 +126,10 @@ class AnswersFragment : Fragment() {
 
             if (it is PublishAnswerUseCase.Result.Success) {
                 Toast.makeText(requireContext(), "Successfully posted!", Toast.LENGTH_SHORT).show()
-                adapter.appendAnswerAtFirst(PublishAnswerRequest.toAnswerData(it.publishAnswerRequest))
+                adapter.appendAnswerAtFirst(answerData = it.answerData)
+                // this will increase the count across screens as the same reference was passed to the arguments.
+                // Its generally not a good thing to do.t(it.answerData)
+                doubtData.no_answers += 1
             }
 
             if (it is PublishAnswerUseCase.Result.Error)

@@ -1,7 +1,9 @@
 package com.doubtless.doubtless.network
 
 import com.doubtless.doubtless.BuildConfig
+import com.doubtless.doubtless.screens.answers.AnswerData
 import com.doubtless.doubtless.screens.answers.PublishAnswerRequest
+import com.doubtless.doubtless.screens.answers.PublishAnswerResponse
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.PublishDoubtRequest
 import com.doubtless.doubtless.screens.search.SearchResult
@@ -26,7 +28,7 @@ interface DoubtlessServer {
         @Body publishAnswerReq: PublishAnswerRequest,
         @Header("is_debug") debug: Boolean = BuildConfig.DEBUG,
         @Header("app_version") appVersion: String = BuildConfig.VERSION_NAME,
-    )
+    ): PublishAnswerResponse
 
     @POST("search")
     suspend fun searchDoubts(

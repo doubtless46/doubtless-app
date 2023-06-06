@@ -3,6 +3,7 @@ package com.doubtless.doubtless.screens.answers.viewholder
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.doubtless.doubtless.DoubtlessApp
@@ -52,7 +53,13 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
         }
 
         authorName.text = answerData.authorName
-        time.text = Utils.getTimeAgo(Date(answerData.date.toString()))
+
+        try {
+            time.text = Utils.getTimeAgo(Date(answerData.date.toString()))
+        } catch (e: Exception) {
+            time.isVisible = false
+        }
+
         description.text = answerData.description
         tvYear.text = "| ${answerData.authorYear} Year |"
 
