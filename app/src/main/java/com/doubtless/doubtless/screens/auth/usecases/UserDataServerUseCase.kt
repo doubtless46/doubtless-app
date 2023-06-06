@@ -92,9 +92,10 @@ class UserDataServerUseCase constructor(
         var createdUser: User = user
 
         firestore.collection(FirestoreCollection.USER)
-            .add(user)
+            .document(user.id.toString())
+            .set(user)
             .addOnSuccessListener {
-                createdUser = user.copy(document_id = it.id)
+                createdUser = user.copy(document_id = user.id)
                 latch.countDown()
             }.addOnFailureListener {
                 errorMessage = it.message

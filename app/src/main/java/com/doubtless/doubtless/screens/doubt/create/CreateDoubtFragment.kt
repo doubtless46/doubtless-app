@@ -14,11 +14,13 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentCreateDoubtBinding
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.doubt.PublishDoubtRequest
 import com.doubtless.doubtless.screens.doubt.usecases.DoubtDataSharedPrefUseCase
 import com.doubtless.doubtless.screens.doubt.usecases.PostDoubtUseCase
 import com.doubtless.doubtless.screens.onboarding.OnBoardingAttributes
@@ -38,8 +40,8 @@ class CreateDoubtFragment : Fragment() {
     private var _binding: FragmentCreateDoubtBinding? = null
 
     private val binding get() = _binding!!
-    private var isButtonClicked = false
     private lateinit var db: FirebaseFirestore
+    private lateinit var viewModel: CreateDoubtViewModel
     private lateinit var userManager: UserManager
     private lateinit var analyticsTracker: AnalyticsTracker
     private lateinit var postDoubtUseCase: PostDoubtUseCase
@@ -48,7 +50,7 @@ class CreateDoubtFragment : Fragment() {
     private var maxHeadingCharLimit by Delegates.notNull<Int>()
     private var maxDescriptionCharLimit by Delegates.notNull<Int>()
     private var maxKeywordsLimit by Delegates.notNull<Int>()
-
+    private var isButtonClicked = false
     private val keywordsEntered = mutableListOf<String>()
 
     private lateinit var doubtDataSharedPrefUseCase: DoubtDataSharedPrefUseCase
@@ -67,6 +69,10 @@ class CreateDoubtFragment : Fragment() {
             .getFetchOnBoardingDataUseCase(userManager.getCachedUserData()!!)
         remoteConfig = DoubtlessApp.getInstance().getAppCompRoot().getRemoteConfig()
         postDoubtUseCase = DoubtlessApp.getInstance().getAppCompRoot().getPostDoubtUseCase()
+        viewModel = ViewModelProvider(
+            this,
+            CreateDoubtViewModel.Companion.Factory(postDoubtUseCase)
+        )[CreateDoubtViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -85,6 +91,27 @@ class CreateDoubtFragment : Fragment() {
         mgr.showSoftInput(binding.doubtHeading, InputMethodManager.SHOW_FORCED)
 
         getMaxCharacterLimit()
+
+        viewModel.postDoubtStatus.observe(viewLifecycleOwner) { result ->
+
+            if (result is CreateDoubtViewModel.Result.Success) {
+                isButtonClicked = false
+                binding.postButton.alpha = 1f
+                binding.doubtHeading.setText("")
+                binding.doubtDescription.setText("")
+                Toast.makeText(context, "Posted Successfully!", Toast.LENGTH_SHORT).show()
+            } else {
+                isButtonClicked = false
+                binding.postButton.alpha = 1f
+                Toast.makeText(
+                    /* context = */ context,
+                    /* text = */
+                    "Failed to Post ${(result as CreateDoubtViewModel.Result.Error).message}",
+                    /* duration = */
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
 
         if (onBoardingAttributes == null) {
             CoroutineScope(Dispatchers.Main).launch {
@@ -272,39 +299,20 @@ class CreateDoubtFragment : Fragment() {
         keywords: List<String>,
         user: User
     ) {
-        CoroutineScope(Dispatchers.Main).launch {
-            val result = postDoubtUseCase.post(
-                PostDoubtUseCase.PostDoubtRequest(
-                    author_id = user.id!!,
-                    author_name = user.name!!,
-                    author_photo_url = user.photoUrl!!,
-                    author_college = user.local_user_attr!!.college!!,
-                    heading = heading,
-                    description = description,
-                    net_votes = 0f,
-                    tags = tags,
-                    keywords = keywords
-                )
+        viewModel.postDoubt(
+            PublishDoubtRequest(
+                userId = user.id!!,
+                userName = user.name!!,
+                userPhotoUrl = user.photoUrl!!,
+                college = user.local_user_attr!!.college!!,
+                year = user.local_user_attr.year!!,
+                heading = heading,
+                description = description,
+                netVotes = 0f,
+                tags = tags,
+                keywords = keywords
             )
-
-            if (!isAdded) return@launch
-
-            if (result is PostDoubtUseCase.Result.Success) {
-                isButtonClicked = false
-                binding.postButton.alpha = 1f
-                binding.doubtHeading.setText("")
-                binding.doubtDescription.setText("")
-                Toast.makeText(context, "Posted Successfully!", Toast.LENGTH_SHORT).show()
-            } else {
-                isButtonClicked = false
-                binding.postButton.alpha = 1f
-                Toast.makeText(
-                    /* context = */ context,
-                    /* text = */ "Failed to Post ${(result as PostDoubtUseCase.Result.Error).message}",
-                    /* duration = */ Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
+        )
     }
 
     override fun onDestroyView() {

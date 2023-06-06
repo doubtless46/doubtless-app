@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.TransitionInflater
 import com.doubtless.doubtless.DoubtlessApp
+import com.doubtless.doubtless.R
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentViewDoubtsBinding
 import com.doubtless.doubtless.navigation.FragNavigator
@@ -35,6 +37,10 @@ class ViewDoubtsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val inflater = TransitionInflater.from(requireContext())
+        //enterTransition = inflater.inflateTransition(R.transition.slide)
+        exitTransition = inflater.inflateTransition(R.transition.fade)
 
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
         analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
@@ -96,9 +102,13 @@ class ViewDoubtsFragment : Fragment() {
                 }
 
                 override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
-                    navigator.moveDoubtDetailFragment()
+                    // note that this we are not sending a copy of doubtData here,
+                    // hence if netVotes are changed on the other screen then it will change here too.
+                    // this solves our problem but can cause complications on long term.
+                    navigator.moveToDoubtDetailFragment(doubtData)
                 }
-            })
+            }
+        )
 
         // how is rv restoring its scroll pos when switching tabs?
         binding.doubtsRecyclerView.adapter = adapter

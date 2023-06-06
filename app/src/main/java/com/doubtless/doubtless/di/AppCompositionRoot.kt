@@ -12,20 +12,25 @@ import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.navigation.Router
 import com.doubtless.doubtless.network.DoubtlessServer
+import com.doubtless.doubtless.screens.answers.AnswerData
+import com.doubtless.doubtless.screens.answers.usecases.FetchAnswerUseCase
+import com.doubtless.doubtless.screens.answers.usecases.PublishAnswerUseCase
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserDataServerUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserDataStorageUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.usecases.DoubtDataSharedPrefUseCase
 import com.doubtless.doubtless.screens.doubt.usecases.PostDoubtUseCase
+import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.screens.home.entities.FeedConfig
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByDateUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByPopularityUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase
-import com.doubtless.doubtless.screens.onboarding.usecases.AddOnBoardingDataUseCase
-import com.doubtless.doubtless.screens.onboarding.usecases.FetchOnBoardingDataUseCase
 import com.doubtless.doubtless.screens.main.MainActivity
 import com.doubtless.doubtless.screens.main.MainFragment
+import com.doubtless.doubtless.screens.onboarding.usecases.AddOnBoardingDataUseCase
+import com.doubtless.doubtless.screens.onboarding.usecases.FetchOnBoardingDataUseCase
 import com.doubtless.doubtless.screens.search.usecases.ExtractKeywordsUseCase
 import com.doubtless.doubtless.screens.search.usecases.FetchSearchResultsUseCase
 import com.google.firebase.auth.FirebaseAuth
@@ -33,8 +38,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 
 class AppCompositionRoot(appContext: DoubtlessApp) {
 
@@ -80,6 +88,16 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
         return FetchFeedByDateUseCase(FirebaseFirestore.getInstance())
     }
 
+    // --------- Answer Screen ------------
+
+    fun getFetchAnswerUseCase(doubtId: String): FetchAnswerUseCase {
+        return FetchAnswerUseCase(FirebaseFirestore.getInstance(), doubtId)
+    }
+
+    fun getPublishAnswerUseCase(): PublishAnswerUseCase {
+        return PublishAnswerUseCase(getServer())
+    }
+
     // --------- Search ------------
 
     fun getExtractKeywordsUseCase(): ExtractKeywordsUseCase {
@@ -109,6 +127,16 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
     fun getPostDoubtUseCase(): PostDoubtUseCase {
         return PostDoubtUseCase(getServer())
+    }
+
+    // ------- Common --------
+
+    fun getAnswerVotingDoubtCase(answerData: AnswerData): VotingUseCase {
+        return VotingUseCase(FirebaseFirestore.getInstance(), getUserManager().getCachedUserData()!!, true, answerData, null)
+    }
+
+    fun getDoubtVotingDoubtCase(doubtData: DoubtData): VotingUseCase {
+        return VotingUseCase(FirebaseFirestore.getInstance(), getUserManager().getCachedUserData()!!, false, null, doubtData)
     }
 
     // ------- User ---------
@@ -210,15 +238,21 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
     // --------- SERVER -----------
 
-    private val BASE_URL = "https://TODO"
+    private val BASE_URL = "https://asia-south1-doubtless-bd798.cloudfunctions.net/doubtless/api/"
     private lateinit var doubtlessServer: DoubtlessServer
 
     @Synchronized
     fun getServer(): DoubtlessServer {
 
         if (::doubtlessServer.isInitialized == false) {
+
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+            val client: OkHttpClient = OkHttpClient.Builder().addInterceptor(interceptor).build()
+
             doubtlessServer = Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .client(client)
                 .addConverterFactory(
                     /* factory = */ GsonConverterFactory.create(getGson())
                 )

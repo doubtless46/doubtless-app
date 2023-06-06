@@ -10,6 +10,7 @@ import com.google.firebase.firestore.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import java.lang.Math.abs
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -74,7 +75,7 @@ class FetchHomeFeedUseCase constructor(
         }
 
         val feedByPopularityJob = async {
-            fetchFeedByPopularityUseCase.getFeedData(request.copy(pageSize = size - feedConfig.recentPostsCount))
+            fetchFeedByPopularityUseCase.getFeedData(request.copy(pageSize = kotlin.math.abs(size - feedConfig.recentPostsCount)))
         }
 
         val resultDate = feedByDateJob.await()

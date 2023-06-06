@@ -26,7 +26,7 @@ class FetchFeedByPopularityUseCase constructor(
 
             try {
                 var query = firestore.collection(FirestoreCollection.AllDoubts)
-                    .orderBy("netVotes", Query.Direction.DESCENDING)
+                    .orderBy("net_votes", Query.Direction.DESCENDING)
 
                 if (lastDoubtData != null && request.fetchFromPage1 == false) {
                     query = query.startAfter(lastDoubtData!!.date)

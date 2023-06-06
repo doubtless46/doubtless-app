@@ -18,6 +18,9 @@
         android:layout_height="0.5dp"
         android:background="#99B8B8B8" />
 
+    <!--    99B8B8B8-->
+    <!--    #99DDDDDD-->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,7 +50,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/user_doubt_timestamp"
+            android:id="@+id/author_doubt_timestamp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="-3dp"
@@ -60,6 +63,18 @@
             app:layout_constraintTop_toBottomOf="@id/tv_username" />
 
         <TextView
+            android:id="@+id/user_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/poppins"
+            android:text="| 1st year |"
+            android:textColor="@color/grey"
+            android:textSize="12dp"
+            app:layout_constraintStart_toEndOf="@id/tv_username"
+            app:layout_constraintTop_toTopOf="@id/tv_username" />
+
+        <TextView
             android:id="@+id/user_college"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -69,7 +84,7 @@
             android:text="MSIT"
             android:textColor="@color/grey"
             android:textSize="12dp"
-            app:layout_constraintStart_toEndOf="@id/tv_username"
+            app:layout_constraintStart_toEndOf="@id/user_year"
             app:layout_constraintTop_toTopOf="@id/tv_username" />
 
         <TextView
@@ -78,7 +93,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:maxLength="500"
             android:fontFamily="@font/poppins"
             android:text="Heading"
             android:textColor="@color/black"
@@ -93,13 +107,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:maxLength="500"
-            android:autoLink="web"
             android:fontFamily="@font/poppins"
-            android:linksClickable="true"
             android:text="Description"
-            android:textSize="12dp"
+            android:textColor="@color/black"
+            android:textSize="14dp"
             app:layout_constraintTop_toBottomOf="@id/user_doubt_heading" />
+
 
         <TextView
             android:id="@+id/tv_tags"
@@ -107,11 +120,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:fontFamily="@font/poppins"
-            android:text="Tags : attendance, marks, teachers"
             android:textColor="@color/grey"
             android:textSize="12dp"
             app:layout_constraintStart_toStartOf="@id/iv_votes"
-            app:layout_constraintTop_toBottomOf="@id/iv_votes" />
+            app:layout_constraintTop_toBottomOf="@id/iv_votes"
+            tools:text="Related to : attendance, marks, teachers" />
 
         <TextView
             android:id="@+id/iv_votes"
@@ -156,6 +169,28 @@
             android:textSize="12dp"
             app:layout_constraintStart_toEndOf="@id/iv_answers"
             app:layout_constraintTop_toTopOf="@id/iv_answers" />
+
+        <ImageView
+            android:id="@+id/iv_upvotes"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_tags"
+            app:tint="@color/grey" />
+
+        <ImageView
+            android:id="@+id/iv_downvote"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="16dp"
+            android:rotation="180"
+            android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
+            app:layout_constraintStart_toEndOf="@id/iv_upvotes"
+            app:layout_constraintTop_toTopOf="@id/iv_upvotes"
+            app:tint="@color/grey" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
