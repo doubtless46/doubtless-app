@@ -7,6 +7,8 @@ import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
@@ -81,173 +83,181 @@ class VotingUseCase constructor(
         }
     }
 
+    private val lock = Mutex()
+
     suspend fun upvoteDoubt(): Result = withContext(Dispatchers.IO) {
 
-        val currentState = getUserCurrentState()
+        lock.withLock {
 
-        if (currentState == NOT_SET) {
-            return@withContext Result.Error("error!")
-        }
+            val currentState = getUserCurrentState()
 
-        try {
-
-            if (currentState == NONE) {
-                // User didn't upvote this doubt, could have downvoted but i am ignoring it as of now,
-                // Ideally should save these operations locally and then send to server after a while.
-
-                docRef
-                    .collection(FirestoreCollection.UPVOTE_DATA_USERS)
-                    .document(user.id!!)
-                    .set(user).await()
-
-                firestore.runTransaction { transaction ->
-
-                    val docx = if (isForAnswer) {
-                        firestore.collection(FirestoreCollection.AllDoubts)
-                            .document(answerData!!.doubtId!!)
-                            .collection(FirestoreCollection.DoubtAnswer)
-                            .document(answerData.id!!)
-                    } else {
-                        firestore.collection(FirestoreCollection.AllDoubts)
-                            .document(doubtData!!.id!!)
-                    }
-
-
-                    val new_votes = if (isForAnswer) {
-                        transaction.get(docx).get("net_votes") as Long + 1
-                    } else {
-                        transaction.get(docx).get("net_votes") as Double + 1
-                    }
-
-                    transaction.update(docx, "net_votes", new_votes)
-                }.await()
-
-                this@VotingUseCase.currentState = UPVOTED
-                return@withContext Result.UpVoted()
+            if (currentState == NOT_SET) {
+                return@withContext Result.Error("error!")
             }
 
-            if (currentState == UPVOTED) {
+            try {
 
-                // user already upvoted this, undo this operation.
+                if (currentState == NONE) {
+                    // User didn't upvote this doubt, could have downvoted but i am ignoring it as of now,
+                    // Ideally should save these operations locally and then send to server after a while.
 
-                docRef
-                    .collection(FirestoreCollection.UPVOTE_DATA_USERS)
-                    .document(user.id!!)
-                    .delete().await()
+                    docRef
+                        .collection(FirestoreCollection.UPVOTE_DATA_USERS)
+                        .document(user.id!!)
+                        .set(user).await()
 
-                firestore.runTransaction { transaction ->
+                    firestore.runTransaction { transaction ->
 
-                    val docx = if (isForAnswer) {
-                        firestore.collection(FirestoreCollection.AllDoubts)
-                            .document(answerData!!.doubtId!!)
-                            .collection(FirestoreCollection.DoubtAnswer)
-                            .document(answerData.id!!)
-                    } else {
-                        firestore.collection(FirestoreCollection.AllDoubts)
-                            .document(doubtData!!.id!!)
-                    }
+                        val docx = if (isForAnswer) {
+                            firestore.collection(FirestoreCollection.AllDoubts)
+                                .document(answerData!!.doubtId!!)
+                                .collection(FirestoreCollection.DoubtAnswer)
+                                .document(answerData.id!!)
+                        } else {
+                            firestore.collection(FirestoreCollection.AllDoubts)
+                                .document(doubtData!!.id!!)
+                        }
 
-                    val new_votes = if (isForAnswer) {
-                        transaction.get(docx).get("net_votes") as Long - 1
-                    } else {
-                        transaction.get(docx).get("net_votes") as Double - 1
-                    }
 
-                    transaction.update(docx, "net_votes", new_votes)
-                }.await()
+                        val new_votes = if (isForAnswer) {
+                            transaction.get(docx).get("net_votes") as Long + 1
+                        } else {
+                            transaction.get(docx).get("net_votes") as Double + 1
+                        }
 
-                this@VotingUseCase.currentState = NONE
-                return@withContext Result.UndoneUpVote()
+                        transaction.update(docx, "net_votes", new_votes)
+                    }.await()
+
+                    this@VotingUseCase.currentState = UPVOTED
+                    return@withContext Result.UpVoted()
+                }
+
+                if (currentState == UPVOTED) {
+
+                    // user already upvoted this, undo this operation.
+
+                    docRef
+                        .collection(FirestoreCollection.UPVOTE_DATA_USERS)
+                        .document(user.id!!)
+                        .delete().await()
+
+                    firestore.runTransaction { transaction ->
+
+                        val docx = if (isForAnswer) {
+                            firestore.collection(FirestoreCollection.AllDoubts)
+                                .document(answerData!!.doubtId!!)
+                                .collection(FirestoreCollection.DoubtAnswer)
+                                .document(answerData.id!!)
+                        } else {
+                            firestore.collection(FirestoreCollection.AllDoubts)
+                                .document(doubtData!!.id!!)
+                        }
+
+                        val new_votes = if (isForAnswer) {
+                            transaction.get(docx).get("net_votes") as Long - 1
+                        } else {
+                            transaction.get(docx).get("net_votes") as Double - 1
+                        }
+
+                        transaction.update(docx, "net_votes", new_votes)
+                    }.await()
+
+                    this@VotingUseCase.currentState = NONE
+                    return@withContext Result.UndoneUpVote()
+                }
+
+                return@withContext Result.Error("unknown state")
+
+            } catch (e: Exception) {
+                return@withContext Result.Error(e.message ?: "error")
             }
-
-            return@withContext Result.Error("unknown state")
-
-        } catch (e: Exception) {
-            return@withContext Result.Error(e.message ?: "error")
         }
     }
 
     suspend fun downVoteDoubt(): Result = withContext(Dispatchers.IO) {
 
-        val currentState = getUserCurrentState()
+        lock.withLock {
 
-        if (currentState == NOT_SET) {
-            return@withContext Result.Error("error!")
-        }
+            val currentState = getUserCurrentState()
 
-        try {
-
-            if (currentState == NONE) {
-                // User didn't upvote this doubt, could have downvoted but i am ignoring it as of now,
-                // Ideally should save these operations locally and then send to server after a while.
-
-                docRef
-                    .collection(FirestoreCollection.DOWNVOTE_DATA_USERS)
-                    .document(user.id!!)
-                    .set(user).await()
-
-                firestore.runTransaction { transaction ->
-
-                    val docx = if (isForAnswer) {
-                        firestore.collection(FirestoreCollection.AllDoubts)
-                            .document(answerData!!.doubtId!!)
-                            .collection(FirestoreCollection.DoubtAnswer)
-                            .document(answerData.id!!)
-                    } else {
-                        firestore.collection(FirestoreCollection.AllDoubts)
-                            .document(doubtData!!.id!!)
-                    }
-
-                    val new_votes = if (isForAnswer) {
-                        transaction.get(docx).get("net_votes") as Long - 1
-                    } else {
-                        transaction.get(docx).get("net_votes") as Double - 1
-                    }
-
-                    transaction.update(docx, "net_votes", new_votes)
-                }.await()
-
-                this@VotingUseCase.currentState = DOWNVOTED
-                return@withContext Result.DownVoted()
+            if (currentState == NOT_SET) {
+                return@withContext Result.Error("error!")
             }
 
-            if (currentState == DOWNVOTED) {
-                // user already downvoted this, undo this operation.
+            try {
 
-                docRef
-                    .collection(FirestoreCollection.DOWNVOTE_DATA_USERS)
-                    .document(user.id!!)
-                    .delete().await()
+                if (currentState == NONE) {
+                    // User didn't upvote this doubt, could have downvoted but i am ignoring it as of now,
+                    // Ideally should save these operations locally and then send to server after a while.
 
-                firestore.runTransaction { transaction ->
+                    docRef
+                        .collection(FirestoreCollection.DOWNVOTE_DATA_USERS)
+                        .document(user.id!!)
+                        .set(user).await()
 
-                    val docx = if (isForAnswer) {
-                        firestore.collection(FirestoreCollection.AllDoubts)
-                            .document(answerData!!.doubtId!!)
-                            .collection(FirestoreCollection.DoubtAnswer)
-                            .document(answerData.id!!)
-                    } else {
-                        firestore.collection(FirestoreCollection.AllDoubts)
-                            .document(doubtData!!.id!!)
-                    }
+                    firestore.runTransaction { transaction ->
 
-                    val new_votes = if (isForAnswer) {
-                        transaction.get(docx).get("net_votes") as Long + 1
-                    } else {
-                        transaction.get(docx).get("net_votes") as Double + 1
-                    }
+                        val docx = if (isForAnswer) {
+                            firestore.collection(FirestoreCollection.AllDoubts)
+                                .document(answerData!!.doubtId!!)
+                                .collection(FirestoreCollection.DoubtAnswer)
+                                .document(answerData.id!!)
+                        } else {
+                            firestore.collection(FirestoreCollection.AllDoubts)
+                                .document(doubtData!!.id!!)
+                        }
 
-                    transaction.update(docx, "net_votes", new_votes)
-                }.await()
+                        val new_votes = if (isForAnswer) {
+                            transaction.get(docx).get("net_votes") as Long - 1
+                        } else {
+                            transaction.get(docx).get("net_votes") as Double - 1
+                        }
 
-                this@VotingUseCase.currentState = NONE
-                return@withContext Result.UndoneDownVote()
+                        transaction.update(docx, "net_votes", new_votes)
+                    }.await()
+
+                    this@VotingUseCase.currentState = DOWNVOTED
+                    return@withContext Result.DownVoted()
+                }
+
+                if (currentState == DOWNVOTED) {
+                    // user already downvoted this, undo this operation.
+
+                    docRef
+                        .collection(FirestoreCollection.DOWNVOTE_DATA_USERS)
+                        .document(user.id!!)
+                        .delete().await()
+
+                    firestore.runTransaction { transaction ->
+
+                        val docx = if (isForAnswer) {
+                            firestore.collection(FirestoreCollection.AllDoubts)
+                                .document(answerData!!.doubtId!!)
+                                .collection(FirestoreCollection.DoubtAnswer)
+                                .document(answerData.id!!)
+                        } else {
+                            firestore.collection(FirestoreCollection.AllDoubts)
+                                .document(doubtData!!.id!!)
+                        }
+
+                        val new_votes = if (isForAnswer) {
+                            transaction.get(docx).get("net_votes") as Long + 1
+                        } else {
+                            transaction.get(docx).get("net_votes") as Double + 1
+                        }
+
+                        transaction.update(docx, "net_votes", new_votes)
+                    }.await()
+
+                    this@VotingUseCase.currentState = NONE
+                    return@withContext Result.UndoneDownVote()
+                }
+
+                return@withContext Result.Error("unknown state")
+
+            } catch (e: Exception) {
+                return@withContext Result.Error(e.message ?: "error")
             }
-
-            return@withContext Result.Error("unknown state")
-
-        } catch (e: Exception) {
-            return@withContext Result.Error(e.message ?: "error")
         }
     }
 
