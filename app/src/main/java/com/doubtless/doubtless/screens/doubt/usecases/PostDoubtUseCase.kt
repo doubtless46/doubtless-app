@@ -1,12 +1,11 @@
 package com.doubtless.doubtless.screens.doubt.usecases
 
 import com.doubtless.doubtless.network.DoubtlessServer
-import com.doubtless.doubtless.screens.auth.User
-import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.PublishDoubtRequest
-import com.google.gson.annotations.SerializedName
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 
 class PostDoubtUseCase constructor(
     private val server: DoubtlessServer
@@ -26,7 +25,19 @@ class PostDoubtUseCase constructor(
                 netVotes = (0..tenPow6).random().toFloat() / tenPow6
             ) // 0.(6 decimal places precision randomized)
 
-            server.publishDoubt(_request)
+            val response = server.publishDoubt(_request)
+
+            if (response.errorBody() != null && !response.isSuccessful) {
+
+                // {"message":"ASK QUESTIONS ONLY"}
+
+                var json = Gson().toJson(response.errorBody()!!.string())
+                json = json.replace("\\\"", "'")
+                val jo = JSONObject(json.substring(1, json.length - 1))
+
+                val errorMessage = jo.getString("message")
+                throw Exception(errorMessage)
+            }
 
             Result.Success
 

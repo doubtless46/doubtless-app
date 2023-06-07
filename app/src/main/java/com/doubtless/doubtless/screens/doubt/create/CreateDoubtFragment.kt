@@ -106,7 +106,7 @@ class CreateDoubtFragment : Fragment() {
                 Toast.makeText(
                     /* context = */ context,
                     /* text = */
-                    "Failed to Post ${(result as CreateDoubtViewModel.Result.Error).message}",
+                    "${(result as CreateDoubtViewModel.Result.Error).message}",
                     /* duration = */
                     Toast.LENGTH_SHORT
                 ).show()

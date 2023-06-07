@@ -7,6 +7,7 @@ import com.doubtless.doubtless.screens.answers.PublishAnswerResponse
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.PublishDoubtRequest
 import com.doubtless.doubtless.screens.search.SearchResult
+import retrofit2.Response
 import retrofit2.http.*
 
 interface DoubtlessServer {
@@ -21,7 +22,7 @@ interface DoubtlessServer {
         @Body publishDoubtRequest: PublishDoubtRequest,
         @Header("is_debug") debug: Boolean = BuildConfig.DEBUG,
         @Header("app_version") appVersion: String = BuildConfig.VERSION_NAME,
-    )
+    ) : Response<Unit>
 
     @POST("doubts/answer")
     suspend fun publishAnswer(
