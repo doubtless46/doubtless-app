@@ -107,8 +107,14 @@ class ViewDoubtsFragment : Fragment() {
                     // this solves our problem but can cause complications on long term.
                     navigator.moveToDoubtDetailFragment(doubtData)
                 }
-            }
-        )
+
+                override fun onSignOutClicked() {
+
+                }
+
+                override fun onSubmitFeedbackClicked() {
+                }
+            })
 
         // how is rv restoring its scroll pos when switching tabs?
         binding.doubtsRecyclerView.adapter = adapter

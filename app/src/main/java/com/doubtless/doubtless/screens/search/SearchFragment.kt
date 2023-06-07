@@ -59,6 +59,13 @@ class SearchFragment : Fragment() {
                         override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
                             navigator.moveToDoubtDetailFragment(doubtData)
                         }
+
+                        override fun onSignOutClicked() {
+
+                        }
+
+                        override fun onSubmitFeedbackClicked() {
+                        }
                     })
         }
 
