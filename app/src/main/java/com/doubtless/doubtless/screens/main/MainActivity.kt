@@ -30,11 +30,13 @@ class MainActivity : AppCompatActivity(), BackPressDispatcher {
     private val backPressListeners: MutableList<OnBackPressListener> = mutableListOf()
 
     override fun registerBackPress(listener: OnBackPressListener) {
-        backPressListeners.add(listener)
+        if (!backPressListeners.contains(listener))
+            backPressListeners.add(listener)
     }
 
     override fun unregisterBackPress(listener: OnBackPressListener) {
-        backPressListeners.remove(listener)
+        if (backPressListeners.contains(listener))
+            backPressListeners.remove(listener)
     }
 
     override fun onBackPressed() {

@@ -86,9 +86,6 @@ class CreateDoubtFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.doubtHeading.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_MULTI_LINE)
-        binding.doubtHeading.requestFocus()
-        val mgr = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        mgr.showSoftInput(binding.doubtHeading, InputMethodManager.SHOW_FORCED)
 
         getMaxCharacterLimit()
 

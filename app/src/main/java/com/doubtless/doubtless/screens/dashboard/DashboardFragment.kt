@@ -14,10 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentDashboardBinding
+import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.common.GenericFeedAdapter
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.home.entities.FeedEntity
+import com.doubtless.doubtless.screens.main.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +33,8 @@ class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
     private lateinit var viewModel: DashboardViewModel
     private lateinit var adapter: GenericFeedAdapter
+    private lateinit var navigator: FragNavigator
+
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -43,6 +47,7 @@ class DashboardFragment : Fragment() {
         tracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
         mAuth = FirebaseAuth.getInstance()
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
+        navigator = DoubtlessApp.getInstance().getAppCompRoot().getDashboardFragNavigator(requireActivity() as MainActivity)!!
 
         viewModel = getViewModel()
         viewModel.fetchDoubts(forPageOne = true)
@@ -75,7 +80,7 @@ class DashboardFragment : Fragment() {
 
 
                     override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
-
+                        navigator.moveToDoubtDetailFragment(doubtData)
                     }
 
                     override fun onSignOutClicked() {
