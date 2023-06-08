@@ -66,7 +66,7 @@ class VotingUseCase constructor(
 
             val userDownvoted = docRef
                 .collection(FirestoreCollection.DOWNVOTE_DATA_USERS)
-                .document(user.id)
+                .document(user.id!!)
                 .get().await()
 
             if (userDownvoted.exists()) {
