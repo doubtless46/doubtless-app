@@ -1,5 +1,6 @@
 package com.doubtless.doubtless.screens.answers
 
+import com.google.errorprone.annotations.Keep
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.PropertyName
 import com.google.firebase.firestore.QuerySnapshot
@@ -7,6 +8,7 @@ import com.google.firebase.firestore.ServerTimestamp
 import com.google.gson.annotations.SerializedName
 import java.util.Date
 
+@Keep
 data class AnswerData(
     @get:PropertyName("answer_id")
     @set:PropertyName("answer_id")
@@ -74,6 +76,7 @@ data class AnswerData(
     }
 }
 
+@Keep
 data class PublishAnswerRequest(
     @SerializedName("doubt_id")
     var doubtId: String? = null,
@@ -110,6 +113,7 @@ data class PublishAnswerRequest(
     }
 }
 
+@Keep
 data class PublishAnswerResponse(
     @get:PropertyName("answer_id")
     @set:PropertyName("answer_id")

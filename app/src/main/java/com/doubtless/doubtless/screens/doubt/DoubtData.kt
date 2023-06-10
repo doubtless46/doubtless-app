@@ -1,6 +1,7 @@
 package com.doubtless.doubtless.screens.doubt
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.PropertyName
@@ -10,6 +11,7 @@ import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Parcelize
+@Keep
 data class DoubtData(
     @get:PropertyName("doubt_id")
     @set:PropertyName("doubt_id")

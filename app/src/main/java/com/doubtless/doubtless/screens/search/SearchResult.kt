@@ -1,6 +1,7 @@
 package com.doubtless.doubtless.screens.search
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import com.google.firebase.firestore.DocumentSnapshot
@@ -11,6 +12,7 @@ import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Parcelize
+@Keep
 data class SearchResult(
     @get:PropertyName("doubt_id")
     @set:PropertyName("doubt_id")

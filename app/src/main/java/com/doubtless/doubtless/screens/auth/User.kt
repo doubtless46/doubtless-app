@@ -1,11 +1,13 @@
 package com.doubtless.doubtless.screens.auth
 
+import androidx.annotation.Keep
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.IgnoreExtraProperties
 import com.google.firebase.firestore.PropertyName
 import com.google.gson.annotations.SerializedName
 
 @IgnoreExtraProperties
+@Keep
 data class User(
     @SerializedName("id")
     @get:PropertyName("id")
@@ -31,6 +33,7 @@ data class User(
     @get:Exclude val local_user_attr: UserAttributes? = null
 )
 
+@Keep
 data class UserAttributes(
     val tags: List<String>? = null,
     val hobbies: List<String>? = null,
