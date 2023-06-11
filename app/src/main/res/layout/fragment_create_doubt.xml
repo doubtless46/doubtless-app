@@ -6,20 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".screens.doubt.CreateDoubtFragment">
-
-    <ImageView
-        android:id="@+id/close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:minWidth="35dp"
-        android:minHeight="35dp"
-        android:visibility="invisible"
-        android:src="@drawable/ic_close"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription,HardcodedText" />
+    tools:context=".screens.doubt.create.CreateDoubtFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -30,7 +17,7 @@
         app:layout_constraintBottom_toTopOf="@+id/post_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/close">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,13 +29,16 @@
                 android:id="@+id/doubt_heading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:background="@android:color/transparent"
+                android:fontFamily="@font/poppins"
                 android:hint="Heading"
                 android:imeOptions="actionNext"
                 android:inputType="textMultiLine|textCapSentences"
                 android:padding="16dp"
                 android:singleLine="true"
-                android:textSize="22sp"
+                android:textColor="@color/black"
+                android:textSize="16dp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.6"
@@ -61,18 +51,96 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
+                android:fontFamily="@font/poppins"
+                android:gravity="top|start"
                 android:hint="Description"
                 android:inputType="textMultiLine"
+                android:minHeight="300dp"
                 android:padding="16dp"
-                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:textSize="14dp"
                 app:layout_constraintEnd_toEndOf="@+id/doubt_heading"
                 app:layout_constraintStart_toStartOf="@+id/doubt_heading"
                 app:layout_constraintTop_toBottomOf="@+id/doubt_heading"
                 tools:ignore="Autofill,HardcodedText,LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/poppins_bold"
+                android:text="SEO Keywords"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/poppins"
+                android:text="Write keywords here that will help the doubt rank above in search results. Separate your keywords with a slash. Eg: &quot;CSE/2nd/Year/Attendance/Detained&quot;. \nKeywords are not case sensitive."
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/doubt_keywords_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/poppins"
+                android:text="Preview : "
+                android:textSize="12dp" />
+
+            <EditText
+                android:id="@+id/doubt_keywords"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/poppins"
+                android:gravity="top|start"
+                android:hint="Enter your keywords here"
+                android:inputType="textMultiLine"
+                android:padding="16dp"
+                android:textColor="@color/black"
+                android:textSize="12dp"
+                app:layout_constraintEnd_toEndOf="@+id/doubt_heading"
+                app:layout_constraintStart_toStartOf="@+id/doubt_heading"
+                app:layout_constraintTop_toBottomOf="@+id/doubt_heading"
+                tools:ignore="Autofill,HardcodedText,LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Select Tags"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/poppins"
+                android:text="Selecting appropriate tags helps us classify the doubt."
+                android:textSize="12dp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipgroup_tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp" />
         </LinearLayout>
-
-
     </ScrollView>
 
     <com.doubtless.doubtless.theming.retro.RetroLayout
@@ -121,7 +189,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.doubtless.doubtless.theming.retro.RetroLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

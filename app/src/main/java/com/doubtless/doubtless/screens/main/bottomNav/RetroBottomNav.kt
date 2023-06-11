@@ -110,24 +110,24 @@ class RetroBottomNav(
     // ---------------------------------
     // ------- save and restore --------
 
-    override fun onSaveInstanceState(): Parcelable {
-        super.onSaveInstanceState()
+//    override fun onSaveInstanceState(): Parcelable {
+//        super.onSaveInstanceState()
+//
+//        val bundle = Bundle()
+//
+//        if (currentSelectedIndex != null)
+//            bundle.putInt("curr_selected", currentSelectedIndex!!)
+//
+//        return bundle
+//    }
 
-        val bundle = Bundle()
-
-        if (currentSelectedIndex != null)
-            bundle.putInt("curr_selected", currentSelectedIndex!!)
-
-        return bundle
-    }
-
-    override fun onRestoreInstanceState(state: Parcelable?) {
-        super.onRestoreInstanceState(state)
-
-        if (state is Bundle) {
-            currentSelectedIndex = state.getInt("curr_selected")
-        }
-    }
+//    override fun onRestoreInstanceState(state: Parcelable?) {
+//        super.onRestoreInstanceState(state)
+//
+//        if (state is Bundle) {
+//            currentSelectedIndex = state.getInt("curr_selected")
+//        }
+//    }
 
     // ------- save and restore --------
     // ---------------------------------

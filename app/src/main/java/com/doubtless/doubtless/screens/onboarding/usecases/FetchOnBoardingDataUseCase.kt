@@ -21,7 +21,6 @@ class FetchOnBoardingDataUseCase constructor(
 
     suspend fun getData(): Result = withContext(Dispatchers.IO) {
         try {
-
             val result = firestore.collection(FirestoreCollection.MiscAppData)
                 .whereEqualTo("type", "attr_data")
                 .get().await()

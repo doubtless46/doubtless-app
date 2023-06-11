@@ -38,8 +38,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="14dp"
                     android:layout_marginTop="4dp"
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="50dp"
-            app:isPlainStyled="true">
+            >
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -75,13 +75,14 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="14dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="14dp"
                     android:layout_marginBottom="4dp"
+                    app:tint="@color/white"
                     android:src="@drawable/ic_baseline_add_24" />
 
                 <TextView
@@ -112,8 +113,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="14dp"
                     android:layout_marginTop="4dp"

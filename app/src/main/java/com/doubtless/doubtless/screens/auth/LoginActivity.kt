@@ -71,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(data)
                 account = task.getResult(ApiException::class.java)
             } catch (exception: ApiException) {
-                Toast.makeText(this, "Some error occurred!!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error : ${exception.message}", Toast.LENGTH_SHORT).show()
                 binding.progress.visibility = View.GONE
                 return
             }

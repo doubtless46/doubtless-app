@@ -6,10 +6,10 @@
   </entry>
   <entry>
     <key>feed_config</key>
-    <value>{"page_size":10,"recent_posts_count":6}</value>
+    <value>{"page_size":10,"recent_posts_count":6,"feed_debounce":3000,"search_debounce":600}</value>
   </entry>
   <entry>
     <key>max_character_limit</key>
-    <value>{"max_heading_char_limit":50,"max_description_char_limit":100}</value>
+    <value>{"max_heading_char_limit":50,"max_description_char_limit":100,"keywords_limit":10}</value>
   </entry>
 </defaults>

@@ -5,17 +5,20 @@ import androidx.annotation.WorkerThread
 import com.doubtless.doubtless.constants.FirestoreCollection
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.doubt.DoubtData
+import com.doubtless.doubtless.screens.home.entities.FeedConfig
 import com.google.firebase.firestore.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import java.lang.Math.abs
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 class FetchHomeFeedUseCase constructor(
     private val fetchFeedByDateUseCase: FetchFeedByDateUseCase,
     private val fetchFeedByPopularityUseCase: FetchFeedByPopularityUseCase,
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val feedConfig: FeedConfig
 ) {
 
     data class FetchHomeFeedRequest(
@@ -24,18 +27,24 @@ class FetchHomeFeedUseCase constructor(
         val fetchFromPage1: Boolean = false
     )
 
-    sealed class Result() {
+    sealed class Result {
         class Success(val data: List<DoubtData>) : Result()
         class ListEnded : Result()
         class Error(val message: String) : Result()
     }
 
     private var lastDoubtData: DoubtData? = null
-    private var collectionCount = -1L
+
+    private val NOT_SET = -1L
+    private val FEED_ENDED = 0L
+    private var collectionCount = NOT_SET
+
     private var docFetched = 0L
 
     @WorkerThread
     suspend fun fetchFeedSync(request: FetchHomeFeedRequest): Result = withContext(Dispatchers.IO) {
+
+        val _request = request.copy(pageSize = feedConfig.pageSize)
 
         // if this is a refresh call then reset all the params,
         // though for now, we don't reset collection count.
@@ -51,21 +60,22 @@ class FetchHomeFeedUseCase constructor(
             return@withContext fetchCountResult
 
         // doc fetched should be less than total count in order to make a new call.
-        if (collectionCount <= docFetched)
+        if (collectionCount <= docFetched || collectionCount == FEED_ENDED)
             return@withContext Result.ListEnded()
 
         // if total size = 33 and docFetched = 30, then request only 3 more,
         // else request page size.
-        val size: Int = if (collectionCount - docFetched < request.pageSize)
+        val size: Int = if (collectionCount - docFetched < _request.pageSize)
             (collectionCount - docFetched).toInt()
         else
-            request.pageSize
+            _request.pageSize
 
         val feedByDateJob = async {
-            fetchFeedByDateUseCase.getFeedData(request.copy(pageSize = size / 2)) // ratio
+            fetchFeedByDateUseCase.getFeedData(request.copy(pageSize = feedConfig.recentPostsCount))
         }
+
         val feedByPopularityJob = async {
-            fetchFeedByPopularityUseCase.getFeedData(request.copy(pageSize = size / 2))
+            fetchFeedByPopularityUseCase.getFeedData(request.copy(pageSize = kotlin.math.abs(size - feedConfig.recentPostsCount)))
         }
 
         val resultDate = feedByDateJob.await()
@@ -84,9 +94,6 @@ class FetchHomeFeedUseCase constructor(
         resultPopularity as FetchFeedByPopularityUseCase.Result.Success
 
         val mergedFeed = mergeFeeds(resultDate.data, resultPopularity.data)
-
-        docFetched += mergedFeed.size
-
         return@withContext Result.Success(mergedFeed)
     }
 
@@ -94,16 +101,20 @@ class FetchHomeFeedUseCase constructor(
         byDate: List<DoubtData>,
         byPopularity: List<DoubtData>
     ): List<DoubtData> {
-        val set = hashSetOf<DoubtData>()
+        val list = mutableListOf<DoubtData>()
 
-        set.addAll(byDate)
-        set.addAll(byPopularity)
+        list.addAll(byDate)
+        list.addAll(byPopularity)
 
-        return set.shuffled()
+        list.distinctBy {
+            it.id
+        }
+
+        return list.shuffled()
     }
 
     private fun fetchCollectionCountIfNotDoneAlready(): Result? {
-        if (collectionCount == -1L) {
+        if (collectionCount == NOT_SET) {
             val latch = CountDownLatch(1)
 
             firestore.collection(FirestoreCollection.AllDoubts).count()
@@ -123,6 +134,14 @@ class FetchHomeFeedUseCase constructor(
         }
 
         return null
+    }
+
+    fun notifyDistinctDocsFetched(docsFetched: Int) {
+        this.docFetched = docsFetched.toLong()
+    }
+
+    fun notifyEffectiveFeedEnded() {
+        collectionCount = FEED_ENDED
     }
 
 }
