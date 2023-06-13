@@ -94,7 +94,6 @@
             android:fontFamily="@font/poppins"
             android:linksClickable="true"
             android:autoLink="web"
-            android:maxLines="5"
             android:text="Description"
             android:textColor="@color/black"
             android:textSize="14dp"
