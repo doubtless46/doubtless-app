@@ -46,13 +46,13 @@ class AnalyticsTracker constructor(
     }
 
     fun trackFeedRefresh() {
-        amplitude.track("feed_refresh", getCommonAttrs())
+        // amplitude.track("feed_refresh", getCommonAttrs())
     }
 
     fun trackFeedNextPage(listSize: Int) {
-        amplitude.track("feed_next_page", getCommonAttrs().toMutableMap().apply {
-            this["page_size"] = listSize.toString()
-        })
+//        amplitude.track("feed_next_page", getCommonAttrs().toMutableMap().apply {
+//            this["page_size"] = listSize.toString()
+//        })
     }
 
     private fun getCommonAttrs(): Map<String, String> {

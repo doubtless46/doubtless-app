@@ -121,6 +121,11 @@ class AnswersFragment : Fragment(){
         binding.answerRecyclerView.adapter = adapter
         binding.answerRecyclerView.layoutManager = LinearLayoutManager(context)
 
+
+        binding.topbar.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
         viewModel.answerDoubtEntities.observe(viewLifecycleOwner) {
             if (it == null) return@observe
             adapter.appendAnswer(it)

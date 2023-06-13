@@ -30,14 +30,14 @@ class FragNavigator constructor(
         supportFragmentManager.beginTransaction()
             .replace(containerId, SearchFragment())
             .addToBackStack(null)
-            .commit()
+            .commitAllowingStateLoss()
     }
 
     fun moveToDoubtDetailFragment(doubtData: DoubtData) {
         supportFragmentManager.beginTransaction()
             .replace(containerId, AnswersFragment.getInstance(doubtData))
             .addToBackStack(null)
-            .commit()
+            .commitAllowingStateLoss()
     }
 
 }
