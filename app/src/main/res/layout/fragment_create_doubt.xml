@@ -82,7 +82,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/poppins"
-                android:text="Write keywords here that will help the doubt rank above in search results. Separate your keywords with a slash. Eg: &quot;CSE/2nd/Year/Attendance/Detained&quot;. \nKeywords are not case sensitive."
+                android:text="Write keywords here that will help the doubt rank above in search results. Separate your keywords with a comma. Eg: &quot;CSE,2nd,Year,Attendance,Detained&quot;. \nKeywords are not case sensitive."
                 android:textSize="12dp" />
 
             <TextView

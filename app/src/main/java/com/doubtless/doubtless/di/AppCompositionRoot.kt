@@ -198,9 +198,12 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
             (mainActivity.supportFragmentManager.findFragmentByTag("MainFragment") as MainFragment?)
                 ?.childFragmentManager?.findFragmentByTag("mainfrag_0")
 
-        if (homeFrag != null)
-            return DoubtlessApp.getInstance().getAppCompRoot()
+        if (homeFrag != null) {
+            homeFragNavigator = DoubtlessApp.getInstance().getAppCompRoot()
                 .getFragNavigator(homeFrag.childFragmentManager, R.id.bottomNav_child_container)
+
+            return homeFragNavigator
+        }
 
         return null
     }
@@ -217,9 +220,12 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
             (mainActivity.supportFragmentManager.findFragmentByTag("MainFragment") as MainFragment?)
                 ?.childFragmentManager?.findFragmentByTag("mainfrag_2")
 
-        if (dashboardFrag != null)
-            return DoubtlessApp.getInstance().getAppCompRoot()
+        if (dashboardFrag != null) {
+            dashboardFragNavigator = DoubtlessApp.getInstance().getAppCompRoot()
                 .getFragNavigator(dashboardFrag.childFragmentManager, R.id.bottomNav_child_container)
+
+            return dashboardFragNavigator
+        }
 
         return null
     }

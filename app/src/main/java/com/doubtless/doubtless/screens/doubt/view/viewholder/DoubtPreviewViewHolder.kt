@@ -1,5 +1,6 @@
 package com.doubtless.doubtless.screens.doubt.view.viewholder
 
+import android.text.util.Linkify
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -65,6 +66,11 @@ class DoubtPreviewViewHolder(
 
         itemView.setOnClickListener {
             interactionListener.onDoubtClicked(doubtData, adapterPosition)
+        }
+
+        if (showVotingLayout) {
+            // this is detailed doubt screen
+            description.autoLinkMask = Linkify.WEB_URLS
         }
 
         userName.text = doubtData.userName!!.split(" ").first()
