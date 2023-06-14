@@ -87,6 +87,17 @@
             app:layout_constraintStart_toEndOf="@id/user_year"
             app:layout_constraintTop_toTopOf="@id/tv_username" />
 
+        <ImageView
+            android:id="@+id/ic_fire"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="16dp"
+            android:visibility="invisible"
+            android:src="@drawable/ic_fire_24"
+            app:layout_constraintStart_toEndOf="@id/user_college"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/purple" />
+
         <TextView
             android:id="@+id/user_doubt_heading"
             android:layout_width="0dp"
