@@ -44,6 +44,7 @@ class DoubtPreviewViewHolder(
     private val tvTags: TextView
     private val tvCollege: TextView
     private val tvYear: TextView = itemView.findViewById(R.id.user_year)
+    private val icFire: ImageView = itemView.findViewById(R.id.ic_fire)
 
     init {
         userName = view.findViewById(R.id.tv_username)
@@ -102,6 +103,7 @@ class DoubtPreviewViewHolder(
         Glide.with(ivDp).load(doubtData.userPhotoUrl).circleCrop()
             .into(ivDp)
 
+        icFire.isVisible = doubtData.isTrending
 
         val votingUseCase = DoubtlessApp.getInstance().getAppCompRoot()
             .getDoubtVotingDoubtCase(doubtData.copy())

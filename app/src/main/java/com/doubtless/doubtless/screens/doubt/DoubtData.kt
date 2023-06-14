@@ -60,7 +60,11 @@ data class DoubtData(
     @SerializedName("tags")
     @get:PropertyName("tags")
     @set:PropertyName("tags")
-    var tags: List<String>? = null
+    var tags: List<String>? = null,
+    @SerializedName("is_trending")
+    @get:PropertyName("is_trending")
+    @set:PropertyName("is_trending")
+    var isTrending: Boolean = false
 ): Parcelable {
     companion object {
         fun parse(documentSnapshot: DocumentSnapshot?): DoubtData? {
