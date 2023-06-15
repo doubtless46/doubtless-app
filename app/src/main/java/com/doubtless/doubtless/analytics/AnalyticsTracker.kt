@@ -3,6 +3,7 @@ package com.doubtless.doubtless.analytics
 import com.amplitude.android.Amplitude
 import com.doubtless.doubtless.BuildConfig
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.doubt.DoubtData
 
 class AnalyticsTracker constructor(
     private val amplitude: Amplitude,
@@ -55,6 +56,30 @@ class AnalyticsTracker constructor(
 //        })
     }
 
+    fun trackDoubtUpVoted(doubtData: DoubtData) {
+        val map = getCommonAttrs().toMutableMap().apply {
+            this["doubt_data"] =  doubtData.toString()
+        }
+
+        amplitude.track("doubt_upvote", map)
+    }
+
+    fun trackDoubtDownVoted(doubtData: DoubtData) {
+        val map = getCommonAttrs().toMutableMap().apply {
+            this["doubt_data"] = doubtData.toString()
+        }
+
+        amplitude.track("doubt_downvote", map)
+    }
+
+    fun trackSearchedDoubtClicked(doubtData: DoubtData) {
+        val map = getCommonAttrs().toMutableMap().apply {
+            this["doubt_data"] = doubtData.toString()
+        }
+
+        amplitude.track("search_doubt_click", map)
+    }
+
     private fun getCommonAttrs(): Map<String, String> {
         val map = hashMapOf<String, String>()
 
@@ -62,6 +87,18 @@ class AnalyticsTracker constructor(
 
         val user = userManager.getCachedUserData() ?: return map
         map["user_id"] = user.id.toString()
+
+        if (user.local_user_attr?.tags != null)
+            map["user_tags"] = user.local_user_attr.tags.toString()
+
+        if (user.local_user_attr?.year != null)
+            map["user_year"] = user.local_user_attr.year.toString()
+
+        if (user.local_user_attr?.college != null)
+            map["user_college"] = user.local_user_attr.college.toString()
+
+        if (user.local_user_attr?.department != null)
+            map["user_department"] = user.local_user_attr.department.toString()
 
         return map
     }
