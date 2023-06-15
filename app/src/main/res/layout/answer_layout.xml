@@ -47,7 +47,7 @@
             android:textColor="@color/black"
             android:textSize="12dp"
             app:layout_constraintStart_toEndOf="@id/iv_dp_author"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/iv_dp_author" />
 
         <TextView
             android:id="@+id/user_year"
@@ -66,12 +66,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="-2dp"
             android:fontFamily="@font/poppins"
             android:text="MSIT"
             android:textSize="12dp"
             app:layout_constraintStart_toEndOf="@id/user_year"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/user_year" />
 
         <TextView
             android:id="@+id/author_doubt_timestamp_2"
@@ -94,7 +93,6 @@
             android:fontFamily="@font/poppins"
             android:linksClickable="true"
             android:autoLink="web"
-            android:maxLines="5"
             android:text="Description"
             android:textColor="@color/black"
             android:textSize="14dp"

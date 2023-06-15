@@ -40,7 +40,7 @@ class ViewDoubtsFragment : Fragment() {
 
         val inflater = TransitionInflater.from(requireContext())
         //enterTransition = inflater.inflateTransition(R.transition.slide)
-        exitTransition = inflater.inflateTransition(R.transition.fade)
+        // exitTransition = inflater.inflateTransition(R.transition.fade)
 
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
         analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()

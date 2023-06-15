@@ -153,7 +153,7 @@ class CreateDoubtFragment : Fragment() {
 
         // keywords
         binding.doubtKeywords.addTextChangedListener {
-            val words = it.toString().split("/")
+            val words = it.toString().split(",")
             keywordsEntered.clear()
             keywordsEntered.addAll(words)
             binding.doubtKeywordsPreview.text =

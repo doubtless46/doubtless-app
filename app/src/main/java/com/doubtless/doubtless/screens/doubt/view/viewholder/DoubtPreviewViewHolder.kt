@@ -1,5 +1,6 @@
 package com.doubtless.doubtless.screens.doubt.view.viewholder
 
+import android.text.util.Linkify
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -43,6 +44,7 @@ class DoubtPreviewViewHolder(
     private val tvTags: TextView
     private val tvCollege: TextView
     private val tvYear: TextView = itemView.findViewById(R.id.user_year)
+    private val icFire: ImageView = itemView.findViewById(R.id.ic_fire)
 
     init {
         userName = view.findViewById(R.id.tv_username)
@@ -65,6 +67,11 @@ class DoubtPreviewViewHolder(
 
         itemView.setOnClickListener {
             interactionListener.onDoubtClicked(doubtData, adapterPosition)
+        }
+
+        if (showVotingLayout) {
+            // this is detailed doubt screen
+            description.autoLinkMask = Linkify.WEB_URLS
         }
 
         userName.text = doubtData.userName!!.split(" ").first()
@@ -96,6 +103,7 @@ class DoubtPreviewViewHolder(
         Glide.with(ivDp).load(doubtData.userPhotoUrl).circleCrop()
             .into(ivDp)
 
+        icFire.isVisible = doubtData.isTrending
 
         val votingUseCase = DoubtlessApp.getInstance().getAppCompRoot()
             .getDoubtVotingDoubtCase(doubtData.copy())
