@@ -46,6 +46,8 @@ class DoubtPreviewViewHolder(
     private val tvYear: TextView = itemView.findViewById(R.id.user_year)
     private val icFire: ImageView = itemView.findViewById(R.id.ic_fire)
 
+    private val analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
+
     init {
         userName = view.findViewById(R.id.tv_username)
         time = view.findViewById(R.id.author_doubt_timestamp)
@@ -116,6 +118,7 @@ class DoubtPreviewViewHolder(
                 val result = votingUseCase.upvoteDoubt()
 
                 if (result is VotingUseCase.Result.UpVoted) {
+                    analyticsTracker.trackDoubtUpVoted(doubtData.copy())
                     doubtData.netVotes += 1
                 } else if (result is VotingUseCase.Result.UndoneUpVote) {
                     doubtData.netVotes -= 1
@@ -131,6 +134,7 @@ class DoubtPreviewViewHolder(
                 val result = votingUseCase.downVoteDoubt()
 
                 if (result is VotingUseCase.Result.DownVoted) {
+                    analyticsTracker.trackDoubtDownVoted(doubtData.copy())
                     doubtData.netVotes -= 1
                 } else if (result is VotingUseCase.Result.UndoneDownVote) {
                     doubtData.netVotes += 1

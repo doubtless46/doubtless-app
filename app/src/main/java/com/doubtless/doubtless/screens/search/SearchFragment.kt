@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.doubtless.doubtless.DoubtlessApp
+import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentSearchBinding
 import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.screens.common.GenericFeedAdapter
@@ -27,12 +28,15 @@ class SearchFragment : Fragment() {
     private lateinit var navigator: FragNavigator
     private lateinit var adapter: GenericFeedAdapter
 
+    private lateinit var analyticsTracker: AnalyticsTracker
+
     private var searchJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         navigator = DoubtlessApp.getInstance().getAppCompRoot()
             .getHomeFragNavigator(requireActivity() as MainActivity)!!
+        analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
     }
 
     override fun onCreateView(
@@ -57,6 +61,7 @@ class SearchFragment : Fragment() {
                         }
 
                         override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
+                            analyticsTracker.trackSearchedDoubtClicked(doubtData.copy())
                             navigator.moveToDoubtDetailFragment(doubtData)
                         }
 
