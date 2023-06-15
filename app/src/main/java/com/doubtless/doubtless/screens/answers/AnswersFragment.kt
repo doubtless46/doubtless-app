@@ -107,6 +107,9 @@ class AnswersFragment : Fragment() {
                                 description = publishAnswerDTO.description
                             )
                         )
+
+                        //show progress bar
+                        binding.progressPostAnswer.visibility = View.VISIBLE
                     }
 
                 }
@@ -128,17 +131,22 @@ class AnswersFragment : Fragment() {
         }
 
         viewModel.publishAnswerStatus.observe(viewLifecycleOwner) {
-
             if (it is PublishAnswerUseCase.Result.Success) {
                 Toast.makeText(requireContext(), "Successfully posted!", Toast.LENGTH_SHORT).show()
                 adapter.appendAnswerAtFirst(answerData = it.answerData)
                 // this will increase the count across screens as the same reference was passed to the arguments.
                 // Its generally not a good thing to do.t(it.answerData)
                 doubtData.no_answers += 1
+
+                // Hide the progress bar
+                binding.progressPostAnswer.visibility = View.GONE
             }
 
-            if (it is PublishAnswerUseCase.Result.Error)
+            if (it is PublishAnswerUseCase.Result.Error){
                 Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                // Hide the progress bar
+                binding.progressPostAnswer.visibility = View.GONE
+            }
         }
     }
 

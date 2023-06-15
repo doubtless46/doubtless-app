@@ -13,6 +13,7 @@ class PublishAnswerUseCase constructor(
     sealed class Result {
         class Success(val answerData: AnswerData): Result()
         class Error(val message: String): Result()
+        class Loading(val isLoading: Boolean): Result()
     }
 
     suspend fun publish(publishAnswerRequest: PublishAnswerRequest) = withContext(Dispatchers.IO) {

@@ -41,9 +41,12 @@ class AnswersViewModel(
 
     fun publishAnswer(publishAnswerRequest: PublishAnswerRequest) =
         viewModelScope.launch(Dispatchers.Main) {
+
+            PublishAnswerUseCase.Result.Loading(true)
             val result = publishAnswerUseCase.publish(publishAnswerRequest)
             // get from result instead
             _publishAnswerStatus.postValue(result)
+            PublishAnswerUseCase.Result.Loading(false)
         }
 
     fun notifyAnswersConsumed() {
