@@ -34,12 +34,17 @@ class AnswersFragment : Fragment(){
     private lateinit var userManager: UserManager
     private lateinit var analyticsTracker: AnalyticsTracker
     private lateinit var navigator: FragNavigator
+    private lateinit var progressDialog: Dialog
 
 
     private lateinit var doubtData: DoubtData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        progressDialog = Dialog(requireContext())
+        progressDialog.setContentView(R.layout.progress_bar)
+        progressDialog.setCancelable(false)
 
         val inflater = TransitionInflater.from(requireContext())
         //enterTransition = inflater.inflateTransition(R.transition.slide)
@@ -64,6 +69,8 @@ class AnswersFragment : Fragment(){
 
         doubtData = _doubtData
         viewModel = getViewModel(doubtData)
+
+        progressDialog.show()
         viewModel.fetchAnswers()
     }
 
@@ -130,6 +137,7 @@ class AnswersFragment : Fragment(){
             if (it == null) return@observe
             adapter.appendAnswer(it)
             viewModel.notifyAnswersConsumed()
+            progressDialog.dismiss()
         }
 
         viewModel.publishAnswerStatus.observe(viewLifecycleOwner) {
