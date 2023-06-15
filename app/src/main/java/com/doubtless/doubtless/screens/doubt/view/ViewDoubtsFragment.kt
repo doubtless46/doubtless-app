@@ -1,5 +1,6 @@
 package com.doubtless.doubtless.screens.doubt.view
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -34,9 +35,16 @@ class ViewDoubtsFragment : Fragment() {
     private lateinit var navigator: FragNavigator
     private lateinit var remoteConfig: FirebaseRemoteConfig
     private lateinit var feedConfig: FeedConfig
+    private lateinit var progressDialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        progressDialog = Dialog(requireContext())
+        progressDialog.setContentView(R.layout.progress_bar)
+        progressDialog.setCancelable(false)
+
 
         val inflater = TransitionInflater.from(requireContext())
         //enterTransition = inflater.inflateTransition(R.transition.slide)
@@ -60,6 +68,7 @@ class ViewDoubtsFragment : Fragment() {
             navigator = _navigator
 
         viewModel = getViewModel()
+        progressDialog.show()
         viewModel.fetchDoubts(forPageOne = true)
     }
 
@@ -72,6 +81,7 @@ class ViewDoubtsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         // for debouncing
         var lastRefreshed = System.currentTimeMillis()
@@ -125,12 +135,15 @@ class ViewDoubtsFragment : Fragment() {
             adapter.appendDoubts(it)
             viewModel.notifyFetchedDoubtsConsumed()
             binding.layoutSwipe.isRefreshing = false
+
+            progressDialog.dismiss() //hide progress dialog
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        progressDialog.dismiss()
     }
 
     private fun getViewModel(): ViewDoubtsViewModel {

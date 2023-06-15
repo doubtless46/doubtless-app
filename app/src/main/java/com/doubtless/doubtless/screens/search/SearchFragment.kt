@@ -1,5 +1,6 @@
 package com.doubtless.doubtless.screens.search
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.doubtless.doubtless.DoubtlessApp
+import com.doubtless.doubtless.R
 import com.doubtless.doubtless.databinding.FragmentSearchBinding
 import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.screens.common.GenericFeedAdapter
@@ -26,6 +28,7 @@ class SearchFragment : Fragment() {
 
     private lateinit var navigator: FragNavigator
     private lateinit var adapter: GenericFeedAdapter
+    private lateinit var progressDialog: Dialog
 
     private var searchJob: Job? = null
 
@@ -41,6 +44,10 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater)
+
+        progressDialog = Dialog(requireContext())
+        progressDialog.setContentView(R.layout.progress_bar)
+        progressDialog.setCancelable(false)
 
         binding.etSearch.requestFocus()
         val mgr = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -82,7 +89,9 @@ class SearchFragment : Fragment() {
 
                 if (it.toString().length <= 4) return@launch
 
+
                 delay(1000L)
+                progressDialog.show() // showProgressBar
 
 //                val keywords =
 //                    extractKeywordsUseCase.notifyNewInput(binding.etSearch.text.toString())
@@ -91,6 +100,8 @@ class SearchFragment : Fragment() {
                     fetchSearchResultsUseCase.getSearchResult(binding.etSearch.text.toString())
 
                 if (!isAdded) return@launch
+
+                progressDialog.dismiss() //hide
 
                 if (results is FetchSearchResultsUseCase.Result.Error) {
                     Toast.makeText(requireContext(), results.message, Toast.LENGTH_SHORT).show()
