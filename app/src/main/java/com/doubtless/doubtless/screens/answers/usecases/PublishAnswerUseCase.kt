@@ -19,22 +19,23 @@ class PublishAnswerUseCase constructor(
         class Error(val message: String): Result()
     }
 
+    sealed class Resource<out T> {
+        data class Loading<out T>(val data: T? = null) : Resource<T>()
+        data class Success<out T>(val data: T) : Resource<T>()
+        data class Error(val message: String) : Resource<Nothing>()
+    }
+
     suspend fun publish(publishAnswerRequest: PublishAnswerRequest,
                         listener: PublishAnswerListener? = null) = withContext(Dispatchers.IO) {
         // centralise error handling
         return@withContext try {
 
-            // Notify loading state to the listener
-            listener?.onPublishAnswerLoading(true)
-
             val response = doubtlessServer.publishAnswer(publishAnswerRequest)
-
             Result.Success(response.toAnswerData())
 
         } catch (e: Exception) {
             Result.Error(e.message ?: "some error occurred")
         } finally {
-            // Notify loading state to the listener
             listener?.onPublishAnswerLoading(false)
         }
     }

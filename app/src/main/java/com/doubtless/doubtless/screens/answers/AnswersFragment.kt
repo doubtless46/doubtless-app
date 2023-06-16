@@ -34,14 +34,12 @@ class AnswersFragment : Fragment(){
     private lateinit var userManager: UserManager
     private lateinit var analyticsTracker: AnalyticsTracker
     private lateinit var navigator: FragNavigator
-    private lateinit var progressBar: ProgressBar
 
 
     private lateinit var doubtData: DoubtData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         val inflater = TransitionInflater.from(requireContext())
         //enterTransition = inflater.inflateTransition(R.transition.slide)
@@ -80,7 +78,6 @@ class AnswersFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        progressBar = binding.progressPostAnswer
 
         if (!::adapter.isInitialized) {
             adapter = AnswerDoubtsAdapter(
@@ -146,9 +143,17 @@ class AnswersFragment : Fragment(){
 
         }
 
-        viewModel.publishAnswerLoading.observe(viewLifecycleOwner) { isLoading ->
-            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-            binding.answerRecyclerView.visibility = if (isLoading) View.GONE else View.VISIBLE
+        viewModel.publishAnswerLoading.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is PublishAnswerUseCase.Resource.Loading -> {
+                    binding.progressPostAnswer.visibility = View.VISIBLE
+                    binding.answerRecyclerView.visibility = View.GONE
+                }
+                else -> {
+                    binding.progressPostAnswer.visibility = View.GONE
+                    binding.answerRecyclerView.visibility = View.VISIBLE
+                }
+            }
         }
 
 
