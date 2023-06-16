@@ -29,7 +29,6 @@ class SearchFragment : Fragment() {
 
     private lateinit var navigator: FragNavigator
     private lateinit var adapter: GenericFeedAdapter
-    private lateinit var progressDialog: Dialog
 
     private lateinit var analyticsTracker: AnalyticsTracker
 
@@ -49,9 +48,6 @@ class SearchFragment : Fragment() {
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater)
 
-        progressDialog = Dialog(requireContext())
-        progressDialog.setContentView(R.layout.progress_bar)
-        progressDialog.setCancelable(false)
 
         binding.etSearch.requestFocus()
         val mgr = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -95,7 +91,9 @@ class SearchFragment : Fragment() {
                 if (it.toString().length <= 4) return@launch
 
                 delay(1000L)
-                progressDialog.show() // showProgressBar
+
+
+                binding.progressSearch.visibility = View.VISIBLE
 
 //                val keywords =
 //                    extractKeywordsUseCase.notifyNewInput(binding.etSearch.text.toString())
@@ -105,7 +103,9 @@ class SearchFragment : Fragment() {
 
                 if (!isAdded) return@launch
 
-                progressDialog.dismiss() //hide
+
+                binding.progressSearch.visibility = View.GONE
+
 
                 if (results is FetchSearchResultsUseCase.Result.Error) {
                     Toast.makeText(requireContext(), results.message, Toast.LENGTH_SHORT).show()
