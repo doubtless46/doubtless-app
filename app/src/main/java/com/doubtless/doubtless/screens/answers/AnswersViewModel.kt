@@ -1,7 +1,6 @@
 package com.doubtless.doubtless.screens.answers
 
 import androidx.lifecycle.*
-import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.answers.usecases.FetchAnswerUseCase
 import com.doubtless.doubtless.screens.answers.usecases.PublishAnswerUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
@@ -28,8 +27,8 @@ class AnswersViewModel(
     private val _publishAnswerStatus = MutableLiveData<PublishAnswerUseCase.Result>()
     val publishAnswerStatus: LiveData<PublishAnswerUseCase.Result> = _publishAnswerStatus
 
-    private val _publishAnswerLoading = MutableLiveData<PublishAnswerUseCase.Resource<Boolean>>()
-    val publishAnswerLoading: LiveData<PublishAnswerUseCase.Resource<Boolean>> = _publishAnswerLoading
+    private val _publishAnswerLoading = MutableLiveData<Boolean>()
+    val publishAnswerLoading: LiveData<Boolean> = _publishAnswerLoading
 
     fun fetchAnswers() = viewModelScope.launch(Dispatchers.IO) {
         val result = fetchAnswerUseCase.fetchAnswers()
@@ -45,21 +44,17 @@ class AnswersViewModel(
 
     fun publishAnswer(publishAnswerRequest: PublishAnswerRequest) =
         viewModelScope.launch(Dispatchers.Main) {
-            if (_publishAnswerLoading.value is PublishAnswerUseCase.Resource.Loading<Boolean>) {
-                // Loading state is already true, return immediately
-                return@launch
-            }
+            _publishAnswerLoading.value = true
 
-            _publishAnswerLoading.value = PublishAnswerUseCase.Resource.Loading()
             val result = publishAnswerUseCase.publish(publishAnswerRequest, object :
                 PublishAnswerUseCase.PublishAnswerListener {
                 override fun onPublishAnswerLoading(isLoading: Boolean) {
-                    _publishAnswerLoading.postValue(PublishAnswerUseCase.Resource.Loading(isLoading))
+                    _publishAnswerLoading.postValue(isLoading)
                 }
             })
 
             _publishAnswerStatus.postValue(result)
-            _publishAnswerLoading.postValue(PublishAnswerUseCase.Resource.Success(false))
+            _publishAnswerLoading.postValue(false)
         }
 
     fun notifyAnswersConsumed() {

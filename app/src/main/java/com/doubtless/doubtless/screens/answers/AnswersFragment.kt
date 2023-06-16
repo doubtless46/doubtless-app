@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,15 +35,11 @@ class AnswersFragment : Fragment(){
     private lateinit var navigator: FragNavigator
     private lateinit var progressDialog: Dialog
 
-
     private lateinit var doubtData: DoubtData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        progressDialog = Dialog(requireContext())
-        progressDialog.setContentView(R.layout.progress_bar)
-        progressDialog.setCancelable(false)
 
         val inflater = TransitionInflater.from(requireContext())
         //enterTransition = inflater.inflateTransition(R.transition.slide)
@@ -69,8 +64,6 @@ class AnswersFragment : Fragment(){
 
         doubtData = _doubtData
         viewModel = getViewModel(doubtData)
-
-        progressDialog.show()
         viewModel.fetchAnswers()
     }
 
@@ -118,7 +111,6 @@ class AnswersFragment : Fragment(){
                                 description = publishAnswerDTO.description
                             )
                         )
-
                     }
 
                 }
@@ -137,7 +129,6 @@ class AnswersFragment : Fragment(){
             if (it == null) return@observe
             adapter.appendAnswer(it)
             viewModel.notifyAnswersConsumed()
-            progressDialog.dismiss()
         }
 
         viewModel.publishAnswerStatus.observe(viewLifecycleOwner) {
