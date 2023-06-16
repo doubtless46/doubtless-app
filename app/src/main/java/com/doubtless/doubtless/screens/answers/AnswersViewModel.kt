@@ -27,6 +27,9 @@ class AnswersViewModel(
     private val _publishAnswerStatus = MutableLiveData<PublishAnswerUseCase.Result>()
     val publishAnswerStatus: LiveData<PublishAnswerUseCase.Result> = _publishAnswerStatus
 
+    private val _publishAnswerLoading = MutableLiveData<Boolean>()
+    val publishAnswerLoading: LiveData<Boolean> = _publishAnswerLoading
+
     fun fetchAnswers() = viewModelScope.launch(Dispatchers.IO) {
         val result = fetchAnswerUseCase.fetchAnswers()
 
@@ -41,9 +44,17 @@ class AnswersViewModel(
 
     fun publishAnswer(publishAnswerRequest: PublishAnswerRequest) =
         viewModelScope.launch(Dispatchers.Main) {
-            val result = publishAnswerUseCase.publish(publishAnswerRequest)
-            // get from result instead
+            _publishAnswerLoading.value = true
+
+            val result = publishAnswerUseCase.publish(publishAnswerRequest, object :
+                PublishAnswerUseCase.PublishAnswerListener {
+                override fun onPublishAnswerLoading(isLoading: Boolean) {
+                    _publishAnswerLoading.postValue(isLoading)
+                }
+            })
+
             _publishAnswerStatus.postValue(result)
+            _publishAnswerLoading.postValue(false)
         }
 
     fun notifyAnswersConsumed() {

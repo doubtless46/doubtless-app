@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,7 +23,7 @@ import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.view.ViewDoubtsViewModel
 import com.doubtless.doubtless.screens.main.MainActivity
 
-class AnswersFragment : Fragment() {
+class AnswersFragment : Fragment(){
 
     private var _binding: FragmentAnswersBinding? = null
 
@@ -33,16 +34,14 @@ class AnswersFragment : Fragment() {
     private lateinit var userManager: UserManager
     private lateinit var analyticsTracker: AnalyticsTracker
     private lateinit var navigator: FragNavigator
-    private lateinit var progressDialog: Dialog
+    private lateinit var progressBar: ProgressBar
+
 
     private lateinit var doubtData: DoubtData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        progressDialog = Dialog(requireContext())
-        progressDialog.setContentView(R.layout.progress_bar)
-        progressDialog.setCancelable(false)
 
         val inflater = TransitionInflater.from(requireContext())
         //enterTransition = inflater.inflateTransition(R.transition.slide)
@@ -67,8 +66,6 @@ class AnswersFragment : Fragment() {
 
         doubtData = _doubtData
         viewModel = getViewModel(doubtData)
-
-        progressDialog.show()
         viewModel.fetchAnswers()
     }
 
@@ -82,6 +79,8 @@ class AnswersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        progressBar = binding.progressPostAnswer
 
         if (!::adapter.isInitialized) {
             adapter = AnswerDoubtsAdapter(
@@ -115,6 +114,7 @@ class AnswersFragment : Fragment() {
                                 description = publishAnswerDTO.description
                             )
                         )
+
                     }
 
                 }
@@ -128,7 +128,6 @@ class AnswersFragment : Fragment() {
             if (it == null) return@observe
             adapter.appendAnswer(it)
             viewModel.notifyAnswersConsumed()
-            progressDialog.dismiss()
         }
 
         viewModel.publishAnswerStatus.observe(viewLifecycleOwner) {
@@ -143,7 +142,16 @@ class AnswersFragment : Fragment() {
 
             if (it is PublishAnswerUseCase.Result.Error)
                 Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+
+
         }
+
+        viewModel.publishAnswerLoading.observe(viewLifecycleOwner) { isLoading ->
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.answerRecyclerView.visibility = if (isLoading) View.GONE else View.VISIBLE
+        }
+
+
     }
 
     private fun getViewModel(doubtData: DoubtData): AnswersViewModel {

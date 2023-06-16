@@ -8,6 +8,19 @@
     android:backgroundTint="@color/cream"
     tools:context=".screens.search.SearchFragment">
 
+
+    <ProgressBar
+        android:id="@+id/progress_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@+id/rv_search_results"
+        app:layout_constraintVertical_bias="0.120" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_searchbar"
         android:layout_width="match_parent"
