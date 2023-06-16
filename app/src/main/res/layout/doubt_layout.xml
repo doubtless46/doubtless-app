@@ -183,9 +183,10 @@
 
         <ImageView
             android:id="@+id/iv_upvotes"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:padding="6dp"
             android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_tags"
@@ -193,8 +194,9 @@
 
         <ImageView
             android:id="@+id/iv_downvote"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
             android:layout_marginStart="16dp"
             android:rotation="180"
             android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
