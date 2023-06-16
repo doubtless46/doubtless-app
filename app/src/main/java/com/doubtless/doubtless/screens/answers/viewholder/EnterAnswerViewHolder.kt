@@ -44,8 +44,8 @@ class EnterAnswerViewHolder(itemView: View, private val interactionListener: Int
             } else {
                 btnPublish.isVisible = true
                 btnPublish.setOnClickListener {
-                    etAnswer.setText("")
                     interactionListener.onAnswerPublish(PublishAnswerDTO(etAnswer.text.toString()))
+                    etAnswer.setText("")
                 }
             }
         }
