@@ -7,19 +7,26 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.doubtless.doubtless.DoubtlessApp
+import com.doubtless.doubtless.R
 import com.doubtless.doubtless.analytics.AnalyticsTracker
+import com.doubtless.doubtless.databinding.BottomSheetDeleteAccountBinding
 import com.doubtless.doubtless.databinding.FragmentDashboardBinding
 import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.common.GenericFeedAdapter
+import com.doubtless.doubtless.screens.dashboard.usecases.DeleteAccountUseCase
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import com.doubtless.doubtless.screens.main.MainActivity
+import com.doubtless.doubtless.theming.retro.RetroLayout
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +41,7 @@ class DashboardFragment : Fragment() {
     private lateinit var viewModel: DashboardViewModel
     private lateinit var adapter: GenericFeedAdapter
     private lateinit var navigator: FragNavigator
+    private lateinit var bottomSheetBinding: BottomSheetDeleteAccountBinding
 
 
     // This property is only valid between onCreateView and
@@ -47,7 +55,8 @@ class DashboardFragment : Fragment() {
         tracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
         mAuth = FirebaseAuth.getInstance()
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
-        navigator = DoubtlessApp.getInstance().getAppCompRoot().getDashboardFragNavigator(requireActivity() as MainActivity)!!
+        navigator = DoubtlessApp.getInstance().getAppCompRoot()
+            .getDashboardFragNavigator(requireActivity() as MainActivity)!!
 
         viewModel = getViewModel()
         viewModel.fetchDoubts(forPageOne = true)
@@ -70,59 +79,31 @@ class DashboardFragment : Fragment() {
         feedList.add(FeedEntity(FeedEntity.TYPE_USER_PROFILE, null))
 
         if (!::adapter.isInitialized) {
-            adapter = GenericFeedAdapter(genericFeedEntities = feedList,
-                onLastItemReached = {
-                    viewModel.fetchDoubts()
-                },
-                interactionListener = object : GenericFeedAdapter.InteractionListener {
-                    override fun onSearchBarClicked() {
-                    }
+            adapter = GenericFeedAdapter(genericFeedEntities = feedList, onLastItemReached = {
+                viewModel.fetchDoubts()
+            }, interactionListener = object : GenericFeedAdapter.InteractionListener {
+                override fun onSearchBarClicked() {
+                }
 
 
-                    override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
-                        navigator.moveToDoubtDetailFragment(doubtData)
-                    }
+                override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
+                    navigator.moveToDoubtDetailFragment(doubtData)
+                }
 
-                    override fun onSignOutClicked() {
-                        tracker.trackLogout()
+                override fun onSignOutClicked() {
+                    signOut()
+                }
 
-                        CoroutineScope(Dispatchers.Main).launch {
+                override fun onSubmitFeedbackClicked() {
+                    tracker.trackFeedbackButtonClicked()
+                    submitFeedback()
+                }
 
-                            val result = withContext(Dispatchers.IO) {
-                                DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
-                                    .onUserLogoutSync()
-                            }
-
-                            if (!isAdded) return@launch
-
-                            if (result is UserManager.Result.LoggedOut) {
-
-                                DoubtlessApp.getInstance()
-                                    .getAppCompRoot().router.moveToLoginActivity(
-                                        requireActivity()
-                                    )
-                                requireActivity().finish()
-
-                            } else if (result is UserManager.Result.Error) {
-
-                                Toast.makeText(
-                                    this@DashboardFragment.requireContext(),
-                                    result.message,
-                                    Toast.LENGTH_LONG
-                                ).show() // encapsulate error ui handling
-
-                            }
-                        }
-                    }
-
-                    override fun onSubmitFeedbackClicked() {
-                        tracker.trackFeedbackButtonClicked()
-                        submitFeedback()
-                    }
-                })
+                override fun onDeleteAccountClicked() {
+                    showBottomSheet()
+                }
+            })
         }
-
-
 
         binding.doubtsRecyclerView.adapter = adapter
         binding.doubtsRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -133,11 +114,54 @@ class DashboardFragment : Fragment() {
             Log.i("ObserveFeed", it.toTypedArray().contentToString())
             viewModel.notifyFetchedDoubtsConsumed()
         }
+
+        viewModel.accountDeletionResult.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is DeleteAccountUseCase.Result.Error -> {
+                    bottomSheetBinding.progress.visibility = View.GONE
+                    Toast.makeText(
+                        requireContext(), result.message, Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                is DeleteAccountUseCase.Result.Success -> {
+
+                    signOut()
+                    Toast.makeText(
+                        requireContext(), "Account Successfully Deleted", Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+
+    }
+
+    private fun showBottomSheet() {
+        // Replace R.layout.bottom_sheet_delete_account with your actual layout name
+        bottomSheetBinding = BottomSheetDeleteAccountBinding.inflate(layoutInflater)
+        val bottomSheetView = bottomSheetBinding.root
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        bottomSheetDialog.setContentView(bottomSheetView)
+
+
+        val confirmDeleteButton = bottomSheetView.findViewById<RetroLayout>(R.id.btnConfirmDelete)
+        val cancelButton = bottomSheetView.findViewById<Button>(R.id.btnCancel)
+        val deleteProgress = bottomSheetDialog.findViewById<ProgressBar>(R.id.progress)
+        confirmDeleteButton.setOnClickListener {
+            deleteProgress!!.visibility = View.VISIBLE
+            viewModel.deleteAccount()
+        }
+        cancelButton.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+        bottomSheetDialog.show()
     }
 
     private fun getViewModel(): DashboardViewModel {
         return ViewModelProvider(
             owner = this, factory = DashboardViewModel.Companion.Factory(
+                deleteAccountUseCase = DoubtlessApp.getInstance().getAppCompRoot()
+                    .getDeleteAccountUseCase(),
                 fetchUserDataUseCase = DoubtlessApp.getInstance().getAppCompRoot()
                     .getFetchUserDataUseCase(),
                 analyticsTracker = tracker,
@@ -157,6 +181,34 @@ class DashboardFragment : Fragment() {
         }
         startActivity(intent)
 
+    }
+
+    private fun signOut() {
+        tracker.trackLogout()
+
+        CoroutineScope(Dispatchers.Main).launch {
+
+            val result = withContext(Dispatchers.IO) {
+                DoubtlessApp.getInstance().getAppCompRoot().getUserManager().onUserLogoutSync()
+            }
+
+            if (!isAdded) return@launch
+
+            if (result is UserManager.Result.LoggedOut) {
+
+                DoubtlessApp.getInstance().getAppCompRoot().router.moveToLoginActivity(
+                    requireActivity()
+                )
+                requireActivity().finish()
+
+            } else if (result is UserManager.Result.Error) {
+
+                Toast.makeText(
+                    this@DashboardFragment.requireContext(), result.message, Toast.LENGTH_LONG
+                ).show() // encapsulate error ui handling
+
+            }
+        }
     }
 
     override fun onDestroyView() {

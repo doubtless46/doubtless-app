@@ -22,10 +22,9 @@ class GenericFeedAdapter(
     interface InteractionListener {
         fun onSearchBarClicked()
         fun onDoubtClicked(doubtData: DoubtData, position: Int)
-
         fun onSignOutClicked()
-
         fun onSubmitFeedbackClicked()
+        fun onDeleteAccountClicked()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -37,6 +36,7 @@ class GenericFeedAdapter(
                 return UserProfileViewHolder(
                     view,
                     object : UserProfileViewHolder.InteractionListener {
+                        override fun onDeleteAccountClicked() = interactionListener.onDeleteAccountClicked()
                         override fun onSignOutClicked() = interactionListener.onSignOutClicked()
                         override fun onSubmitFeedbackClicked() =
                             interactionListener.onSubmitFeedbackClicked()

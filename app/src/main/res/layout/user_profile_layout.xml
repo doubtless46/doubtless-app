@@ -62,6 +62,17 @@
             app:text="SIGN OUT" />
 
         <TextView
+            android:id="@+id/btn_delete_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:background="@android:color/transparent"
+            android:elevation="8dp"
+            android:text="Delete Account"
+            android:textSize="12dp" />
+
+        <TextView
             android:id="@+id/btnFeedback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

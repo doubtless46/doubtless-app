@@ -13,6 +13,7 @@ class UserProfileViewHolder(view: View, private val interactionListener: Interac
     RecyclerView.ViewHolder(view) {
 
     interface InteractionListener {
+        fun onDeleteAccountClicked()
         fun onSignOutClicked()
         fun onSubmitFeedbackClicked()
     }
@@ -22,6 +23,7 @@ class UserProfileViewHolder(view: View, private val interactionListener: Interac
     private val userEmail: TextView
     private val signOutButton: SecondaryButton
     private val submitFeedback: TextView
+    private val deleteAccount: TextView
 
 
     init {
@@ -30,9 +32,14 @@ class UserProfileViewHolder(view: View, private val interactionListener: Interac
         userEmail = view.findViewById(R.id.tv_user_email)
         signOutButton = view.findViewById(R.id.btn_signout)
         submitFeedback = view.findViewById(R.id.btnFeedback)
+        deleteAccount = view.findViewById(R.id.btn_delete_account)
     }
 
     fun setData(userManager: UserManager) {
+
+        deleteAccount.setOnClickListener {
+            interactionListener.onDeleteAccountClicked()
+        }
 
         signOutButton.setOnClickListener {
             interactionListener.onSignOutClicked()
