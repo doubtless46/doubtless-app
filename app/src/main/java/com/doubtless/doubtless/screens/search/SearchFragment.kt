@@ -46,9 +46,11 @@ class SearchFragment : Fragment() {
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater)
 
-        binding.etSearch.requestFocus()
-        val mgr = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        mgr.showSoftInput(binding.root, InputMethodManager.SHOW_IMPLICIT)
+        binding.etSearch.post {
+            val mgr = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            mgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+            binding.etSearch.requestFocus()
+        }
 
         if (!::adapter.isInitialized) {
             adapter =
