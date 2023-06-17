@@ -90,6 +90,10 @@ class SearchFragment : Fragment() {
                 //and according to progress bar as well it was not suitable
 
                 binding.progressSearch.visibility = View.VISIBLE
+                if (it.toString().isEmpty()){
+                    delay(1000L)
+                    binding.progressSearch.visibility = View.GONE
+                }
 
                 adapter.clearCurrentList() // so as to remove list when change in text
 
