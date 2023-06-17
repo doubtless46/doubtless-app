@@ -85,7 +85,13 @@ class SearchFragment : Fragment() {
 
             searchJob = CoroutineScope(Dispatchers.Main).launch {
 
-                if (it.toString().length <= 4) return@launch
+                //if (it.toString().length <= 4) return@launch
+                //I feel its useless because there were problems with smaller keywords,
+                //and according to progress bar as well it was not suitable
+
+                binding.progressSearch.visibility = View.VISIBLE
+
+                adapter.clearCurrentList() // so as to remove list when change in text
 
                 delay(1000L)
 
@@ -101,12 +107,11 @@ class SearchFragment : Fragment() {
                     Toast.makeText(requireContext(), results.message, Toast.LENGTH_SHORT).show()
                     return@launch
                 }
-
-                adapter.clearCurrentList()
                 adapter.appendDoubts((results as FetchSearchResultsUseCase.Result.Success)
                     .searchResult.map {
                         it.toGenericEntity()
                     })
+                binding.progressSearch.visibility = View.GONE
             }
         }
 
@@ -114,8 +119,6 @@ class SearchFragment : Fragment() {
 
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    binding.progressSearch.visibility = View.VISIBLE
-
                     val results =
                         fetchSearchResultsUseCase.getSearchResult(binding.etSearch.text.toString())
 
@@ -129,8 +132,6 @@ class SearchFragment : Fragment() {
                         .searchResult.map {
                             it.toGenericEntity()
                         })
-
-                    binding.progressSearch.visibility = View.GONE
                 }
             }
 
