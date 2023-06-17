@@ -114,6 +114,7 @@ class SearchFragment : Fragment() {
 
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 CoroutineScope(Dispatchers.Main).launch {
+                    binding.progressSearch.visibility = View.VISIBLE
 
                     val results =
                         fetchSearchResultsUseCase.getSearchResult(binding.etSearch.text.toString())
@@ -128,6 +129,8 @@ class SearchFragment : Fragment() {
                         .searchResult.map {
                             it.toGenericEntity()
                         })
+
+                    binding.progressSearch.visibility = View.GONE
                 }
             }
 
