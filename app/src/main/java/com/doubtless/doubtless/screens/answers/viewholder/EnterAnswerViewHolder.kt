@@ -1,9 +1,11 @@
 package com.doubtless.doubtless.screens.answers.viewholder
 
+import android.text.InputType
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -34,16 +36,16 @@ class EnterAnswerViewHolder(itemView: View, private val interactionListener: Int
         authorName = itemView.findViewById(R.id.tv_author_name)
         ivDp = itemView.findViewById(R.id.iv_dp_author)
 
+        etAnswer.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
+
         etAnswer.addTextChangedListener {
             if (it.toString().isEmpty()) {
-                btnPublish.alpha = 0.2f
-                btnPublish.setOnClickListener {
-                    /* no-op */
-                }
+                btnPublish.isVisible = false
             } else {
-                btnPublish.alpha = 1f
+                btnPublish.isVisible = true
                 btnPublish.setOnClickListener {
                     interactionListener.onAnswerPublish(PublishAnswerDTO(etAnswer.text.toString()))
+                    etAnswer.setText("")
                 }
             }
         }
@@ -52,6 +54,10 @@ class EnterAnswerViewHolder(itemView: View, private val interactionListener: Int
     fun setData(user: User) {
         authorName.text = user.name
         tvCollege.text = user.local_user_attr!!.college
+
+        if (etAnswer.toString().isEmpty()) {
+            btnPublish.isVisible = false
+        }
 
         Glide.with(ivDp).load(user.photoUrl).circleCrop()
             .into(ivDp)
