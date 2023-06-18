@@ -7,12 +7,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.dashboard.usecases.DeleteAccountUseCase
 import com.doubtless.doubtless.screens.dashboard.usecases.FetchUserDataUseCase
 import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DashboardViewModel(
+    private val deleteAccountUseCase: DeleteAccountUseCase,
     private val fetchUserDataUseCase: FetchUserDataUseCase,
     private val analyticsTracker: AnalyticsTracker,
     private val userManager: UserManager
@@ -28,6 +30,9 @@ class DashboardViewModel(
     private val _fetchedHomeEntities = MutableLiveData<List<FeedEntity>?>()
     val fetchedHomeEntities: LiveData<List<FeedEntity>?> =
         _fetchedHomeEntities // TODO : use Result here!
+
+    private val _accountDeletingResult = MutableLiveData<DeleteAccountUseCase.Result>()
+    val accountDeletionResult: LiveData<DeleteAccountUseCase.Result> = _accountDeletingResult
 
     fun notifyFetchedDoubtsConsumed() {
         _fetchedHomeEntities.postValue(null)
@@ -85,8 +90,29 @@ class DashboardViewModel(
         isLoading = false
     }
 
+    fun deleteAccount() = viewModelScope.launch(Dispatchers.IO) {
+        if (isLoading) return@launch
+
+        isLoading = true
+
+        val result = deleteAccountUseCase.deleteAccount(userManager)
+
+        if (result is DeleteAccountUseCase.Result.Error) {
+            isLoading = false
+            return@launch
+        }
+
+        result as DeleteAccountUseCase.Result.Success
+
+        isLoading = false
+        _accountDeletingResult.postValue(result)
+
+
+    }
+
     companion object {
         class Factory constructor(
+            private val deleteAccountUseCase: DeleteAccountUseCase,
             private val fetchUserDataUseCase: FetchUserDataUseCase,
             private val analyticsTracker: AnalyticsTracker,
             private val userManager: UserManager
@@ -94,7 +120,7 @@ class DashboardViewModel(
 
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return DashboardViewModel(
-                    fetchUserDataUseCase, analyticsTracker, userManager
+                    deleteAccountUseCase, fetchUserDataUseCase, analyticsTracker, userManager
                 ) as T
             }
         }

@@ -19,6 +19,7 @@ import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserDataServerUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserDataStorageUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.dashboard.usecases.DeleteAccountUseCase
 import com.doubtless.doubtless.screens.dashboard.usecases.FetchUserDataUseCase
 import com.doubtless.doubtless.screens.dashboard.usecases.FetchUserFeedByDateUseCase
 import com.doubtless.doubtless.screens.doubt.DoubtData
@@ -291,6 +292,12 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
     fun getFetchUserDataUseCase(): FetchUserDataUseCase {
         return FetchUserDataUseCase(
             FetchUserFeedByDateUseCase(FirebaseFirestore.getInstance()),
+            FirebaseFirestore.getInstance()
+        )
+    }
+
+    fun getDeleteAccountUseCase() : DeleteAccountUseCase {
+        return DeleteAccountUseCase(
             FirebaseFirestore.getInstance()
         )
     }

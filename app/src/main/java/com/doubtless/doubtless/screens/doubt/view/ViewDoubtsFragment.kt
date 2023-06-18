@@ -19,6 +19,7 @@ import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.home.entities.FeedConfig
 import com.doubtless.doubtless.screens.main.MainActivity
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.gson.Gson
 
@@ -34,6 +35,7 @@ class ViewDoubtsFragment : Fragment() {
     private lateinit var navigator: FragNavigator
     private lateinit var remoteConfig: FirebaseRemoteConfig
     private lateinit var feedConfig: FeedConfig
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +117,9 @@ class ViewDoubtsFragment : Fragment() {
                 }
 
                 override fun onSubmitFeedbackClicked() {
+                }
+
+                override fun onDeleteAccountClicked() {
                 }
             })
 

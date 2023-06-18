@@ -5,12 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.doubtless.doubtless.analytics.AnalyticsTracker
-import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.PublishDoubtRequest
 import com.doubtless.doubtless.screens.doubt.usecases.PostDoubtUseCase
-import com.doubtless.doubtless.screens.doubt.view.ViewDoubtsViewModel
-import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase
 import kotlinx.coroutines.launch
 
 class CreateDoubtViewModel constructor(

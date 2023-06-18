@@ -58,21 +58,18 @@ class SearchFragment : Fragment() {
                     genericFeedEntities = mutableListOf(),
                     onLastItemReached = {},
                     interactionListener = object : GenericFeedAdapter.InteractionListener {
-                        override fun onSearchBarClicked() {
-
-                        }
+                        override fun onSearchBarClicked() {}
 
                         override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
                             analyticsTracker.trackSearchedDoubtClicked(doubtData.copy())
                             navigator.moveToDoubtDetailFragment(doubtData)
                         }
 
-                        override fun onSignOutClicked() {
+                        override fun onSignOutClicked() {}
 
-                        }
+                        override fun onSubmitFeedbackClicked() {}
 
-                        override fun onSubmitFeedbackClicked() {
-                        }
+                        override fun onDeleteAccountClicked() {}
                     })
         }
 
