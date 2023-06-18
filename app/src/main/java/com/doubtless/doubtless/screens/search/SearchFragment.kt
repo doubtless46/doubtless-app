@@ -85,18 +85,15 @@ class SearchFragment : Fragment() {
 
             searchJob = CoroutineScope(Dispatchers.Main).launch {
 
-                //if (it.toString().length <= 4) return@launch
-                //I feel its useless because there were problems with smaller keywords,
-                //and according to progress bar as well it was not suitable
 
                 binding.progressSearch.visibility = View.VISIBLE
-                if (it.toString().isEmpty()){
+                if (it.toString().length <= 1){
                     delay(1000L)
                     binding.progressSearch.visibility = View.GONE
                     return@launch
                 }
 
-                adapter.clearCurrentList() // so as to remove list when change in text
+                adapter.clearCurrentList() // remove list when change in text
 
                 delay(1000L)
 
