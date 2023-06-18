@@ -93,6 +93,7 @@ class SearchFragment : Fragment() {
                 if (it.toString().isEmpty()){
                     delay(1000L)
                     binding.progressSearch.visibility = View.GONE
+                    return@launch
                 }
 
                 adapter.clearCurrentList() // so as to remove list when change in text
