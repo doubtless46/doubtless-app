@@ -104,8 +104,6 @@ class DashboardViewModel(
 
         result as DeleteAccountUseCase.Result.Success
 
-        userManager.onUserLogoutSync()
-
         isLoading = false
         _accountDeletingResult.postValue(result)
 

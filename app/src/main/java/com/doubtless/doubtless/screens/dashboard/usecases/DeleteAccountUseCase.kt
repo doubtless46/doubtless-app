@@ -18,7 +18,6 @@ class DeleteAccountUseCase(
         class Error(val message: String) : Result()
     }
 
-    @WorkerThread
     suspend fun deleteAccount(userManager: UserManager): Result = withContext(Dispatchers.IO) {
         try {
 
