@@ -76,6 +76,8 @@ class ViewDoubtsFragment : Fragment() {
         // for debouncing
         var lastRefreshed = System.currentTimeMillis()
 
+        binding.llProgressBar.visibility= View.VISIBLE //show progress bar
+
         binding.layoutSwipe.setOnRefreshListener {
 
             if (System.currentTimeMillis() - lastRefreshed < feedConfig.feedDebounce) {
@@ -121,6 +123,7 @@ class ViewDoubtsFragment : Fragment() {
         binding.doubtsRecyclerView.layoutManager = LinearLayoutManager(context)
 
         viewModel.fetchedHomeEntities.observe(viewLifecycleOwner) {
+            binding.llProgressBar.visibility= View.GONE //hide progress bar
             if (it == null) return@observe
             adapter.appendDoubts(it)
             viewModel.notifyFetchedDoubtsConsumed()

@@ -13,12 +13,12 @@ class PublishAnswerUseCase constructor(
     sealed class Result {
         class Success(val answerData: AnswerData): Result()
         class Error(val message: String): Result()
+        object Loading: Result()
     }
 
     suspend fun publish(publishAnswerRequest: PublishAnswerRequest) = withContext(Dispatchers.IO) {
         // centralise error handling
         return@withContext try {
-
             val response = doubtlessServer.publishAnswer(publishAnswerRequest)
 
             Result.Success(response.toAnswerData())

@@ -27,6 +27,7 @@ class AnswersViewModel(
     private val _publishAnswerStatus = MutableLiveData<PublishAnswerUseCase.Result>()
     val publishAnswerStatus: LiveData<PublishAnswerUseCase.Result> = _publishAnswerStatus
 
+
     fun fetchAnswers() = viewModelScope.launch(Dispatchers.IO) {
         val result = fetchAnswerUseCase.fetchAnswers()
 
@@ -41,6 +42,7 @@ class AnswersViewModel(
 
     fun publishAnswer(publishAnswerRequest: PublishAnswerRequest) =
         viewModelScope.launch(Dispatchers.Main) {
+            _publishAnswerStatus.value = PublishAnswerUseCase.Result.Loading
             val result = publishAnswerUseCase.publish(publishAnswerRequest)
             // get from result instead
             _publishAnswerStatus.postValue(result)

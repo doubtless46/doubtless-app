@@ -128,8 +128,8 @@ class AnswersFragment : Fragment() {
         }
 
         viewModel.publishAnswerStatus.observe(viewLifecycleOwner) {
-
             if (it is PublishAnswerUseCase.Result.Success) {
+                binding.progressPostAnswer.visibility = View.GONE
                 Toast.makeText(requireContext(), "Successfully posted!", Toast.LENGTH_SHORT).show()
                 adapter.appendAnswerAtFirst(answerData = it.answerData)
                 // this will increase the count across screens as the same reference was passed to the arguments.
@@ -137,8 +137,13 @@ class AnswersFragment : Fragment() {
                 doubtData.no_answers += 1
             }
 
-            if (it is PublishAnswerUseCase.Result.Error)
+            if (it is PublishAnswerUseCase.Result.Error){
+                binding.progressPostAnswer.visibility = View.GONE
                 Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+            }
+            if (it is PublishAnswerUseCase.Result.Loading){
+                binding.progressPostAnswer.visibility = View.VISIBLE
+            }
         }
     }
 
