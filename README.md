@@ -16,6 +16,8 @@ The CollegeQ&A App is an open-source Android application designed to facilitate 
 
 - **Notification System:** Users receive notifications when someone answers their questions or when there are updates to the questions they follow.
 
+## Policies
+
 ## Installation
 
 To install and run the CollegeQ&A App, follow these steps:
