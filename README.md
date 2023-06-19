@@ -16,7 +16,7 @@ The CollegeQ&A App is an open-source Android application designed to facilitate 
 
 - **Notification System:** Users receive notifications when someone answers their questions or when there are updates to the questions they follow.
 
-- **Manual Bottom Navigation with Multiple Back Stacks:** The app's custom manual bottom navigation allows users to switch between sections while maintaining separate navigation histories for each section. This intuitive feature ensures seamless navigation within each section, preserving progress and context.
+- **Manual Bottom Navigation with Multiple Back Stacks(No Library used):** The app's custom manual bottom navigation allows users to switch between sections while maintaining separate navigation histories for each section. This intuitive feature ensures seamless navigation within each section, preserving progress and context.
 
 - **Retro Layout:** The app features a visually appealing retro layout, inspired by popular apps like Cred. This design choice adds a nostalgic and attractive element to the user interface.
 <div align="center">
