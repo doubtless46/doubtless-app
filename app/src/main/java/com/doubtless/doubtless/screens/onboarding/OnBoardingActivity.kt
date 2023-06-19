@@ -154,7 +154,7 @@ class OnBoardingActivity : AppCompatActivity() {
                 if (checkedCount > 3) {
                     Toast.makeText(
                         this@OnBoardingActivity,
-                        "Please select atmax 3 tags",
+                        getString(R.string.select_at_max_tags),
                         Toast.LENGTH_SHORT
                     ).show()
                     return@setOnClickListener
