@@ -40,9 +40,9 @@ class UserDataServerUseCase constructor(
         var serverUser: User? = null
         var errorMessage: String? = null
 
-        querySnapshot.addOnSuccessListener {
+        querySnapshot.addOnSuccessListener { userSnapshot->
 
-            if (it.documents.size == 0) {
+            if (userSnapshot.documents.size == 0) {
                 isNew = true
                 latch.countDown()
                 return@addOnSuccessListener
@@ -51,21 +51,20 @@ class UserDataServerUseCase constructor(
             // old user
             try {
                 val _serverUser =
-                    it.documents[0].toObject(User::class.java) // make ServerUser and map to User
+                    userSnapshot.documents[0].toObject(User::class.java) // make ServerUser and map to User
 
                 firestore.collection(FirestoreCollection.USER)
-                    .document(it.documents[0].id)
+                    .document(userSnapshot.documents[0].id)
                     .collection(FirestoreCollection.USER_ATTR)
-                    .get().addOnSuccessListener {
+                    .get().addOnSuccessListener { attrSnapshot ->
                         try {
 
-                            if (it.documents.size == 0) { // this user is present but his onboarding data is null, ask him to onboard!
+                            if (attrSnapshot.documents.size == 0) { // this user is present but his onboarding data is null, ask him to onboard!
                                 isOldUserWithNoOnboarding = true
-                                serverUser = _serverUser!!.copy(document_id = it.documents[0].id)
-                                return@addOnSuccessListener
+                                serverUser = _serverUser!!.copy(document_id = userSnapshot.documents[0].id)
                             } else {
-                                val attr = it.documents[0].toObject(UserAttributes::class.java)
-                                serverUser = _serverUser!!.copy(document_id = it.documents[0].id, local_user_attr = attr)
+                                val attr = attrSnapshot.documents[0].toObject(UserAttributes::class.java)
+                                serverUser = _serverUser!!.copy(document_id = userSnapshot.documents[0].id, local_user_attr = attr)
                             }
 
                         } catch (e: Exception) {
