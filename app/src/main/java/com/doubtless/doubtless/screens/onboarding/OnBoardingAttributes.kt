@@ -1,7 +1,9 @@
 package com.doubtless.doubtless.screens.onboarding
 
+import com.google.errorprone.annotations.Keep
 import com.google.firebase.firestore.DocumentSnapshot
 
+@Keep
 data class OnBoardingAttributes(
     val tags: List<String>? = null,
     val colleges: List<String>? = null,
