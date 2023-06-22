@@ -17,6 +17,7 @@ android {
         versionCode 2
         versionName "0.1"
 
+        signingConfig signingConfigs.debug
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

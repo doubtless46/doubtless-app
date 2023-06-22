@@ -115,10 +115,12 @@ class LoginActivity : AppCompatActivity() {
 
             analyticsTracker.trackLoginSuccess(isNewUser)
 
-            if (isNewUser == false) {
-                DoubtlessApp.getInstance().getAppCompRoot().router.moveToMainActivity(this@LoginActivity)
-            } else {
+            val isOldUserWithNoOnboardingData = result.isOldUserWithNoOnboarding
+
+            if (isOldUserWithNoOnboardingData || isNewUser) {
                 DoubtlessApp.getInstance().getAppCompRoot().router.moveToOnBoardingActivity(this@LoginActivity)
+            } else {
+                DoubtlessApp.getInstance().getAppCompRoot().router.moveToMainActivity(this@LoginActivity)
             }
 
             finish()

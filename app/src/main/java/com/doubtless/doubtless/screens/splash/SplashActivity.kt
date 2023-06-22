@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.doubtless.doubtless.BuildConfig
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
+import com.doubtless.doubtless.di.AppCompositionRoot
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.utils.anims.animateFadeUp
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -38,7 +39,10 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun moveToNextActivity() {
-        if (userManager.getLoggedInUser() != null) {
+        if (userManager.getLoggedInUser() != null
+            // if not onboarding, move to login screen ask to onboard.
+            && userManager.getLoggedInUser()?.local_user_attr != null) {
+
             DoubtlessApp.getInstance()
                 .getAppCompRoot().router.moveToMainActivity(this@SplashActivity)
 
@@ -46,6 +50,7 @@ class SplashActivity : AppCompatActivity() {
             analyticsTracker.trackAppLaunch()
 
             finish()
+
         } else {
             DoubtlessApp.getInstance()
                 .getAppCompRoot().router.moveToLoginActivity(this@SplashActivity)
@@ -59,11 +64,10 @@ class SplashActivity : AppCompatActivity() {
 
     private fun checkMinAppVersionRequired() {
         val currVersion = BuildConfig.VERSION_CODE
-        val remoteConfig = FirebaseRemoteConfig.getInstance()
+        val remoteConfig = DoubtlessApp.getInstance().getAppCompRoot().getRemoteConfig()
+
         var minVersion = 0
-        val configSettings =
-            FirebaseRemoteConfigSettings.Builder().setMinimumFetchIntervalInSeconds(10).build()
-        remoteConfig.setConfigSettingsAsync(configSettings)
+
         remoteConfig.fetchAndActivate().addOnCompleteListener {
             if (it.isSuccessful) {
                 minVersion = remoteConfig.getLong("min_app_version").toInt();
@@ -81,7 +85,7 @@ class SplashActivity : AppCompatActivity() {
             title = "New Version Available"
             setMessage("Please update the app to continue")
             setPositiveButton("Update") { _, _ ->
-                val playStoreUrl = "https://play.google.com/store/apps"
+                val playStoreUrl = "https://play.google.com/store/apps/details?id=com.doubtless.doubtless"
                 try {
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(playStoreUrl)))
                 } catch (e: ActivityNotFoundException) {
