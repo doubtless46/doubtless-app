@@ -55,8 +55,6 @@ class OnBoardingActivity : AppCompatActivity() {
 
             val onBoardingAttributes = (result as FetchOnBoardingDataUseCase.Result.Success).data
 
-            Toast.makeText(this@OnBoardingActivity, onBoardingAttributes.toString(), Toast.LENGTH_SHORT).show()
-
             val autoCompleteTxtYear: AutoCompleteTextView =
                 findViewById(R.id.auto_complete_txt_year)
             val adapterItemsYear = ArrayAdapter(
