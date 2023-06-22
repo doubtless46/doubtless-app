@@ -6,12 +6,12 @@ import com.google.firebase.firestore.DocumentSnapshot
 @Suppress("UNCHECKED_CAST")
 @Keep
 data class OnBoardingAttributes(
-    val tags: List<String>? = listOf("fake"),
-    val colleges: List<String>? = listOf("fake"),
-    val years: List<String>? = listOf("fake"),
-    val departments: List<String>? = listOf("fake"),
-    val purposes: List<String>? = listOf("fake"),
-    val hobbies: List<String>? = listOf("fake")
+    val tags: List<String>? = listOf(),
+    val colleges: List<String>? = listOf(),
+    val years: List<String>? = listOf(),
+    val departments: List<String>? = listOf(),
+    val purposes: List<String>? = listOf(),
+    val hobbies: List<String>? = listOf()
 ) {
     companion object {
         fun parse(document: DocumentSnapshot?): OnBoardingAttributes? {
