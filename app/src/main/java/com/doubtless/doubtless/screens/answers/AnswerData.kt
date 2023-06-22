@@ -5,6 +5,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.PropertyName
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ServerTimestamp
+import com.google.firebase.firestore.ktx.getField
 import com.google.gson.annotations.SerializedName
 import java.util.Date
 
@@ -56,9 +57,22 @@ data class AnswerData(
 
                 val list = mutableListOf<AnswerData>()
 
-                querySnapshot.documents.forEach {
+                querySnapshot.documents.forEach { answerSnapshot ->
                     try {
-                        list.add(it.toObject(AnswerData::class.java)!!)
+                        list.add(
+                            AnswerData(
+                                id = answerSnapshot.getField("answer_id"),
+                                doubtId = answerSnapshot.getField("doubt_id"),
+                                authorId = answerSnapshot.getField("author_id"),
+                                authorPhotoUrl = answerSnapshot.getField("author_photo_url"),
+                                authorName = answerSnapshot.getField("author_name"),
+                                authorCollege = answerSnapshot.getField("author_college"),
+                                authorYear = answerSnapshot.getField("author_year"),
+                                description = answerSnapshot.getField("description"),
+                                netVotes = (answerSnapshot.getField("net_votes") as Float?) ?: 0f,
+                                date = answerSnapshot.getField("created_on")
+                            )
+                        )
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
