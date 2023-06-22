@@ -187,13 +187,13 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
     val router = Router()
 
     // TODO : ig this should be home frag scoped.
-    private lateinit var homeFragNavigator: FragNavigator
+    private var homeFragNavigator: FragNavigator? = null
 
     fun getHomeFragNavigator(mainActivity: MainActivity): FragNavigator? {
 
-        if (::homeFragNavigator.isInitialized) {
-            return homeFragNavigator
-        }
+//        if (homeFragNavigator) {
+//            return homeFragNavigator
+//        }
 
         val homeFrag =
             (mainActivity.supportFragmentManager.findFragmentByTag("MainFragment") as MainFragment?)
