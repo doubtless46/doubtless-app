@@ -107,7 +107,7 @@ class OnBoardingActivity : AppCompatActivity() {
 
             repeat(onBoardingAttributes.hobbies!!.size) {
                 val chip = Chip(this@OnBoardingActivity).apply {
-                    text = onBoardingAttributes.hobbies.get(it)
+                    text = onBoardingAttributes.hobbies!!.get(it)
                     isCheckable = true
                 }
                 chipGroupHobbies.addView(chip)
@@ -117,7 +117,7 @@ class OnBoardingActivity : AppCompatActivity() {
 
             repeat(onBoardingAttributes.tags!!.size) {
                 val chip = Chip(this@OnBoardingActivity).apply {
-                    text = onBoardingAttributes.tags.get(it)
+                    text = onBoardingAttributes.tags!!.get(it)
                     isCheckable = true
                 }
                 chipGroupTags.addView(chip)
@@ -154,7 +154,7 @@ class OnBoardingActivity : AppCompatActivity() {
                 if (checkedCount > 3) {
                     Toast.makeText(
                         this@OnBoardingActivity,
-                        "Please select atmax 3 tags",
+                        getString(R.string.select_at_max_tags),
                         Toast.LENGTH_SHORT
                     ).show()
                     return@setOnClickListener

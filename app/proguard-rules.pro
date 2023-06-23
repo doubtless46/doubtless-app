@@ -20,4 +20,8 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keep class com.google.android.gms.ads.** { *; }
+
 -dontwarn okio.**
+
+# Preserve annotations, line numbers, and source file names
+-keepattributes *Annotation*,SourceFile,LineNumberTable

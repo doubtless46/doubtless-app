@@ -18,4 +18,5 @@
     <string name="text_choice_tag_1">Attendance</string>
     <string name="text_choice_tag_2">Higher Studies</string>
     <string name="text_choice_tag_3">Placements</string>
+    <string name="select_at_max_tags">Please select at max 3 tags</string>
 </resources>
