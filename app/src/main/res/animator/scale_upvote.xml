@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="@android:integer/config_shortAnimTime">
+    <propertyValuesHolder
+        android:propertyName="scaleX"
+        android:valueTo="1.525"
+        android:valueType="floatType" />
+    <propertyValuesHolder
+        android:propertyName="scaleY"
+        android:valueTo="1.525"
+        android:valueType="floatType" />
+    <propertyValuesHolder
+        android:propertyName="translationZ"
+        android:valueTo="4dp"
+        android:valueType="floatType" />
+    <propertyValuesHolder
+        android:propertyName="scaleX"
+        android:startOffset="@android:integer/config_shortAnimTime"
+        android:valueTo="1.0"
+        android:valueType="floatType" />
+    <propertyValuesHolder
+        android:propertyName="scaleY"
+        android:startOffset="@android:integer/config_shortAnimTime"
+        android:valueTo="1.0"
+        android:valueType="floatType" />
+    <propertyValuesHolder
+        android:propertyName="translationZ"
+        android:startOffset="@android:integer/config_shortAnimTime"
+        android:valueTo="0dp"
+        android:valueType="floatType" />
+</objectAnimator>
