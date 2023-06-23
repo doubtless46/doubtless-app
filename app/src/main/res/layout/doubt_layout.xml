@@ -33,6 +33,7 @@
             android:id="@+id/iv_dp"
             android:layout_width="34dp"
             android:layout_height="34dp"
+            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:fontFamily="@font/poppins"
-            android:text="| 1st year |"
+            android:text="| 4th year |"
             android:textColor="@color/grey"
             android:textSize="12dp"
             app:layout_constraintStart_toEndOf="@id/tv_username"
@@ -92,8 +93,8 @@
             android:layout_width="34dp"
             android:layout_height="34dp"
             android:layout_marginStart="16dp"
-            android:visibility="invisible"
             android:src="@drawable/ic_fire_24"
+            android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@id/user_college"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/purple" />
@@ -105,7 +106,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/poppins"
-            android:text="Heading"
+            android:text="Some secrets of how I got 2 job offers in 4th semester!"
             android:textColor="@color/black"
             android:textSize="16dp"
             android:textStyle="bold"
@@ -119,7 +120,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/poppins"
-            android:text="Description"
+            android:text="Find a curated list of secrets of how I cracked companies like gfg &amp; rooter ->"
             android:textColor="@color/black"
             android:textSize="14dp"
             app:layout_constraintTop_toBottomOf="@id/user_doubt_heading" />
@@ -131,14 +132,15 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:fontFamily="@font/poppins"
+            android:text="Related to : attendance, marks, teachers"
             android:textColor="@color/grey"
             android:textSize="12dp"
-            app:layout_constraintStart_toStartOf="@id/cb_upvote"
-            app:layout_constraintTop_toBottomOf="@id/cb_upvote"
+            app:layout_constraintStart_toStartOf="@id/iv_votes"
+            app:layout_constraintTop_toBottomOf="@id/iv_votes"
             tools:text="Related to : attendance, marks, teachers" />
 
         <TextView
-            android:id="@+id/cb_upvote"
+            android:id="@+id/iv_votes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
@@ -155,8 +157,8 @@
             android:fontFamily="@font/poppins"
             android:text="211"
             android:textSize="12dp"
-            app:layout_constraintStart_toEndOf="@id/cb_upvote"
-            app:layout_constraintTop_toTopOf="@id/cb_upvote" />
+            app:layout_constraintStart_toEndOf="@id/iv_votes"
+            app:layout_constraintTop_toTopOf="@id/iv_votes" />
 
 
         <TextView
@@ -167,7 +169,7 @@
             android:text="Answers"
             android:textSize="12dp"
             app:layout_constraintStart_toEndOf="@id/tv_votes"
-            app:layout_constraintTop_toTopOf="@id/cb_upvote" />
+            app:layout_constraintTop_toTopOf="@id/iv_votes" />
 
         <TextView
             android:id="@+id/tv_answers"
@@ -199,9 +201,9 @@
             android:id="@+id/cb_downvote"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:padding="6dp"
             android:background="@drawable/upvote_icon"
             android:layout_marginStart="16dp"
+            android:padding="6dp"
             android:rotation="180"
             android:backgroundTint="@color/grey"
             android:button="@null"

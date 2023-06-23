@@ -3,8 +3,10 @@ package com.doubtless.doubtless.screens.auth
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.analytics.AnalyticsTracker
@@ -44,6 +46,8 @@ class LoginActivity : AppCompatActivity() {
         analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
         mAuth = FirebaseAuth.getInstance()
 
+        setupUi()
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -59,6 +63,15 @@ class LoginActivity : AppCompatActivity() {
             val intent = googleSignInClient.signInIntent
             startActivityForResult(intent, 1001)
         }
+    }
+
+    private fun setupUi() {
+        window.statusBarColor = getColor(R.color.purple)
+
+        Glide.with(this)
+            .load("https://lh3.googleusercontent.com/a/AGNmyxaceCDqTACCSoa1e3VimHXoAEQ4IBSYbPk8YTU-J5U=s96-c")
+            .circleCrop()
+            .into(binding.layoutDoubt.findViewById<ImageView>(R.id.iv_dp))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -118,11 +131,14 @@ class LoginActivity : AppCompatActivity() {
             val isOldUserWithNoOnboardingData = result.isOldUserWithNoOnboarding
 
             if (isOldUserWithNoOnboardingData || isNewUser) {
-                DoubtlessApp.getInstance().getAppCompRoot().router.moveToOnBoardingActivity(this@LoginActivity)
+                DoubtlessApp.getInstance()
+                    .getAppCompRoot().router.moveToOnBoardingActivity(this@LoginActivity)
             } else {
-                DoubtlessApp.getInstance().getAppCompRoot().router.moveToMainActivity(this@LoginActivity)
+                DoubtlessApp.getInstance()
+                    .getAppCompRoot().router.moveToMainActivity(this@LoginActivity)
             }
 
+            window.statusBarColor = getColor(R.color.white)
             finish()
         }
     }
