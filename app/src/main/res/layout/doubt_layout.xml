@@ -193,7 +193,7 @@
             android:checked="false"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_tags"
-            android:stateListAnimator="@animator/scale_votes_icon" />
+            />
 
         <CheckBox
             android:id="@+id/cb_downvote"
@@ -206,7 +206,6 @@
             android:backgroundTint="@color/grey"
             android:button="@null"
             android:checked="false"
-            android:stateListAnimator="@animator/scale_votes_icon"
             app:layout_constraintStart_toEndOf="@id/cb_upvotes"
             app:layout_constraintTop_toTopOf="@id/cb_upvotes" />
 

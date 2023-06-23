@@ -109,7 +109,6 @@
             android:padding="6dp"
             android:button="@null"
             android:checked="false"
-            android:stateListAnimator="@animator/scale_votes_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/author_answer_description_2" />
 
@@ -123,7 +122,6 @@
             android:text="211"
             android:textColor="@color/grey"
             android:textSize="14dp"
-            android:stateListAnimator="@animator/scale_votes_icon"
             app:layout_constraintBottom_toBottomOf="@id/cb_upvote"
             app:layout_constraintStart_toEndOf="@id/cb_upvote"
             app:layout_constraintTop_toTopOf="@id/cb_upvote" />
@@ -139,7 +137,6 @@
             android:layout_marginStart="6dp"
             android:padding="6dp"
             android:rotation="180"
-            android:stateListAnimator="@animator/scale_votes_icon"
             app:layout_constraintStart_toEndOf="@id/tv_votes"
             app:layout_constraintTop_toTopOf="@id/cb_upvote"
             app:tint="@color/grey" />

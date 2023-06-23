@@ -14,6 +14,7 @@ import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.utils.Utils
 import com.doubtless.doubtless.utils.Utils.flatten
+import com.doubtless.doubtless.utils.addStateListAnimation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -114,6 +115,8 @@ class DoubtPreviewViewHolder(
 
         upvotes.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
+                if (it.stateListAnimator == null)
+                    it.addStateListAnimation(R.animator.scale_votes_icon)
 
                 val result = votingUseCase.upvoteDoubt()
 
@@ -130,6 +133,8 @@ class DoubtPreviewViewHolder(
 
         downvotes.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
+                if (it.stateListAnimator == null)
+                    it.addStateListAnimation(R.animator.scale_votes_icon)
 
                 val result = votingUseCase.downVoteDoubt()
 
@@ -149,8 +154,14 @@ class DoubtPreviewViewHolder(
         tvNetVotes.text = floor(doubtData.netVotes).toInt().toString()
         CoroutineScope(Dispatchers.Main).launch {
             when (votingUseCase.getUserCurrentState()) {
-                VotingUseCase.UPVOTED -> downvotes.isClickable = false
-                VotingUseCase.DOWNVOTED -> upvotes.isClickable = false
+                VotingUseCase.UPVOTED -> {
+                    downvotes.isClickable = false
+                    upvotes.isChecked = true
+                }
+                VotingUseCase.DOWNVOTED -> {
+                    upvotes.isClickable = false
+                    downvotes.isChecked = true
+                }
                 else -> {
                     downvotes.isClickable = true
                     upvotes.isClickable = true
