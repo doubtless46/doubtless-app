@@ -186,46 +186,29 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
     val router = Router()
 
-    // TODO : ig this should be home frag scoped.
-    private var homeFragNavigator: FragNavigator? = null
-
     fun getHomeFragNavigator(mainActivity: MainActivity): FragNavigator? {
-
-//        if (homeFragNavigator) {
-//            return homeFragNavigator
-//        }
 
         val homeFrag =
             (mainActivity.supportFragmentManager.findFragmentByTag("MainFragment") as MainFragment?)
                 ?.childFragmentManager?.findFragmentByTag("mainfrag_0")
 
         if (homeFrag != null) {
-            homeFragNavigator = DoubtlessApp.getInstance().getAppCompRoot()
+            return DoubtlessApp.getInstance().getAppCompRoot()
                 .getFragNavigator(homeFrag.childFragmentManager, R.id.bottomNav_child_container)
-
-            return homeFragNavigator
         }
 
         return null
     }
 
-    private lateinit var dashboardFragNavigator: FragNavigator
-
     fun getDashboardFragNavigator(mainActivity: MainActivity): FragNavigator? {
-
-        if (::dashboardFragNavigator.isInitialized) {
-            return dashboardFragNavigator
-        }
 
         val dashboardFrag =
             (mainActivity.supportFragmentManager.findFragmentByTag("MainFragment") as MainFragment?)
                 ?.childFragmentManager?.findFragmentByTag("mainfrag_2")
 
         if (dashboardFrag != null) {
-            dashboardFragNavigator = DoubtlessApp.getInstance().getAppCompRoot()
+            return DoubtlessApp.getInstance().getAppCompRoot()
                 .getFragNavigator(dashboardFrag.childFragmentManager, R.id.bottomNav_child_container)
-
-            return dashboardFragNavigator
         }
 
         return null
