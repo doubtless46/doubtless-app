@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<defaults>
+  <entry>
+    <key>min_app_version</key>
+    <value>1</value>
+  </entry>
+  <entry>
+    <key>feed_config</key>
+    <value>{"page_size":10,"recent_posts_count":6,"feed_debounce":3000,"search_debounce":600}</value>
+  </entry>
+  <entry>
+    <key>max_character_limit</key>
+    <value>{"max_heading_char_limit":50,"max_description_char_limit":100,"keywords_limit":10}</value>
+  </entry>
+</defaults>

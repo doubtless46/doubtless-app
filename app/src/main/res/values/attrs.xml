@@ -3,4 +3,9 @@
     <declare-styleable name="PrimaryButton">
         <attr name="text" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="RetroLayout">
+        <attr name="isPlainStyled" format="boolean" />
+    </declare-styleable>
+
 </resources>
