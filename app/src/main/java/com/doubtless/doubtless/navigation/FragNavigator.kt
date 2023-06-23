@@ -2,6 +2,7 @@ package com.doubtless.doubtless.navigation
 
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentManager
+import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.answers.AnswersFragment
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.search.SearchFragment
@@ -25,13 +26,21 @@ class FragNavigator constructor(
         supportFragmentManager.beginTransaction()
             .replace(containerId, SearchFragment())
             .addToBackStack(null)
+            .setReorderingAllowed(true)
             .commitAllowingStateLoss()
     }
 
     fun moveToDoubtDetailFragment(doubtData: DoubtData) {
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                /* enter = */ R.anim.slide_in_right,
+                /* exit = */ R.anim.slide_out_left,
+                /* popEnter = */ R.anim.slide_in_left,
+                /* popExit = */ R.anim.slide_out_right
+            )
             .replace(containerId, AnswersFragment.getInstance(doubtData))
             .addToBackStack(null)
+            .setReorderingAllowed(true)
             .commitAllowingStateLoss()
     }
 
