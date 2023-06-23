@@ -1,5 +1,9 @@
 package com.doubtless.doubtless.screens.answers
 
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
+import com.doubtless.doubtless.DoubtlessApp
 import com.google.errorprone.annotations.Keep
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.PropertyName
@@ -39,6 +43,9 @@ data class AnswerData(
     @get:PropertyName("author_year")
     @set:PropertyName("author_year")
     var authorYear: String? = null,
+    @SerializedName("description")
+    @get:PropertyName("description")
+    @set:PropertyName("description")
     var description: String? = null,
     @SerializedName("net_votes")
     @get:PropertyName("net_votes")
@@ -157,6 +164,7 @@ data class PublishAnswerResponse(
     @get:PropertyName("author_year")
     @set:PropertyName("author_year")
     var authorYear: String? = null,
+    @SerializedName("description")
     var description: String? = null,
     @SerializedName("net_votes")
     @get:PropertyName("net_votes")
