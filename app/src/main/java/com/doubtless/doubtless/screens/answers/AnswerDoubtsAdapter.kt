@@ -1,8 +1,12 @@
 package com.doubtless.doubtless.screens.answers
 
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.answers.viewholder.AnswerViewHolder
 import com.doubtless.doubtless.screens.answers.viewholder.EnterAnswerViewHolder
@@ -88,11 +92,13 @@ class AnswerDoubtsAdapter(
     }
 
     fun appendAnswerAtFirst(answerData: AnswerData) {
+        val answer = AnswerData.toAnswerDoubtEntity(answerData)
+
         doubtAnswerEntities.add(
-            2,
-            AnswerData.toAnswerDoubtEntity(answerData)
-        ) // first 2 are doubts and enter views
-        notifyItemInserted(0)
+            index = 2,
+            element = answer
+        ) // first 2 are doubt and enter answer view
+        notifyItemInserted(1)
     }
 
 }
