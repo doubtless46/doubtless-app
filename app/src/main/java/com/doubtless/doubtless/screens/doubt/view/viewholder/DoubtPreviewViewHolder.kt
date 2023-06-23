@@ -37,8 +37,8 @@ class DoubtPreviewViewHolder(
     private val description: TextView
     private val ivDp: ImageView
     private val tvNetVotes: TextView
-    private val ivUpvotes: CheckBox
-    private val ivDownvotes: CheckBox
+    private val upvotes: CheckBox
+    private val downvotes: CheckBox
     private val tvAnswers: TextView
     private val tvTags: TextView
     private val tvCollege: TextView
@@ -57,11 +57,11 @@ class DoubtPreviewViewHolder(
         tvAnswers = view.findViewById(R.id.tv_answers)
         tvTags = view.findViewById(R.id.tv_tags)
         tvCollege = view.findViewById(R.id.user_college)
-        ivUpvotes = view.findViewById(R.id.iv_upvotes)
-        ivDownvotes = view.findViewById(R.id.iv_downvote)
+        upvotes = view.findViewById(R.id.cb_upvotes)
+        downvotes = view.findViewById(R.id.cb_downvote)
 
-        ivUpvotes.isVisible = showVotingLayout
-        ivDownvotes.isVisible = showVotingLayout
+        upvotes.isVisible = showVotingLayout
+        downvotes.isVisible = showVotingLayout
     }
 
     fun setData(doubtData: DoubtData) {
@@ -112,7 +112,7 @@ class DoubtPreviewViewHolder(
         setVotesUi(doubtData, votingUseCase)
 
 
-        ivUpvotes.setOnClickListener {
+        upvotes.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
 
                 val result = votingUseCase.upvoteDoubt()
@@ -128,7 +128,7 @@ class DoubtPreviewViewHolder(
             }
         }
 
-        ivDownvotes.setOnClickListener {
+        downvotes.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
 
                 val result = votingUseCase.downVoteDoubt()
@@ -149,11 +149,11 @@ class DoubtPreviewViewHolder(
         tvNetVotes.text = floor(doubtData.netVotes).toInt().toString()
         CoroutineScope(Dispatchers.Main).launch {
             when (votingUseCase.getUserCurrentState()) {
-                VotingUseCase.UPVOTED -> ivDownvotes.isClickable = false
-                VotingUseCase.DOWNVOTED -> ivUpvotes.isClickable = false
+                VotingUseCase.UPVOTED -> downvotes.isClickable = false
+                VotingUseCase.DOWNVOTED -> upvotes.isClickable = false
                 else -> {
-                    ivDownvotes.isClickable = true
-                    ivUpvotes.isClickable = true
+                    downvotes.isClickable = true
+                    upvotes.isClickable = true
                 }
             }
         }

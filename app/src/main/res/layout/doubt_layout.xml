@@ -133,12 +133,12 @@
             android:fontFamily="@font/poppins"
             android:textColor="@color/grey"
             android:textSize="12dp"
-            app:layout_constraintStart_toStartOf="@id/iv_votes"
-            app:layout_constraintTop_toBottomOf="@id/iv_votes"
+            app:layout_constraintStart_toStartOf="@id/cb_upvote"
+            app:layout_constraintTop_toBottomOf="@id/cb_upvote"
             tools:text="Related to : attendance, marks, teachers" />
 
         <TextView
-            android:id="@+id/iv_votes"
+            android:id="@+id/cb_upvote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
@@ -155,8 +155,8 @@
             android:fontFamily="@font/poppins"
             android:text="211"
             android:textSize="12dp"
-            app:layout_constraintStart_toEndOf="@id/iv_votes"
-            app:layout_constraintTop_toTopOf="@id/iv_votes" />
+            app:layout_constraintStart_toEndOf="@id/cb_upvote"
+            app:layout_constraintTop_toTopOf="@id/cb_upvote" />
 
 
         <TextView
@@ -167,7 +167,7 @@
             android:text="Answers"
             android:textSize="12dp"
             app:layout_constraintStart_toEndOf="@id/tv_votes"
-            app:layout_constraintTop_toTopOf="@id/iv_votes" />
+            app:layout_constraintTop_toTopOf="@id/cb_upvote" />
 
         <TextView
             android:id="@+id/tv_answers"
@@ -182,7 +182,7 @@
             app:layout_constraintTop_toTopOf="@id/iv_answers" />
 
         <CheckBox
-            android:id="@+id/iv_upvotes"
+            android:id="@+id/cb_upvotes"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="@drawable/upvote_icon"
@@ -196,7 +196,7 @@
             android:stateListAnimator="@animator/scale_votes_icon" />
 
         <CheckBox
-            android:id="@+id/iv_downvote"
+            android:id="@+id/cb_downvote"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:padding="6dp"
@@ -207,8 +207,8 @@
             android:button="@null"
             android:checked="false"
             android:stateListAnimator="@animator/scale_votes_icon"
-            app:layout_constraintStart_toEndOf="@id/iv_upvotes"
-            app:layout_constraintTop_toTopOf="@id/iv_upvotes" />
+            app:layout_constraintStart_toEndOf="@id/cb_upvotes"
+            app:layout_constraintTop_toTopOf="@id/cb_upvotes" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
