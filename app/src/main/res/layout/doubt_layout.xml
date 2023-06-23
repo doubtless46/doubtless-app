@@ -135,12 +135,12 @@
             android:text="Related to : attendance, marks, teachers"
             android:textColor="@color/grey"
             android:textSize="12dp"
-            app:layout_constraintStart_toStartOf="@id/cb_upvote"
-            app:layout_constraintTop_toBottomOf="@id/cb_upvote"
+            app:layout_constraintStart_toStartOf="@id/iv_votes"
+            app:layout_constraintTop_toBottomOf="@id/iv_votes"
             tools:text="Related to : attendance, marks, teachers" />
 
         <TextView
-            android:id="@+id/cb_upvote"
+            android:id="@+id/iv_votes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
@@ -157,8 +157,8 @@
             android:fontFamily="@font/poppins"
             android:text="211"
             android:textSize="12dp"
-            app:layout_constraintStart_toEndOf="@id/cb_upvote"
-            app:layout_constraintTop_toTopOf="@id/cb_upvote" />
+            app:layout_constraintStart_toEndOf="@id/iv_votes"
+            app:layout_constraintTop_toTopOf="@id/iv_votes" />
 
 
         <TextView
@@ -169,7 +169,7 @@
             android:text="Answers"
             android:textSize="12dp"
             app:layout_constraintStart_toEndOf="@id/tv_votes"
-            app:layout_constraintTop_toTopOf="@id/cb_upvote" />
+            app:layout_constraintTop_toTopOf="@id/iv_votes" />
 
         <TextView
             android:id="@+id/tv_answers"
@@ -201,7 +201,6 @@
             android:id="@+id/cb_downvote"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:padding="6dp"
             android:background="@drawable/upvote_icon"
             android:layout_marginStart="16dp"
             android:padding="6dp"
