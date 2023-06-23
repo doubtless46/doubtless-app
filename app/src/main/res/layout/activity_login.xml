@@ -6,6 +6,71 @@
     android:layout_height="match_parent"
     tools:context=".screens.auth.LoginActivity">
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/layout_doubt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="12dp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_banner"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include
+            android:id="@+id/doubt_layout"
+            layout="@layout/doubt_layout" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/iv_banner"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:visibility="visible"
+        app:cardBackgroundColor="@color/purple"
+        app:cardElevation="0dp"
+        app:layout_constraintDimensionRatio="1.1:1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_banner"
+        app:layout_constraintTop_toBottomOf="@id/iv_banner" />
+
+    <TextView
+        android:id="@+id/tv_signin_heading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Welcome to the club &#128075;"
+        android:textAlignment="textStart"
+        android:textColor="@color/black"
+        android:textSize="22dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_signin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/btn_signin"
+        app:layout_constraintTop_toBottomOf="@id/iv_banner"
+        app:layout_constraintVertical_bias="0.2" />
+
+    <TextView
+        android:id="@+id/tv_signin_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="26dp"
+        android:fontFamily="@font/poppins"
+        android:text="Welcome to the community where you can ask doubts from seniors and other college peers. Become Doubtless."
+        android:textAlignment="textStart"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_signin_heading"
+        app:layout_constraintTop_toBottomOf="@+id/tv_signin_heading" />
+
     <com.doubtless.doubtless.theming.retro.RetroLayout
         android:id="@+id/btn_signin"
         android:layout_width="match_parent"
@@ -62,45 +127,5 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.doubtless.doubtless.theming.retro.RetroLayout>
-
-    <ImageView
-        android:id="@+id/iv_banner"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:scaleType="centerCrop"
-        android:visibility="visible"
-        app:layout_constraintDimensionRatio="1.1:1"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/tv_signin_heading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="22dp"
-        android:fontFamily="@font/poppins_bold"
-        android:text="Hey There!"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="22dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_signin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_banner"
-        app:layout_constraintVertical_bias="0.2" />
-
-    <TextView
-        android:id="@+id/tv_signin_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="26dp"
-        android:fontFamily="@font/poppins"
-        android:text="Welcome to the community where you can ask doubts from seniors and other college peers. Become Doubtless."
-        android:textAlignment="textStart"
-        android:textSize="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/tv_signin_heading"
-        app:layout_constraintTop_toBottomOf="@+id/tv_signin_heading" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
