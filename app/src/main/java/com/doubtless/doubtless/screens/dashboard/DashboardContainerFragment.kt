@@ -8,6 +8,7 @@ import com.doubtless.doubtless.R
 import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.navigation.OnBackPressListener
 import com.doubtless.doubtless.screens.main.MainActivity
+import com.doubtless.doubtless.screens.main.MainFragment
 
 class DashboardContainerFragment : Fragment(R.layout.fragment_home) {
 
@@ -28,7 +29,15 @@ class DashboardContainerFragment : Fragment(R.layout.fragment_home) {
 
     private val onBackPressListener = object : OnBackPressListener {
         override fun onBackPress(): Boolean {
-            return navigator.onBackPress()
+
+            val backPressConsumed = navigator.onBackPress()
+
+            return if (backPressConsumed)
+                true
+            else {
+                (parentFragment as? MainFragment)?.selectHomeBottomNavElement()
+                true
+            }
         }
     }
 

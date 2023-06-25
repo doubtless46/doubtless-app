@@ -200,6 +200,19 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
         return null
     }
 
+    fun getCreateFragmentNavigator(mainActivity: MainActivity): FragNavigator? {
+        val createFrag =
+            (mainActivity.supportFragmentManager.findFragmentByTag("MainFragment") as MainFragment?)
+                ?.childFragmentManager?.findFragmentByTag("mainfrag_1")
+
+        if (createFrag != null) {
+            return DoubtlessApp.getInstance().getAppCompRoot()
+                .getFragNavigator(createFrag.childFragmentManager, R.id.bottomNav_child_container)
+        }
+
+        return null
+    }
+
     fun getDashboardFragNavigator(mainActivity: MainActivity): FragNavigator? {
 
         val dashboardFrag =
