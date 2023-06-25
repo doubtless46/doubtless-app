@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import com.doubtless.doubtless.R
 
 
-class CreatePollFragment : Fragment() {
-
+class InteractionPollFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
@@ -20,7 +20,7 @@ class CreatePollFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_poll, container, false)
+        return inflater.inflate(R.layout.fragment_interaction_poll, container, false)
     }
 
 }

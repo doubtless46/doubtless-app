@@ -37,7 +37,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="12dp"
         android:fontFamily="@font/poppins"
         android:text="Question"
@@ -70,12 +70,10 @@
         app:layout_constraintTop_toBottomOf="@id/question_header"
         tools:ignore="Autofill,HardcodedText,LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
 
-
     <EditText
         android:id="@+id/doubt_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
         android:background="@android:color/transparent"
         android:fontFamily="@font/poppins"
         android:gravity="top|start"
@@ -85,11 +83,20 @@
         android:padding="16dp"
         android:textColor="@color/black"
         android:textSize="14dp"
+        android:layout_marginStart="12dp"
         app:layout_constraintEnd_toEndOf="@+id/doubt_heading"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/doubt_heading"
         app:layout_constraintTop_toBottomOf="@+id/doubt_heading"
         tools:ignore="Autofill,HardcodedText,LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_create_poll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/post_poll_button"
+        app:layout_constraintTop_toBottomOf="@+id/doubt_description" />
+
 
     <com.doubtless.doubtless.theming.retro.RetroLayout
         android:id="@+id/post_poll_button"
@@ -139,59 +146,4 @@
     </com.doubtless.doubtless.theming.retro.RetroLayout>
 
 
-    <TextView
-        android:id="@+id/option_header"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginStart="12dp"
-        android:fontFamily="@font/poppins"
-        android:text="Options"
-        android:textColor="@color/black"
-        android:textSize="12dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/doubt_description" />
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:padding="4dp"
-        android:id="@+id/ll_option"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/option_header"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/et_option"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/poppins"
-            android:hint="Option 1"
-            android:imeOptions="actionNext"
-            android:inputType="text"
-            android:padding="4dp"
-            android:paddingStart="16dp"
-            android:singleLine="true"
-            android:textSize="16sp"
-            tools:ignore="Autofill,HardcodedText,LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
-
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/ic_add_option"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:background="@color/cardview_shadow_start_color"
-        android:layout_marginEnd="12dp"
-        android:src="@drawable/ic_baseline_add_24"
-        app:layout_constraintEnd_toEndOf="@+id/ll_option"
-        app:layout_constraintTop_toBottomOf="@+id/ll_option" />
 </androidx.constraintlayout.widget.ConstraintLayout>
