@@ -1,6 +1,7 @@
 package com.doubtless.doubtless.screens.answers
 
 import androidx.lifecycle.*
+import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.screens.answers.usecases.FetchAnswerUseCase
 import com.doubtless.doubtless.screens.answers.usecases.PublishAnswerUseCase
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
@@ -15,28 +16,55 @@ class AnswersViewModel(
     private val doubtData: DoubtData
 ) : ViewModel() {
 
-    private val _answerDoubtEntities = MutableLiveData(
-        listOf(
-            AnswerDoubtEntity(AnswerDoubtEntity.TYPE_DOUBT, doubtData, null),
-            AnswerDoubtEntity(AnswerDoubtEntity.TYPE_ANSWER_ENTER, null, null)
+    sealed class Result {
+        class Success(val data: List<AnswerDoubtEntity>) : Result()
+        object Loading : Result()
+        class Error(val message: String) : Result()
+    }
+
+    private val _answerDoubtEntities = MutableLiveData<Result>(
+        Result.Success(
+            listOf(
+                AnswerDoubtEntity(
+                    type = AnswerDoubtEntity.TYPE_DOUBT,
+                    doubt = doubtData,
+                    answer = null,
+                    answerVotingUseCase = null,
+                    doubtVotingUseCase = DoubtlessApp.getInstance().getAppCompRoot()
+                        .getDoubtVotingDoubtCase(doubtData)
+                ),
+                AnswerDoubtEntity(AnswerDoubtEntity.TYPE_ANSWER_ENTER, null, null)
+            )
         )
     )
 
-    val answerDoubtEntities: LiveData<List<AnswerDoubtEntity>?> = _answerDoubtEntities
+    val answerDoubtEntities: LiveData<Result> = _answerDoubtEntities
 
     private val _publishAnswerStatus = MutableLiveData<PublishAnswerUseCase.Result>()
     val publishAnswerStatus: LiveData<PublishAnswerUseCase.Result> = _publishAnswerStatus
 
 
     fun fetchAnswers() = viewModelScope.launch(Dispatchers.IO) {
+
+        _answerDoubtEntities.postValue(Result.Loading)
+
         val result = fetchAnswerUseCase.fetchAnswers()
 
-        if (result is FetchAnswerUseCase.Result.Success) {
-            _answerDoubtEntities.postValue(result.data.map {
-                AnswerData.toAnswerDoubtEntity(it)
-            })
-        } else {
-            /* no-op */
+        when (result) {
+            is FetchAnswerUseCase.Result.Success -> {
+                _answerDoubtEntities.postValue(
+                    Result.Success(result.data.map {
+                        AnswerData.toAnswerDoubtEntity(it)
+                    })
+                )
+            }
+            else -> {
+                _answerDoubtEntities.postValue(
+                    Result.Error(
+                        (result as FetchAnswerUseCase.Result.Error).message
+                    )
+                )
+            }
         }
     }
 
@@ -61,7 +89,12 @@ class AnswersViewModel(
         ) : ViewModelProvider.Factory {
 
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return AnswersViewModel(fetchAnswerUseCase, publishAnswerUseCase, userManager, doubtData) as T
+                return AnswersViewModel(
+                    fetchAnswerUseCase,
+                    publishAnswerUseCase,
+                    userManager,
+                    doubtData
+                ) as T
             }
         }
     }
