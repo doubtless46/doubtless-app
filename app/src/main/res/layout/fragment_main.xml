@@ -21,7 +21,7 @@
         android:background="@color/separation_grey"
         app:layout_constraintBottom_toTopOf="@id/retro_bottom_nav" />
 
-    <com.doubtless.doubtless.screens.main.bottomNav.RetroBottomNav
+    <com.doubtless.doubtless.screens.main.bottomNav.BottomNavLayout
         android:id="@+id/retro_bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,5 +61,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btm_nav_create" />
 
-    </com.doubtless.doubtless.screens.main.bottomNav.RetroBottomNav>
+    </com.doubtless.doubtless.screens.main.bottomNav.BottomNavLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

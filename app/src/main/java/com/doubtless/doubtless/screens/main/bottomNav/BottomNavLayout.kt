@@ -1,18 +1,12 @@
 package com.doubtless.doubtless.screens.main.bottomNav
 
 import android.content.Context
-import android.os.Bundle
-import android.os.Parcelable
-import android.os.Vibrator
-import android.os.VibratorManager
 import android.util.AttributeSet
 import android.view.View
-import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
-import com.doubtless.doubtless.theming.buttons.SecondaryButton
 
-class RetroBottomNav(
+class BottomNavLayout(
     context: Context,
     attributeSet: AttributeSet
 ) : ConstraintLayout(context, attributeSet) {
