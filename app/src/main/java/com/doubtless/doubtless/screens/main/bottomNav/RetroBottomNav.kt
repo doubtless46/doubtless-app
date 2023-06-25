@@ -8,13 +8,14 @@ import android.os.VibratorManager
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
 import com.doubtless.doubtless.theming.buttons.SecondaryButton
 
 class RetroBottomNav(
     context: Context,
     attributeSet: AttributeSet
-) : LinearLayout(context, attributeSet) {
+) : ConstraintLayout(context, attributeSet) {
 
     private var currentSelectedIndex: Int? = null
     private val elements: ArrayList<BottomIntractableElement> = arrayListOf()
