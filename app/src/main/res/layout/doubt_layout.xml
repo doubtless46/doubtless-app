@@ -16,7 +16,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#99B8B8B8" />
+        android:background="@color/separation_grey" />
 
     <!--    99B8B8B8-->
     <!--    #99DDDDDD-->
