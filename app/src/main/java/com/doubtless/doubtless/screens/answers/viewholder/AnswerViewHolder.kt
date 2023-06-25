@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.answers.AnswerData
 import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
@@ -17,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
+import java.util.Date
 import kotlin.math.floor
 
 
@@ -47,7 +47,7 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
         downVote = itemView.findViewById(R.id.cb_downvote)
     }
 
-    fun setData(answerData: AnswerData) {
+    fun setData(answerData: AnswerData, answerVotingUseCase: VotingUseCase) {
 
         itemView.setOnClickListener {
             interactionListener.onAnswerClicked(answerData, adapterPosition)
@@ -64,15 +64,14 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
         description.text = answerData.description
         tvYear.text = "| ${answerData.authorYear} Year |"
 
-        val votingUseCase = DoubtlessApp.getInstance().getAppCompRoot().getAnswerVotingDoubtCase(answerData.copy())
-        setVotesUi(answerData, votingUseCase)
+        setVotesUi(answerData, answerVotingUseCase)
 
         upVote.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
                 if (it.stateListAnimator == null)
                     it.addStateListAnimation(R.animator.scale_votes_icon)
 
-                val result = votingUseCase.upvoteDoubt()
+                val result = answerVotingUseCase.upvoteDoubt()
 
                 if (result is VotingUseCase.Result.UpVoted) {
                     answerData.netVotes += 1
@@ -80,7 +79,7 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
                     answerData.netVotes -= 1
                 }
 
-                setVotesUi(answerData, votingUseCase)
+                setVotesUi(answerData, answerVotingUseCase)
             }
         }
 
@@ -89,7 +88,7 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
                 if (it.stateListAnimator == null)
                     it.addStateListAnimation(R.animator.scale_votes_icon)
 
-                val result = votingUseCase.downVoteDoubt()
+                val result = answerVotingUseCase.downVoteDoubt()
 
                 if (result is VotingUseCase.Result.DownVoted) {
                     answerData.netVotes -= 1
@@ -97,7 +96,7 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
                     answerData.netVotes += 1
                 }
 
-                setVotesUi(answerData, votingUseCase)
+                setVotesUi(answerData, answerVotingUseCase)
             }
         }
 

@@ -75,7 +75,7 @@ class AnswerDoubtsAdapter(
             holder.setData(doubtAnswerEntities[position].doubt!!)
 
         if (holder is AnswerViewHolder)
-            holder.setData(doubtAnswerEntities[position].answer!!)
+            holder.setData(doubtAnswerEntities[position].answer!!, doubtAnswerEntities[position].answerVotingUseCase!!)
 
         if (holder is EnterAnswerViewHolder)
             holder.setData(user)
@@ -98,6 +98,7 @@ class AnswerDoubtsAdapter(
             index = 2,
             element = answer
         ) // first 2 are doubt and enter answer view
+
         notifyItemInserted(1)
     }
 

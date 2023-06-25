@@ -92,7 +92,12 @@ data class AnswerData(
         }
 
         fun toAnswerDoubtEntity(answerData: AnswerData): AnswerDoubtEntity {
-            return AnswerDoubtEntity(AnswerDoubtEntity.TYPE_ANSWER, null, answerData)
+            return AnswerDoubtEntity(
+                type = AnswerDoubtEntity.TYPE_ANSWER,
+                doubt = null,
+                answer = answerData,
+                answerVotingUseCase = DoubtlessApp.getInstance().getAppCompRoot().getAnswerVotingDoubtCase(answerData)
+            )
         }
     }
 }
