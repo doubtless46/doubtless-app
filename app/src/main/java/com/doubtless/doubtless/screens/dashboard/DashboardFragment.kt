@@ -50,6 +50,8 @@ class DashboardFragment : Fragment() {
 
     private lateinit var tracker: AnalyticsTracker
 
+    private var onCreateEventUnConsumed = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         tracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
@@ -57,10 +59,9 @@ class DashboardFragment : Fragment() {
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
         navigator = DoubtlessApp.getInstance().getAppCompRoot()
             .getDashboardFragNavigator(requireActivity() as MainActivity)!!
-
         viewModel = getViewModel()
-        viewModel.fetchDoubts(forPageOne = true)
 
+        onCreateEventUnConsumed = true
     }
 
     override fun onCreateView(
@@ -74,6 +75,11 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (onCreateEventUnConsumed) {
+            viewModel.fetchDoubts(forPageOne = true)
+            onCreateEventUnConsumed = false
+        }
 
         val feedList = mutableListOf<FeedEntity>()
         feedList.add(FeedEntity(FeedEntity.TYPE_USER_PROFILE, null))

@@ -20,7 +20,7 @@ class FirestoreCollection {
         val UPVOTE_DATA_USERS = "upvoted_users"
         val DOWNVOTE_DATA_USERS = "downvoted_users"
 
-
+        val NOTIFICATION = "notifications"
     }
 
 }

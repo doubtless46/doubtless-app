@@ -37,4 +37,8 @@ class RetroBottomNavElementLayout(context: Context, attributeSet: AttributeSet?)
         isCurrentlySelected = false
     }
 
+    override fun onReselected() {
+
+    }
+
 }

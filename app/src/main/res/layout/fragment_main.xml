@@ -38,7 +38,7 @@
             android:button="@null"
             android:checked="false"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintStart_toStartOf="parent" />
 
         <com.doubtless.doubtless.theming.bottomNav.SoberBottomNavElementLayout
@@ -48,8 +48,18 @@
             android:background="@drawable/create_checkable_icon"
             android:button="@null"
             android:checked="false"
-            app:layout_constraintEnd_toStartOf="@id/btm_nav_dashboard"
+            app:layout_constraintEnd_toStartOf="@id/btm_nav_notif"
             app:layout_constraintStart_toEndOf="@id/btm_nav_home" />
+
+        <com.doubtless.doubtless.theming.bottomNav.SoberBottomNavElementLayout
+            android:id="@+id/btm_nav_notif"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/notif_checkable_icon"
+            android:button="@null"
+            android:checked="false"
+            app:layout_constraintEnd_toStartOf="@id/btm_nav_dashboard"
+            app:layout_constraintStart_toEndOf="@id/btm_nav_create" />
 
         <com.doubtless.doubtless.theming.bottomNav.SoberBottomNavElementLayout
             android:id="@+id/btm_nav_dashboard"
@@ -59,7 +69,7 @@
             android:button="@null"
             android:checked="false"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btm_nav_create" />
+            app:layout_constraintStart_toEndOf="@id/btm_nav_notif" />
 
     </com.doubtless.doubtless.screens.main.bottomNav.BottomNavLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

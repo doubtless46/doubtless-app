@@ -76,6 +76,10 @@ class SecondaryButton constructor(
         setCardBackgroundColor(resources.getColor(R.color.cream))
     }
 
+    override fun onReselected() {
+
+    }
+
     override fun onUnselected() {
         setCardBackgroundColor(resources.getColor(R.color.cream))
         isCurrentlySelected = false

@@ -12,6 +12,11 @@ class SoberBottomNavElementLayout(context: Context, attributeSet: AttributeSet?)
         isChecked = true
     }
 
+    override fun onReselected() {
+        // on reselection the checked icon will toggle, hence manually make it checked.
+        isChecked = true
+    }
+
     override fun onUnselected() {
         isChecked = false
     }
