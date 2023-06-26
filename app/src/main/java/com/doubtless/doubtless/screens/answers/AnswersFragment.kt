@@ -20,6 +20,7 @@ import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.view.ViewDoubtsViewModel
 import com.doubtless.doubtless.screens.main.MainActivity
+import com.doubtless.doubtless.screens.main.MainFragment
 
 class AnswersFragment : Fragment() {
 
@@ -46,8 +47,23 @@ class AnswersFragment : Fragment() {
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
         analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
 
-        val _navigator = DoubtlessApp.getInstance().getAppCompRoot()
-            .getHomeFragNavigator(requireActivity() as MainActivity)
+
+        var _navigator: FragNavigator? = null
+
+        // uuhh!!
+        val currentSelectedFrag =
+            (requireActivity() as MainActivity).getMainFragment()?.getCurrentSelectedElement()
+
+        // encapsulate this logic
+        if (currentSelectedFrag is MainFragment.CurrentSelectedBottomNavFrag.HomeFrag) {
+             _navigator = DoubtlessApp.getInstance().getAppCompRoot()
+                .getHomeFragNavigator(requireActivity() as MainActivity)
+        }
+
+        if (currentSelectedFrag is MainFragment.CurrentSelectedBottomNavFrag.DashboardFrag) {
+            _navigator = DoubtlessApp.getInstance().getAppCompRoot()
+                .getDashboardFragNavigator(requireActivity() as MainActivity)
+        }
 
         if (_navigator != null)
             navigator = _navigator

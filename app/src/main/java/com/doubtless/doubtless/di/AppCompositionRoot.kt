@@ -9,6 +9,7 @@ import com.amplitude.android.Configuration
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.analytics.AnalyticsTracker
+import com.doubtless.doubtless.localDatabase.AppDatabase
 import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.navigation.Router
 import com.doubtless.doubtless.network.DoubtlessServer
@@ -24,12 +25,17 @@ import com.doubtless.doubtless.screens.dashboard.usecases.FetchUserDataUseCase
 import com.doubtless.doubtless.screens.dashboard.usecases.FetchUserFeedByDateUseCase
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.usecases.DoubtDataSharedPrefUseCase
+import com.doubtless.doubtless.screens.doubt.usecases.FetchDoubtDataFromDoubtIdUseCase
 import com.doubtless.doubtless.screens.doubt.usecases.PostDoubtUseCase
 import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.screens.home.entities.FeedConfig
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByDateUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByPopularityUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase
+import com.doubtless.doubtless.screens.inAppNotification.dao.InAppNotificationDao
+import com.doubtless.doubtless.screens.inAppNotification.usecases.FetchInAppNotificationUseCase
+import com.doubtless.doubtless.screens.inAppNotification.usecases.FetchUnreadNotificationUseCase
+import com.doubtless.doubtless.screens.inAppNotification.usecases.MarkInAppNotificationsReadUseCase
 import com.doubtless.doubtless.screens.main.MainActivity
 import com.doubtless.doubtless.screens.main.MainFragment
 import com.doubtless.doubtless.screens.onboarding.usecases.AddOnBoardingDataUseCase
@@ -132,6 +138,24 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
         return PostDoubtUseCase(getServer())
     }
 
+    // --------- InApp Notification ----------
+
+    fun getFetchNotificationUseCase(): FetchInAppNotificationUseCase {
+        return FetchInAppNotificationUseCase(getInAppNotificationDao(), getFetchUnreadNotificationUseCase())
+    }
+
+    fun getMarkInAppNotificationsReadUseCase(): MarkInAppNotificationsReadUseCase {
+        return MarkInAppNotificationsReadUseCase(getInAppNotificationDao(), FirebaseFirestore.getInstance())
+    }
+
+    private fun getFetchUnreadNotificationUseCase(): FetchUnreadNotificationUseCase {
+        return FetchUnreadNotificationUseCase(FirebaseFirestore.getInstance(), getUserManager())
+    }
+
+    private fun getInAppNotificationDao(): InAppNotificationDao {
+        return AppDatabase.getDbInstance().inAppNotificationDao()
+    }
+
     // ------- Common --------
 
     fun getAnswerVotingDoubtCase(answerData: AnswerData): VotingUseCase {
@@ -140,6 +164,10 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
     fun getDoubtVotingDoubtCase(doubtData: DoubtData): VotingUseCase {
         return VotingUseCase(FirebaseFirestore.getInstance(), getUserManager().getCachedUserData()!!, false, null, doubtData)
+    }
+
+    fun getFetchDoubtDataFromDoubtIdUseCase(): FetchDoubtDataFromDoubtIdUseCase {
+        return FetchDoubtDataFromDoubtIdUseCase(FirebaseFirestore.getInstance())
     }
 
     // ------- User ---------
@@ -213,11 +241,25 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
         return null
     }
 
+    fun getInAppFragNavigator(mainActivity: MainActivity): FragNavigator? {
+
+        val inAppFrag =
+            (mainActivity.supportFragmentManager.findFragmentByTag("MainFragment") as MainFragment?)
+                ?.childFragmentManager?.findFragmentByTag("mainfrag_2")
+
+        if (inAppFrag != null) {
+            return DoubtlessApp.getInstance().getAppCompRoot()
+                .getFragNavigator(inAppFrag.childFragmentManager, R.id.bottomNav_child_container)
+        }
+
+        return null
+    }
+
     fun getDashboardFragNavigator(mainActivity: MainActivity): FragNavigator? {
 
         val dashboardFrag =
             (mainActivity.supportFragmentManager.findFragmentByTag("MainFragment") as MainFragment?)
-                ?.childFragmentManager?.findFragmentByTag("mainfrag_2")
+                ?.childFragmentManager?.findFragmentByTag("mainfrag_3")
 
         if (dashboardFrag != null) {
             return DoubtlessApp.getInstance().getAppCompRoot()

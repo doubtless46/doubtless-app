@@ -39,11 +39,7 @@ class BottomNavLayout(
 
     private fun onNewSelectedIndex(index: Int) {
         onSelectedItemChangedListener?.onNewSelectedIndex(index)
-
         elements[index].onSelected()
-//
-//        (elements[index] as View).layoutParams =
-//            LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f)
     }
 
     private fun notifyAllUnSelectedElements() {
@@ -61,7 +57,10 @@ class BottomNavLayout(
         clickedBtn: BottomIntractableElement
     ) {
         // proceed on only new index selection.
-        if (currentSelectedIndex == idx) return
+        if (currentSelectedIndex == idx) {
+            clickedBtn.onReselected()
+            return
+        }
 
         currentSelectedIndex = idx
         onSelectedItemChangedListener?.onNewSelectedIndex(idx)

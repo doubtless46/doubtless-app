@@ -25,6 +25,10 @@ class MainActivity : AppCompatActivity(), BackPressDispatcher {
         }
     }
 
+    fun getMainFragment(): MainFragment? {
+        return supportFragmentManager.findFragmentByTag("MainFragment") as MainFragment?
+    }
+
     // ----- backpress impl ------
 
     private val backPressListeners: MutableList<OnBackPressListener> = mutableListOf()
