@@ -2,7 +2,6 @@ package com.doubtless.doubtless.screens.home.usecases
 
 import com.doubtless.doubtless.constants.FirestoreCollection
 import com.doubtless.doubtless.screens.doubt.DoubtData
-import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
@@ -25,8 +24,25 @@ class FetchFeedByDateUseCase constructor(
         withContext(Dispatchers.IO) {
 
             try {
-                var query = firestore.collection(FirestoreCollection.AllDoubts)
-                    .orderBy("created_on", Query.Direction.DESCENDING)
+
+                var query = when (request.tag) {
+                    "All" -> {
+                        firestore.collection(FirestoreCollection.AllDoubts)
+                            .orderBy("created_on", Query.Direction.DESCENDING)
+                    }
+
+                    "My College" -> {
+                        firestore.collection(FirestoreCollection.AllDoubts)
+                            .whereEqualTo("author_college", request.user.local_user_attr?.college)
+                            .orderBy("created_on", Query.Direction.DESCENDING)
+                    }
+
+                    else -> {
+                        firestore.collection(FirestoreCollection.AllDoubts)
+                            .whereArrayContains("tags", request.tag)
+                            .orderBy("created_on", Query.Direction.DESCENDING)
+                    }
+                }
 
                 if (lastDoubtData != null && request.fetchFromPage1 == false) {
                     query = query.startAfter(lastDoubtData!!.date)
