@@ -23,7 +23,6 @@ import com.doubtless.doubtless.screens.home.entities.FeedConfig
 import com.doubtless.doubtless.screens.main.MainActivity
 import com.doubtless.doubtless.utils.Resource
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.gson.Gson
 
@@ -39,7 +38,7 @@ class ViewDoubtsFragment : Fragment() {
     private lateinit var navigator: FragNavigator
     private lateinit var remoteConfig: FirebaseRemoteConfig
     private lateinit var feedConfig: FeedConfig
-    private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var tag: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +46,8 @@ class ViewDoubtsFragment : Fragment() {
         val inflater = TransitionInflater.from(requireContext())
         //enterTransition = inflater.inflateTransition(R.transition.slide)
         // exitTransition = inflater.inflateTransition(R.transition.fade)
+
+        tag = arguments?.getString("tag")!!
 
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
         analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
@@ -66,7 +67,7 @@ class ViewDoubtsFragment : Fragment() {
             navigator = _navigator
 
         viewModel = getViewModel()
-        viewModel.fetchDoubts(forPageOne = true)
+        viewModel.fetchDoubts(forPageOne = true, feedTag = tag!!)
     }
 
     override fun onCreateView(
@@ -82,7 +83,7 @@ class ViewDoubtsFragment : Fragment() {
         // for debouncing
         var lastRefreshed = System.currentTimeMillis()
 
-        binding.llProgressBar.visibility= View.VISIBLE //show progress bar
+        binding.llProgressBar.visibility = View.VISIBLE //show progress bar
 
         binding.layoutSwipe.setOnRefreshListener {
 
@@ -93,16 +94,15 @@ class ViewDoubtsFragment : Fragment() {
             }
 
             lastRefreshed = System.currentTimeMillis()
-
             binding.layoutSwipe.isRefreshing = true
-            viewModel.refreshList()
+            viewModel.refreshList(tag = tag)
             adapter.clearCurrentList()
         }
 
         adapter = GenericFeedAdapter(
             genericFeedEntities = viewModel.homeEntities.toMutableList(),
             onLastItemReached = {
-                viewModel.fetchDoubts()
+                viewModel.fetchDoubts(feedTag = tag!!)
             },
             interactionListener = object : GenericFeedAdapter.InteractionListener {
                 override fun onSearchBarClicked() {
@@ -136,12 +136,12 @@ class ViewDoubtsFragment : Fragment() {
             binding.layoutSwipe.isRefreshing = false
             result?.let {
                 when (result) {
-                    is Resource.Success -> {
+                    is Resource.Success<*> -> {
                         result.data?.let {
                             adapter.appendDoubts(it)
                         }
                     }
-                    is Resource.Error -> {
+                    is Resource.Error<*> -> {
                         when (result.error) {
                             is UserNotFoundException -> {
                                 if (!isAdded) return@observe

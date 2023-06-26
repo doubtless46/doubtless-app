@@ -1,16 +1,17 @@
 package com.doubtless.doubtless.screens.home.usecases
 
+import android.os.UserManager
 import android.util.Log
 import androidx.annotation.WorkerThread
 import com.doubtless.doubtless.constants.FirestoreCollection
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.home.entities.FeedConfig
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.AggregateSource
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
-import java.lang.Math.abs
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -24,7 +25,10 @@ class FetchHomeFeedUseCase constructor(
     data class FetchHomeFeedRequest(
         val user: User,
         val pageSize: Int = 10,
-        val fetchFromPage1: Boolean = false
+        val fetchFromPage1: Boolean = false,
+        val tag: String
+
+
     )
 
     sealed class Result {
