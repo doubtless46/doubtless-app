@@ -12,7 +12,7 @@ import com.doubtless.doubtless.R
 import com.doubtless.doubtless.databinding.FragmentHomeBinding
 import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.navigation.OnBackPressListener
-import com.doubtless.doubtless.screens.doubt.view.ViewDoubtsFragment
+import com.doubtless.doubtless.screens.doubt.HomeMainScreenFragment
 import com.doubtless.doubtless.screens.main.MainActivity
 
 class HomeFragment : Fragment() {
@@ -21,6 +21,7 @@ class HomeFragment : Fragment() {
     private lateinit var navigator: FragNavigator
 
     private var _binding: FragmentHomeBinding? = null
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -30,7 +31,7 @@ class HomeFragment : Fragment() {
 
         if (savedInstanceState == null) {
             childFragmentManager.commit {
-                replace(R.id.bottomNav_child_container, ViewDoubtsFragment())
+                replace(R.id.bottomNav_child_container, HomeMainScreenFragment())
             }
         }
 

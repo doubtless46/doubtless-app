@@ -24,6 +24,7 @@ import com.doubtless.doubtless.screens.dashboard.usecases.FetchUserDataUseCase
 import com.doubtless.doubtless.screens.dashboard.usecases.FetchUserFeedByDateUseCase
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.usecases.DoubtDataSharedPrefUseCase
+import com.doubtless.doubtless.screens.doubt.usecases.FetchFilterTagsUseCase
 import com.doubtless.doubtless.screens.doubt.usecases.PostDoubtUseCase
 import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.screens.home.entities.FeedConfig
@@ -135,11 +136,23 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
     // ------- Common --------
 
     fun getAnswerVotingDoubtCase(answerData: AnswerData): VotingUseCase {
-        return VotingUseCase(FirebaseFirestore.getInstance(), getUserManager().getCachedUserData()!!, true, answerData, null)
+        return VotingUseCase(
+            FirebaseFirestore.getInstance(),
+            getUserManager().getCachedUserData()!!,
+            true,
+            answerData,
+            null
+        )
     }
 
     fun getDoubtVotingDoubtCase(doubtData: DoubtData): VotingUseCase {
-        return VotingUseCase(FirebaseFirestore.getInstance(), getUserManager().getCachedUserData()!!, false, null, doubtData)
+        return VotingUseCase(
+            FirebaseFirestore.getInstance(),
+            getUserManager().getCachedUserData()!!,
+            false,
+            null,
+            doubtData
+        )
     }
 
     // ------- User ---------
@@ -208,13 +221,19 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
 
         if (dashboardFrag != null) {
             return DoubtlessApp.getInstance().getAppCompRoot()
-                .getFragNavigator(dashboardFrag.childFragmentManager, R.id.bottomNav_child_container)
+                .getFragNavigator(
+                    dashboardFrag.childFragmentManager,
+                    R.id.bottomNav_child_container
+                )
         }
 
         return null
     }
 
-    private fun getFragNavigator(supportFragmentManager: FragmentManager, @IdRes containerId: Int ): FragNavigator {
+    private fun getFragNavigator(
+        supportFragmentManager: FragmentManager,
+        @IdRes containerId: Int
+    ): FragNavigator {
         return FragNavigator(
             containerId,
             supportFragmentManager
@@ -279,8 +298,14 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
         )
     }
 
-    fun getDeleteAccountUseCase() : DeleteAccountUseCase {
+    fun getDeleteAccountUseCase(): DeleteAccountUseCase {
         return DeleteAccountUseCase(
+            FirebaseFirestore.getInstance()
+        )
+    }
+
+    fun getFetchFilterTagsUseCase(): FetchFilterTagsUseCase {
+        return FetchFilterTagsUseCase(
             FirebaseFirestore.getInstance()
         )
     }
