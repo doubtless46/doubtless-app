@@ -20,6 +20,7 @@ import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.common.GenericFeedAdapter
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.home.entities.FeedConfig
+import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import com.doubtless.doubtless.screens.main.MainActivity
 import com.doubtless.doubtless.utils.Resource
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -102,7 +103,7 @@ class ViewDoubtsFragment : Fragment() {
         adapter = GenericFeedAdapter(
             genericFeedEntities = viewModel.homeEntities.toMutableList(),
             onLastItemReached = {
-                viewModel.fetchDoubts(feedTag = tag!!)
+                viewModel.fetchDoubts(feedTag = tag)
             },
             interactionListener = object : GenericFeedAdapter.InteractionListener {
                 override fun onSearchBarClicked() {
@@ -138,7 +139,7 @@ class ViewDoubtsFragment : Fragment() {
                 when (result) {
                     is Resource.Success<*> -> {
                         result.data?.let {
-                            adapter.appendDoubts(it)
+                            adapter.appendDoubts(it as List<FeedEntity>)
                         }
                     }
                     is Resource.Error<*> -> {
@@ -157,7 +158,7 @@ class ViewDoubtsFragment : Fragment() {
                             }
                         }
                     }
-                    is Resource.Loading -> {
+                    is Resource.Loading<*> -> {
                     }
                 }
             }

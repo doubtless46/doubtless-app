@@ -9,14 +9,12 @@ import com.doubtless.doubtless.screens.doubt.usecases.FetchFilterTagsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DoubtFilterViewModel constructor(
+class HomeMainScreenViewModel constructor(
     private val fetchFilterTagsUseCase: FetchFilterTagsUseCase,
 ) : ViewModel() {
 
     private val _tags = MutableLiveData<List<String>?>()
     val tags: LiveData<List<String>?> = _tags
-
-//    private var tags: ArrayList<String> = arrayListOf("My College", "All")
 
     fun fetchTags() = viewModelScope.launch(Dispatchers.IO) {
 
@@ -28,9 +26,9 @@ class DoubtFilterViewModel constructor(
         }
 
         result as FetchFilterTagsUseCase.Result.Success
+
         val tags = result.data.toMutableList()
-        tags[0] = "My College"
-        tags[1] = "All"
+        tags.addAll(0, listOf("My College", "All"))
         _tags.postValue(tags)
     }
 
@@ -41,7 +39,7 @@ class DoubtFilterViewModel constructor(
         ) : ViewModelProvider.Factory {
 
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return DoubtFilterViewModel(fetchFilterTagsUseCase) as T
+                return HomeMainScreenViewModel(fetchFilterTagsUseCase) as T
             }
         }
     }
