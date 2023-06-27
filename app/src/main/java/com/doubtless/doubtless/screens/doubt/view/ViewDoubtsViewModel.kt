@@ -97,6 +97,7 @@ class ViewDoubtsViewModel constructor(
                 }
             }
 
+<<<<<<< HEAD
             _homeEntities.addAll(entitiesFromServer)
             _fetchedHomeEntities.postValue(Resource.Success(entitiesFromServer))
             fetchHomeFeedUseCase.notifyDistinctDocsFetched(
@@ -105,6 +106,22 @@ class ViewDoubtsViewModel constructor(
 
             isLoading = false
         }
+=======
+        // for page 1 call add search and options button entity
+        if (_homeEntities.isEmpty())
+            entitiesFromServer.add(0, FeedEntity.getSearchEntity())
+        if (_homeEntities.isEmpty())
+            entitiesFromServer.add(1, FeedEntity.getOptionButtons())
+
+        _homeEntities.addAll(entitiesFromServer)
+        _fetchedHomeEntities.postValue(entitiesFromServer)
+        fetchHomeFeedUseCase.notifyDistinctDocsFetched(
+            docsFetched = homeEntities.size
+                    - /* subtract one for search entity, ideally should have counted Type = Doubt size */ 1
+        )
+        isLoading = false
+    }
+>>>>>>> 620bd64 (added create poll button in ViewDoubtsFragment)
 
     fun refreshList(tag: String?) {
         _homeEntities.clear()

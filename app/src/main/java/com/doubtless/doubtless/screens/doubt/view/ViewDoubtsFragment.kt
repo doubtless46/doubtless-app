@@ -122,6 +122,16 @@ class ViewDoubtsFragment : Fragment() {
                     })
         }
 
+<<<<<<< HEAD
+=======
+                override fun onDeleteAccountClicked() {
+                }
+
+                override fun onCreatePollClicked() {
+                    navigator.moveToCreatePollFragment()
+                }
+            })
+>>>>>>> 620bd64 (added create poll button in ViewDoubtsFragment)
 
         // how is rv restoring its scroll pos when switching tabs?
         binding.doubtsRecyclerView.adapter = adapter
