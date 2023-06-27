@@ -18,5 +18,9 @@ data class FeedEntity(
         fun getSearchEntity(): FeedEntity {
             return FeedEntity(TYPE_SEARCH, null, null)
         }
+
+        fun getOptionButtons(): FeedEntity{
+            return FeedEntity(TYPE_BUTTONS, null, null)
+        }
     }
 }

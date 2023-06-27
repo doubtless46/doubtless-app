@@ -25,6 +25,7 @@ class GenericFeedAdapter(
         fun onSignOutClicked()
         fun onSubmitFeedbackClicked()
         fun onDeleteAccountClicked()
+        fun onCreatePollClicked()
 
     }
 
@@ -85,14 +86,14 @@ class GenericFeedAdapter(
             FeedEntity.TYPE_BUTTONS -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.layout_home_buttons, parent, false)
-                return DoubtPreviewViewHolder(
-                    view = view,
-                    showVotingLayout = false,
-                    interactionListener = object : DoubtPreviewViewHolder.InteractionListener {
-                        override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
-                            interactionListener.onDoubtClicked(doubtData, position)
-                        }
-                    })
+                return ExtraOptionsButtonHolder(view= view,
+                object : ExtraOptionsButtonHolder.InteractionListener{
+                    override fun onCreatePollClicked() {
+                        interactionListener.onCreatePollClicked()
+                    }
+
+                }
+                    )
             }
         }
 

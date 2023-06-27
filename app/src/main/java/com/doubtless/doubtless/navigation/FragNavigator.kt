@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.answers.AnswersFragment
 import com.doubtless.doubtless.screens.doubt.DoubtData
+import com.doubtless.doubtless.screens.poll.CreatePollFragment
 import com.doubtless.doubtless.screens.search.SearchFragment
 
 class FragNavigator constructor(
@@ -39,6 +40,14 @@ class FragNavigator constructor(
                 /* popExit = */ R.anim.slide_out_right
             )
             .replace(containerId, AnswersFragment.getInstance(doubtData))
+            .addToBackStack(null)
+            .setReorderingAllowed(true)
+            .commitAllowingStateLoss()
+    }
+
+    fun moveToCreatePollFragment(){
+        supportFragmentManager.beginTransaction()
+            .replace(containerId, CreatePollFragment())
             .addToBackStack(null)
             .setReorderingAllowed(true)
             .commitAllowingStateLoss()
