@@ -1,12 +1,16 @@
 package com.doubtless.doubtless.screens.doubt.view
 
 import androidx.lifecycle.*
+import com.doubtless.doubtless.DoubtlessApp
+import com.doubtless.doubtless.R
 import com.doubtless.doubtless.analytics.AnalyticsTracker
+import com.doubtless.doubtless.screens.auth.exception.UserNotFoundException
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase.FetchHomeFeedRequest
 import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase.Result
+import com.doubtless.doubtless.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -23,12 +27,12 @@ class ViewDoubtsViewModel constructor(
 
     private var isLoading = false
 
-    private val _fetchedHomeEntities = MutableLiveData<List<FeedEntity>?>()
-    val fetchedHomeEntities: LiveData<List<FeedEntity>?> =
+    private val _fetchedHomeEntities = MutableLiveData<Resource<List<FeedEntity>?>>()
+    val fetchedHomeEntities: LiveData<Resource<List<FeedEntity>?>> =
         _fetchedHomeEntities // TODO : use Result here!
 
     fun notifyFetchedDoubtsConsumed() {
-        _fetchedHomeEntities.value = null
+        _fetchedHomeEntities.value = Resource.Success(data = null)
     }
 
     fun fetchDoubts(forPageOne: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
@@ -48,7 +52,7 @@ class ViewDoubtsViewModel constructor(
 
             if (result is Result.ListEnded || result is Result.Error) {
                 // ERROR CASE
-                _fetchedHomeEntities.postValue(null)
+                _fetchedHomeEntities.postValue(Resource.Error())
                 isLoading = false
                 return@launch
             }
@@ -77,7 +81,7 @@ class ViewDoubtsViewModel constructor(
                 entitiesFromServer.add(0, FeedEntity.getSearchEntity())
 
             _homeEntities.addAll(entitiesFromServer)
-            _fetchedHomeEntities.postValue(entitiesFromServer)
+            _fetchedHomeEntities.postValue(Resource.Success(entitiesFromServer))
             fetchHomeFeedUseCase.notifyDistinctDocsFetched(
                 docsFetched = homeEntities.size
                         - /* subtract one for search entity, ideally should have counted Type = Doubt size */ 1
@@ -86,7 +90,13 @@ class ViewDoubtsViewModel constructor(
         } ?: kotlin.run {
             // current user is null
             // ERROR CASE
-            _fetchedHomeEntities.postValue(null)
+            _fetchedHomeEntities.postValue(
+                Resource.Error(
+                    message = DoubtlessApp.getInstance().getString(R.string.sign_in_again),
+                    data = null,
+                    error = UserNotFoundException()
+                )
+            )
             isLoading = false
         }
     }
