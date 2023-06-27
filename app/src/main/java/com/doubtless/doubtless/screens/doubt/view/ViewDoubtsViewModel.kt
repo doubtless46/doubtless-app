@@ -76,9 +76,11 @@ class ViewDoubtsViewModel constructor(
                 }
             }
 
-            // for page 1 call add search entity
-            if (_homeEntities.isEmpty())
-                entitiesFromServer.add(0, FeedEntity.getSearchEntity())
+        // for page 1 call add search and options button entity
+        if (_homeEntities.isEmpty())
+            entitiesFromServer.add(0, FeedEntity.getSearchEntity())
+        if (_homeEntities.isEmpty())
+            entitiesFromServer.add(1, FeedEntity.getOptionButtons())
 
             _homeEntities.addAll(entitiesFromServer)
             _fetchedHomeEntities.postValue(Resource.Success(entitiesFromServer))
