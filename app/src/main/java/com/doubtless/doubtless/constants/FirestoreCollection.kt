@@ -21,6 +21,11 @@ class FirestoreCollection {
         val DOWNVOTE_DATA_USERS = "downvoted_users"
 
         val NOTIFICATION = "notifications"
+
+        const val TAG_MY_COLLEGE = "My College"
+        const val TAG_ALL = "All"
+
+
     }
 
 }

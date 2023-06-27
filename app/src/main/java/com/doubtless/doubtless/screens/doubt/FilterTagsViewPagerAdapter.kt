@@ -6,12 +6,10 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.doubtless.doubtless.screens.doubt.view.ViewDoubtsFragment
 
 class FilterTagsViewPagerAdapter(
-    homeMainScreenFragment: HomeMainScreenFragment,
-    private val tagsList: List<String>
-) :
-    FragmentStateAdapter(
-        homeMainScreenFragment
-    ) {
+    homeMainScreenFragment: HomeMainScreenFragment, private val tagsList: List<String>
+) : FragmentStateAdapter(
+    homeMainScreenFragment
+) {
 
     override fun getItemCount(): Int {
         return tagsList.size

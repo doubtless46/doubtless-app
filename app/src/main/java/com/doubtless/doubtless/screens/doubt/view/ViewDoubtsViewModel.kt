@@ -1,6 +1,5 @@
 package com.doubtless.doubtless.screens.doubt.view
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -78,10 +77,6 @@ class ViewDoubtsViewModel constructor(
                 }
             }
 
-            // for page 1 call add search entity
-//        if (_homeEntities.isEmpty())
-//            entitiesFromServer.add(0, FeedEntity.getSearchEntity())
-
             _homeEntities.addAll(entitiesFromServer)
             _fetchedHomeEntities.postValue(entitiesFromServer)
             fetchHomeFeedUseCase.notifyDistinctDocsFetched(
@@ -94,7 +89,6 @@ class ViewDoubtsViewModel constructor(
     fun refreshList(tag: String?) {
         _homeEntities.clear()
         _homeEntitiesIds.clear()
-        Log.i("tags", tag!!)
         fetchDoubts(forPageOne = true, feedTag = tag!!)
     }
 

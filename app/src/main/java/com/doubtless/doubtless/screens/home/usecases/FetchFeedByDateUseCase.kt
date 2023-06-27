@@ -26,12 +26,12 @@ class FetchFeedByDateUseCase constructor(
             try {
 
                 var query = when (request.tag) {
-                    "All" -> {
+                    FirestoreCollection.TAG_ALL -> {
                         firestore.collection(FirestoreCollection.AllDoubts)
                             .orderBy("created_on", Query.Direction.DESCENDING)
                     }
 
-                    "My College" -> {
+                    FirestoreCollection.TAG_MY_COLLEGE -> {
                         firestore.collection(FirestoreCollection.AllDoubts)
                             .whereEqualTo("author_college", request.user.local_user_attr?.college)
                             .orderBy("created_on", Query.Direction.DESCENDING)
