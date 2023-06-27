@@ -43,7 +43,7 @@ class ViewDoubtsFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val inflater = TransitionInflater.from(requireContext())
-        //enterTransition = inflater.inflateTransition(R.transition.slide)
+        // enterTransition = inflater.inflateTransition(R.transition.slide)
         // exitTransition = inflater.inflateTransition(R.transition.fade)
 
         tag = arguments?.getString("tag")!!
