@@ -136,7 +136,6 @@ class ViewDoubtsFragment : Fragment() {
             result?.let {
                 when (result) {
                     is Resource.Success -> {
-                        Log.d("prattham", "onViewCreated: -> Resource.Success ")
                         result.data?.let {
                             adapter.appendDoubts(it)
                         }
@@ -144,7 +143,6 @@ class ViewDoubtsFragment : Fragment() {
                     is Resource.Error -> {
                         when (result.error) {
                             is UserNotFoundException -> {
-                                Log.d("prattham", "onViewCreated: -> Resource.Error -> $result ")
                                 if (!isAdded) return@observe
                                 LoginUtilsImpl.logOutUser(analyticsTracker, requireActivity())
                                 result.message?.let { it1 -> showToast(it1) }
