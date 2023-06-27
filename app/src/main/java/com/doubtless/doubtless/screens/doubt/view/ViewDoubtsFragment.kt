@@ -22,6 +22,7 @@ import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.home.entities.FeedConfig
 import com.doubtless.doubtless.screens.main.MainActivity
 import com.doubtless.doubtless.utils.Resource
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.gson.Gson
@@ -144,6 +145,8 @@ class ViewDoubtsFragment : Fragment() {
                         when (result.error) {
                             is UserNotFoundException -> {
                                 if (!isAdded) return@observe
+                                FirebaseCrashlytics.getInstance()
+                                    .recordException(Exception("current user is null"))
                                 LoginUtilsImpl.logOutUser(analyticsTracker, requireActivity())
                                 result.message?.let { it1 -> showToast(it1) }
                             }
