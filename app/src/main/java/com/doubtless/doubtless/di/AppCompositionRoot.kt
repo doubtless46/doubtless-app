@@ -133,7 +133,7 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
         return PostDoubtUseCase(getServer())
     }
 
-    // ------- Common --------
+    // ------- Doubt Preview --------
 
     fun getAnswerVotingDoubtCase(answerData: AnswerData): VotingUseCase {
         return VotingUseCase(
@@ -291,6 +291,7 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
         return remoteConfig
     }
 
+    // --------- Dashboard -----------
     fun getFetchUserDataUseCase(): FetchUserDataUseCase {
         return FetchUserDataUseCase(
             FetchUserFeedByDateUseCase(FirebaseFirestore.getInstance()),
@@ -303,6 +304,8 @@ class AppCompositionRoot(appContext: DoubtlessApp) {
             FirebaseFirestore.getInstance()
         )
     }
+
+    // --------- Home Main Screen  -----------
 
     fun getFetchFilterTagsUseCase(): FetchFilterTagsUseCase {
         return FetchFilterTagsUseCase(

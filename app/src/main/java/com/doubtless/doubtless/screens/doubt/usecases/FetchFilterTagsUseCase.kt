@@ -9,6 +9,7 @@ import kotlinx.coroutines.withContext
 class FetchFilterTagsUseCase constructor(
     private val firestore: FirebaseFirestore,
 ) {
+    private var cachedTags: List<String>? = null
 
     sealed class Result {
         class Success(val data: List<String>) : Result()
@@ -17,20 +18,25 @@ class FetchFilterTagsUseCase constructor(
 
     suspend fun fetchTagsFromFirebase(): Result = withContext(Dispatchers.IO) {
         return@withContext try {
+            if (cachedTags?.isNotEmpty() == true) {
+                Result.Success(cachedTags!!)
+            } else {
+                val tags: MutableList<String> = mutableListOf()
 
-            val tags: MutableList<String> = mutableListOf()
+                val querySnapshot = firestore.collection(FirestoreCollection.MiscAppData)
+                    .whereEqualTo("type", "attr_data").get().await()
 
-            val querySnapshot = firestore.collection(FirestoreCollection.MiscAppData)
-                .whereEqualTo("type", "attr_data").get().await()
-
-            for (document in querySnapshot.documents) {
-                val tagsList = document.get("tags") as? List<String>
-                tagsList?.let {
-                    tags.addAll(it)
+                for (document in querySnapshot.documents) {
+                    val tagsList = document.get("tags") as? List<String>
+                    tagsList?.let {
+                        tags.addAll(it)
+                    }
                 }
+
+                cachedTags = tags
+                Result.Success(tags)
             }
 
-            Result.Success(tags)
         } catch (e: Exception) {
             Result.Error(e.message ?: "Failed to fetch tags")
         }

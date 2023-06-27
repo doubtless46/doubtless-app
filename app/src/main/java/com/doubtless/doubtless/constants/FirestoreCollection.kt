@@ -1,7 +1,5 @@
 package com.doubtless.doubtless.constants
 
-import com.doubtless.doubtless.BuildConfig
-
 class FirestoreCollection {
 
     companion object {
@@ -19,6 +17,9 @@ class FirestoreCollection {
 
         val UPVOTE_DATA_USERS = "upvoted_users"
         val DOWNVOTE_DATA_USERS = "downvoted_users"
+
+        const val TAG_MY_COLLEGE = "My College"
+        const val TAG_ALL = "All"
 
 
     }

@@ -42,29 +42,21 @@ class ViewDoubtsFragment : Fragment() {
         //enterTransition = inflater.inflateTransition(R.transition.slide)
         // exitTransition = inflater.inflateTransition(R.transition.fade)
 
-
-        Log.i("hello", "ViewDoubtFragment")
         tag = arguments?.getString("tag")!!
 
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
         analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
         remoteConfig = DoubtlessApp.getInstance().getAppCompRoot().getRemoteConfig()
-        feedConfig = FeedConfig.parse(Gson(), remoteConfig)
-            ?: FeedConfig(
-                pageSize = 10,
-                recentPostsCount = 6,
-                feedDebounce = 3000,
-                searchDebounce = 600
-            )
+        feedConfig = FeedConfig.parse(Gson(), remoteConfig) ?: FeedConfig(
+            pageSize = 10, recentPostsCount = 6, feedDebounce = 3000, searchDebounce = 600
+        )
 
         val _navigator = DoubtlessApp.getInstance().getAppCompRoot()
             .getHomeFragNavigator(requireActivity() as MainActivity)
 
-        if (_navigator != null)
-            navigator = _navigator
+        if (_navigator != null) navigator = _navigator
 
         viewModel = getViewModel()
-        viewModel.fetchDoubts(forPageOne = true, feedTag = tag!!)
     }
 
     override fun onCreateView(
@@ -76,6 +68,10 @@ class ViewDoubtsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (viewModel.fetchedHomeEntities.value.isNullOrEmpty()) {
+            viewModel.fetchDoubts(forPageOne = true, feedTag = tag)
+        }
 
         // for debouncing
         var lastRefreshed = System.currentTimeMillis()
@@ -96,33 +92,36 @@ class ViewDoubtsFragment : Fragment() {
             adapter.clearCurrentList()
         }
 
-        adapter = GenericFeedAdapter(
-            genericFeedEntities = viewModel.homeEntities.toMutableList(),
-            onLastItemReached = {
-                viewModel.fetchDoubts(feedTag = tag!!)
-            },
-            interactionListener = object : GenericFeedAdapter.InteractionListener {
-                override fun onSearchBarClicked() {
-                    navigator.moveToSearchFragment()
-                }
+        if (!::adapter.isInitialized) {
+            adapter =
+                GenericFeedAdapter(genericFeedEntities = viewModel.homeEntities.toMutableList(),
+                    onLastItemReached = {
+                        viewModel.fetchDoubts(feedTag = tag)
+                    },
+                    interactionListener = object : GenericFeedAdapter.InteractionListener {
+                        override fun onSearchBarClicked() {
+                            navigator.moveToSearchFragment()
+                        }
 
-                override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
-                    // note that this we are not sending a copy of doubtData here,
-                    // hence if netVotes are changed on the other screen then it will change here too.
-                    // this solves our problem but can cause complications on long term.
-                    navigator.moveToDoubtDetailFragment(doubtData)
-                }
+                        override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
+                            // note that this we are not sending a copy of doubtData here,
+                            // hence if netVotes are changed on the other screen then it will change here too.
+                            // this solves our problem but can cause complications on long term.
+                            navigator.moveToDoubtDetailFragment(doubtData)
+                        }
 
-                override fun onSignOutClicked() {
+                        override fun onSignOutClicked() {
 
-                }
+                        }
 
-                override fun onSubmitFeedbackClicked() {
-                }
+                        override fun onSubmitFeedbackClicked() {
+                        }
 
-                override fun onDeleteAccountClicked() {
-                }
-            })
+                        override fun onDeleteAccountClicked() {
+                        }
+                    })
+        }
+
 
         // how is rv restoring its scroll pos when switching tabs?
         binding.doubtsRecyclerView.adapter = adapter
@@ -144,8 +143,7 @@ class ViewDoubtsFragment : Fragment() {
 
     private fun getViewModel(): ViewDoubtsViewModel {
         return ViewModelProvider(
-            owner = this,
-            factory = ViewDoubtsViewModel.Companion.Factory(
+            owner = this, factory = ViewDoubtsViewModel.Companion.Factory(
                 fetchHomeFeedUseCase = DoubtlessApp.getInstance().getAppCompRoot()
                     .getFetchHomeFeedUseCase(feedConfig),
                 analyticsTracker = analyticsTracker,

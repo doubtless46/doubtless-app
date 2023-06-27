@@ -12,6 +12,7 @@ import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.screens.doubt.view.HomeMainScreenViewModel
 import com.doubtless.doubtless.screens.main.MainActivity
 import com.google.android.material.tabs.TabLayoutMediator
+import java.util.Locale
 
 
 class HomeMainScreenFragment : Fragment() {
@@ -38,18 +39,19 @@ class HomeMainScreenFragment : Fragment() {
         if (_navigator != null) navigator = _navigator
 
         viewModel = getViewModel()
-        viewModel.fetchTags()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.fetchTags()
+
         viewModel.tags.observe(viewLifecycleOwner) {
-            if (it != null) {
+            if (binding.viewPager.adapter == null) {
                 setupViewPager(it)
             }
         }
-        _binding!!.tvSearch.setOnClickListener {
+        binding.tvSearch.setOnClickListener {
             navigator.moveToSearchFragment()
         }
 
@@ -57,12 +59,19 @@ class HomeMainScreenFragment : Fragment() {
 
     private fun setupViewPager(tags: List<String>) {
         val pagerAdapter = FilterTagsViewPagerAdapter(this@HomeMainScreenFragment, tags)
-        _binding?.viewPager?.adapter = pagerAdapter
+        binding.viewPager.adapter = pagerAdapter
+        val capitalizedTagList = tags.map { s ->
+            s.replaceFirstChar {
+                if (it.isLowerCase()) it.uppercase(
+                    Locale.ROOT
+                ) else it.toString()
+            }
+        }.toMutableList()
+        capitalizedTagList[0] = "${user.local_user_attr!!.college!!} only"
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            val capitalizedTagList = tags.map { it.capitalize() }.toMutableList()
-            capitalizedTagList[0] = "${user.local_user_attr!!.college!!} only"
             tab.text = capitalizedTagList[position]
         }.attach()
+
     }
 
     override fun onDestroyView() {
@@ -78,4 +87,5 @@ class HomeMainScreenFragment : Fragment() {
             )
         )[HomeMainScreenViewModel::class.java]
     }
+
 }
