@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.databinding.FragmentHomeMainScreenBinding
 import com.doubtless.doubtless.navigation.FragNavigator
-import com.doubtless.doubtless.screens.doubt.view.DoubtFilterViewModel
+import com.doubtless.doubtless.screens.doubt.view.HomeMainScreenViewModel
 import com.doubtless.doubtless.screens.main.MainActivity
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -18,8 +18,8 @@ class HomeMainScreenFragment : Fragment() {
     private var _binding: FragmentHomeMainScreenBinding? = null
     private val binding get() = _binding!!
     private lateinit var navigator: FragNavigator
-    private var tags: ArrayList<String> = arrayListOf("My College", "All")
-    private lateinit var viewModel: DoubtFilterViewModel
+    private lateinit var viewModel: HomeMainScreenViewModel
+    private lateinit var user: com.doubtless.doubtless.screens.auth.User
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -30,6 +30,8 @@ class HomeMainScreenFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        user = DoubtlessApp.getInstance().getAppCompRoot().getUserManager().getCachedUserData()!!
 
         val _navigator = DoubtlessApp.getInstance().getAppCompRoot()
             .getHomeFragNavigator(requireActivity() as MainActivity)
@@ -57,7 +59,9 @@ class HomeMainScreenFragment : Fragment() {
         val pagerAdapter = FilterTagsViewPagerAdapter(this@HomeMainScreenFragment, tags)
         _binding?.viewPager?.adapter = pagerAdapter
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            tab.text = tags[position]
+            val capitalizedTagList = tags.map { it.capitalize() }.toMutableList()
+            capitalizedTagList[0] = "${user.local_user_attr!!.college!!} only"
+            tab.text = capitalizedTagList[position]
         }.attach()
     }
 
@@ -66,12 +70,12 @@ class HomeMainScreenFragment : Fragment() {
         _binding = null
     }
 
-    private fun getViewModel(): DoubtFilterViewModel {
+    private fun getViewModel(): HomeMainScreenViewModel {
         return ViewModelProvider(
-            owner = this, factory = DoubtFilterViewModel.Companion.Factory(
+            owner = this, factory = HomeMainScreenViewModel.Companion.Factory(
                 fetchFilterTagsUseCase = DoubtlessApp.getInstance().getAppCompRoot()
                     .getFetchFilterTagsUseCase()
             )
-        )[DoubtFilterViewModel::class.java]
+        )[HomeMainScreenViewModel::class.java]
     }
 }

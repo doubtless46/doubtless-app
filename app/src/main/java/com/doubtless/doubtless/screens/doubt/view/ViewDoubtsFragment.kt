@@ -18,7 +18,6 @@ import com.doubtless.doubtless.screens.common.GenericFeedAdapter
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.home.entities.FeedConfig
 import com.doubtless.doubtless.screens.main.MainActivity
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.gson.Gson
 
@@ -43,6 +42,8 @@ class ViewDoubtsFragment : Fragment() {
         //enterTransition = inflater.inflateTransition(R.transition.slide)
         // exitTransition = inflater.inflateTransition(R.transition.fade)
 
+
+        Log.i("hello", "ViewDoubtFragment")
         tag = arguments?.getString("tag")!!
 
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
