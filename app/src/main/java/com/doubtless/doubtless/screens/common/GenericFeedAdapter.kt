@@ -26,8 +26,6 @@ class GenericFeedAdapter(
         fun onSubmitFeedbackClicked()
         fun onDeleteAccountClicked()
 
-        fun onCreatePollButtonClicked()
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -84,7 +82,7 @@ class GenericFeedAdapter(
                     })
             }
 
-            FeedEntity.TYPE_CREATE_POLL -> {
+            FeedEntity.TYPE_BUTTONS -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.layout_home_buttons, parent, false)
                 return DoubtPreviewViewHolder(
