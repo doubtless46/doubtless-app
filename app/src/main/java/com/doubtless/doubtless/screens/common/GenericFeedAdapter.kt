@@ -25,6 +25,8 @@ class GenericFeedAdapter(
         fun onSignOutClicked()
         fun onSubmitFeedbackClicked()
         fun onDeleteAccountClicked()
+        fun onCreatePollClicked()
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -79,6 +81,19 @@ class GenericFeedAdapter(
                             interactionListener.onDoubtClicked(doubtData, position)
                         }
                     })
+            }
+
+            FeedEntity.TYPE_BUTTONS -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.layout_home_buttons, parent, false)
+                return ExtraOptionsButtonHolder(view= view,
+                object : ExtraOptionsButtonHolder.InteractionListener{
+                    override fun onCreatePollClicked() {
+                        interactionListener.onCreatePollClicked()
+                    }
+
+                }
+                    )
             }
         }
 

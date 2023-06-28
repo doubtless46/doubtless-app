@@ -41,7 +41,7 @@ class ViewDoubtsFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val inflater = TransitionInflater.from(requireContext())
-        //enterTransition = inflater.inflateTransition(R.transition.slide)
+        // enterTransition = inflater.inflateTransition(R.transition.slide)
         // exitTransition = inflater.inflateTransition(R.transition.fade)
 
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
@@ -121,6 +121,12 @@ class ViewDoubtsFragment : Fragment() {
 
                 override fun onDeleteAccountClicked() {
                 }
+
+                override fun onCreatePollClicked() {
+                    navigator.moveToCreatePollFragment()
+                }
+
+
             })
 
         // how is rv restoring its scroll pos when switching tabs?

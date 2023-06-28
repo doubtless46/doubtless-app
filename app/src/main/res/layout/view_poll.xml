@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+
+    <ImageView
+        android:id="@+id/tv_user_dp_poll"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="12dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_username_poll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="-2dp"
+        android:fontFamily="@font/poppins"
+        android:text="Siddharth Sharma"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        app:layout_constraintStart_toEndOf="@id/tv_user_dp_poll"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/author_doubt_timestamp2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-3dp"
+        android:fontFamily="@font/poppins"
+        android:text="2 hours ago"
+        android:textColor="@color/grey"
+        android:textSize="12dp"
+        app:layout_constraintStart_toStartOf="@id/tv_username_poll"
+        app:layout_constraintTop_toBottomOf="@id/tv_username_poll" />
+
+    <TextView
+        android:id="@+id/user_year2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:fontFamily="@font/poppins"
+        android:text="| 4th year |"
+        android:textColor="@color/grey"
+        android:textSize="12dp"
+        app:layout_constraintStart_toEndOf="@id/tv_username_poll"
+        app:layout_constraintTop_toTopOf="@id/tv_username_poll" />
+
+    <TextView
+        android:id="@+id/tv_poll_college"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:fontFamily="@font/poppins"
+        android:text="MSIT"
+        android:textColor="@color/grey"
+        android:textSize="12dp"
+        app:layout_constraintStart_toEndOf="@id/user_year2"
+        app:layout_constraintTop_toTopOf="@id/tv_username_poll" />
+
+    <TextView
+        android:id="@+id/tv_poll_heading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/poppins"
+        android:text="Some secrets of how I got 2 job offers in 4th semester!"
+        android:textColor="@color/black"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_user_dp_poll" />
+
+    <TextView
+        android:id="@+id/tv_poll_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/poppins"
+        android:text="Find a curated list of secrets of how I cracked companies like gfg &amp; rooter ->"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_poll_heading" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/poll_item_border"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_poll_description">
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:id="@+id/progress_poll"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="75"
+                android:visibility="gone"
+                android:progressTint="@color/purple" />
+
+            <TextView
+                android:id="@+id/tv_option"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:paddingStart="16dp"
+                tools:text="Option 1"
+                tools:ignore="RtlSymmetry" />
+
+        </FrameLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_tags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/poppins"
+        android:text="Related to : attendance, marks, teachers"
+        android:textColor="@color/grey"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_options" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

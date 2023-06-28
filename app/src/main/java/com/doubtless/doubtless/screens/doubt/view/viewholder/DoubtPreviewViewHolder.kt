@@ -1,13 +1,9 @@
 package com.doubtless.doubtless.screens.doubt.view.viewholder
 
-import android.content.res.ColorStateList
 import android.text.util.Linkify
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -53,8 +49,8 @@ class DoubtPreviewViewHolder(
     init {
         userName = view.findViewById(R.id.tv_username)
         time = view.findViewById(R.id.author_doubt_timestamp)
-        heading = view.findViewById(R.id.user_doubt_heading)
-        description = view.findViewById(R.id.user_doubt_description)
+        heading = view.findViewById(R.id.tv_poll_heading)
+        description = view.findViewById(R.id.tv_poll_description)
         ivDp = view.findViewById(R.id.iv_dp)
         tvNetVotes = view.findViewById(R.id.tv_votes)
         tvAnswers = view.findViewById(R.id.tv_answers)
