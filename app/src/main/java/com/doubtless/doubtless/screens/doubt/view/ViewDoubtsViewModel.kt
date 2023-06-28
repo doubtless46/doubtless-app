@@ -81,6 +81,8 @@ class ViewDoubtsViewModel constructor(
             entitiesFromServer.add(0, FeedEntity.getSearchEntity())
         if (_homeEntities.isEmpty())
             entitiesFromServer.add(1, FeedEntity.getOptionButtons())
+        if(_homeEntities.isEmpty())
+            entitiesFromServer.add(6, FeedEntity.getPollView() )
 
             _homeEntities.addAll(entitiesFromServer)
             _fetchedHomeEntities.postValue(Resource.Success(entitiesFromServer))
