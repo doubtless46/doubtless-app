@@ -44,7 +44,10 @@ class HomeMainScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.fetchTags()
+        if (viewModel.tags.value.isNullOrEmpty()) {
+            viewModel.fetchTags()
+
+        }
 
         viewModel.tags.observe(viewLifecycleOwner) {
             if (binding.viewPager.adapter == null) {
