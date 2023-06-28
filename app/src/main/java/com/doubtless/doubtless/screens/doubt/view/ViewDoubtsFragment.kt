@@ -99,9 +99,6 @@ class ViewDoubtsFragment : Fragment() {
                         viewModel.fetchDoubts(feedTag = tag)
                     },
                     interactionListener = object : GenericFeedAdapter.InteractionListener {
-                        override fun onSearchBarClicked() {
-                            navigator.moveToSearchFragment()
-                        }
 
                         override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
                             // note that this we are not sending a copy of doubtData here,
