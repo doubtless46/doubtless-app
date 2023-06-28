@@ -37,7 +37,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="12dp"
         android:layout_marginStart="12dp"
         android:fontFamily="@font/poppins"
         android:text="Question"
@@ -144,7 +144,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="12dp"
         android:layout_marginStart="12dp"
         android:fontFamily="@font/poppins"
         android:text="Options"
@@ -159,24 +159,39 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="6dp"
         android:padding="4dp"
+        android:id="@+id/ll_option"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/option_header">
+        app:layout_constraintTop_toBottomOf="@+id/option_header"
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/et_option"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/poppins"
             android:hint="Option 1"
-            android:textSize="16sp"
-            android:layout_marginTop="4dp"
             android:imeOptions="actionNext"
             android:inputType="text"
+            android:padding="4dp"
+            android:paddingStart="16dp"
             android:singleLine="true"
+            android:textSize="16sp"
             tools:ignore="Autofill,HardcodedText,LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ic_add_option"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@color/cardview_shadow_start_color"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/ic_baseline_add_24"
+        app:layout_constraintEnd_toEndOf="@+id/ll_option"
+        app:layout_constraintTop_toBottomOf="@+id/ll_option" />
 </androidx.constraintlayout.widget.ConstraintLayout>

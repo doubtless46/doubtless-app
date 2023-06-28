@@ -130,6 +130,8 @@ class ViewDoubtsFragment : Fragment() {
                 override fun onCreatePollClicked() {
                     navigator.moveToCreatePollFragment()
                 }
+
+
             })
 >>>>>>> 620bd64 (added create poll button in ViewDoubtsFragment)
 
