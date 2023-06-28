@@ -8,10 +8,8 @@ import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.dashboard.viewholder.UserProfileViewHolder
 import com.doubtless.doubtless.screens.doubt.DoubtData
-import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.screens.doubt.view.viewholder.DoubtPreviewViewHolder
 import com.doubtless.doubtless.screens.home.entities.FeedEntity
-import com.doubtless.doubtless.screens.home.viewholders.HomeSearchViewHolder
 
 class GenericFeedAdapter(
     private val genericFeedEntities: MutableList<FeedEntity>,
@@ -20,7 +18,6 @@ class GenericFeedAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface InteractionListener {
-        fun onSearchBarClicked()
         fun onDoubtClicked(doubtData: DoubtData, position: Int)
         fun onSignOutClicked()
         fun onSubmitFeedbackClicked()
@@ -36,7 +33,9 @@ class GenericFeedAdapter(
                 return UserProfileViewHolder(
                     view,
                     object : UserProfileViewHolder.InteractionListener {
-                        override fun onDeleteAccountClicked() = interactionListener.onDeleteAccountClicked()
+                        override fun onDeleteAccountClicked() =
+                            interactionListener.onDeleteAccountClicked()
+
                         override fun onSignOutClicked() = interactionListener.onSignOutClicked()
                         override fun onSubmitFeedbackClicked() =
                             interactionListener.onSubmitFeedbackClicked()
@@ -46,8 +45,7 @@ class GenericFeedAdapter(
             FeedEntity.TYPE_DOUBT -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.doubt_layout, parent, false)
-                return DoubtPreviewViewHolder(
-                    view = view,
+                return DoubtPreviewViewHolder(view = view,
                     showVotingLayout = false,
                     interactionListener = object : DoubtPreviewViewHolder.InteractionListener {
                         override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
@@ -56,23 +54,10 @@ class GenericFeedAdapter(
                     })
             }
 
-            FeedEntity.TYPE_SEARCH -> {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.layout_home_search, parent, false)
-                return HomeSearchViewHolder(
-                    view,
-                    object : HomeSearchViewHolder.InteractionListener {
-                        override fun onLayoutClicked() {
-                            interactionListener.onSearchBarClicked()
-                        }
-                    })
-            }
-
             FeedEntity.TYPE_SEARCH_RESULT -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.doubt_layout, parent, false)
-                return DoubtPreviewViewHolder(
-                    view = view,
+                return DoubtPreviewViewHolder(view = view,
                     showVotingLayout = false,
                     interactionListener = object : DoubtPreviewViewHolder.InteractionListener {
                         override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
@@ -90,11 +75,13 @@ class GenericFeedAdapter(
             userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
         )
 
-        if (holder is DoubtPreviewViewHolder && getItemViewType(position) == FeedEntity.TYPE_DOUBT)
-            holder.setData(genericFeedEntities[position].doubt!!)
+        if (holder is DoubtPreviewViewHolder && getItemViewType(position) == FeedEntity.TYPE_DOUBT) holder.setData(
+            genericFeedEntities[position].doubt!!
+        )
 
-        if (holder is DoubtPreviewViewHolder && getItemViewType(position) == FeedEntity.TYPE_SEARCH_RESULT)
-            holder.setData(genericFeedEntities[position].search_doubt!!.toDoubtData())
+        if (holder is DoubtPreviewViewHolder && getItemViewType(position) == FeedEntity.TYPE_SEARCH_RESULT) holder.setData(
+            genericFeedEntities[position].search_doubt!!.toDoubtData()
+        )
 
         if (position == itemCount - 1) {
             onLastItemReached.invoke()

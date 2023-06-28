@@ -18,6 +18,11 @@ import com.doubtless.doubtless.screens.common.GenericFeedAdapter
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.main.MainActivity
 import com.doubtless.doubtless.screens.search.usecases.FetchSearchResultsUseCase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import com.doubtless.doubtless.utils.hideSoftKeyboard
 import kotlinx.coroutines.*
 
@@ -41,9 +46,7 @@ class SearchFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater)
 
@@ -54,24 +57,20 @@ class SearchFragment : Fragment() {
         }
 
         if (!::adapter.isInitialized) {
-            adapter =
-                GenericFeedAdapter(
-                    genericFeedEntities = mutableListOf(),
-                    onLastItemReached = {},
-                    interactionListener = object : GenericFeedAdapter.InteractionListener {
-                        override fun onSearchBarClicked() {}
+            adapter = GenericFeedAdapter(genericFeedEntities = mutableListOf(),
+                onLastItemReached = {},
+                interactionListener = object : GenericFeedAdapter.InteractionListener {
+                    override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
+                        analyticsTracker.trackSearchedDoubtClicked(doubtData.copy())
+                        navigator.moveToDoubtDetailFragment(doubtData)
+                    }
 
-                        override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
-                            analyticsTracker.trackSearchedDoubtClicked(doubtData.copy())
-                            navigator.moveToDoubtDetailFragment(doubtData)
-                        }
+                    override fun onSignOutClicked() {}
 
-                        override fun onSignOutClicked() {}
+                    override fun onSubmitFeedbackClicked() {}
 
-                        override fun onSubmitFeedbackClicked() {}
-
-                        override fun onDeleteAccountClicked() {}
-                    })
+                    override fun onDeleteAccountClicked() {}
+                })
         }
 
         binding.rvSearchResults.adapter = adapter
@@ -87,7 +86,7 @@ class SearchFragment : Fragment() {
 
 
                 binding.progressSearch.visibility = View.VISIBLE
-                if (it.toString().length <= 1){
+                if (it.toString().length <= 1) {
                     delay(1000L)
                     binding.progressSearch.visibility = View.GONE
                     return@launch
@@ -109,10 +108,9 @@ class SearchFragment : Fragment() {
                     Toast.makeText(requireContext(), results.message, Toast.LENGTH_SHORT).show()
                     return@launch
                 }
-                adapter.appendDoubts((results as FetchSearchResultsUseCase.Result.Success)
-                    .searchResult.map {
-                        it.toGenericEntity()
-                    })
+                adapter.appendDoubts((results as FetchSearchResultsUseCase.Result.Success).searchResult.map {
+                    it.toGenericEntity()
+                })
                 binding.progressSearch.visibility = View.GONE
                 requireView().hideSoftKeyboard()
                 binding.etSearch.clearFocus()
@@ -132,10 +130,9 @@ class SearchFragment : Fragment() {
                     }
 
                     adapter.clearCurrentList()
-                    adapter.appendDoubts((results as FetchSearchResultsUseCase.Result.Success)
-                        .searchResult.map {
-                            it.toGenericEntity()
-                        })
+                    adapter.appendDoubts((results as FetchSearchResultsUseCase.Result.Success).searchResult.map {
+                        it.toGenericEntity()
+                    })
                 }
             }
 
