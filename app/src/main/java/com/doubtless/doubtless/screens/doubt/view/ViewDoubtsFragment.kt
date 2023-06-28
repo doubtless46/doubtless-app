@@ -125,6 +125,8 @@ class ViewDoubtsFragment : Fragment() {
                 override fun onCreatePollClicked() {
                     navigator.moveToCreatePollFragment()
                 }
+
+
             })
 
         // how is rv restoring its scroll pos when switching tabs?

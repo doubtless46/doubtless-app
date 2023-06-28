@@ -70,6 +70,7 @@ class SearchFragment : Fragment() {
                         override fun onSubmitFeedbackClicked() {}
 
                         override fun onDeleteAccountClicked() {}
+                        override fun onCreatePollClicked() {}
                     })
         }
 

@@ -102,6 +102,10 @@ class DashboardFragment : Fragment() {
                 override fun onDeleteAccountClicked() {
                     showBottomSheet()
                 }
+
+                override fun onCreatePollClicked() {
+
+                }
             })
         }
 
