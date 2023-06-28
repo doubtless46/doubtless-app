@@ -32,6 +32,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.internal.notify
 
 class DashboardFragment : Fragment() {
 
@@ -111,6 +112,10 @@ class DashboardFragment : Fragment() {
         viewModel.fetchedHomeEntities.observe(viewLifecycleOwner) {
             if (it == null) return@observe
             adapter.appendDoubts(it)
+            if (adapter.itemCount == 0)
+                binding.tvNoDoubtsFound.visibility = View.VISIBLE
+            else
+                binding.tvNoDoubtsFound.visibility = View.GONE
             Log.i("ObserveFeed", it.toTypedArray().contentToString())
             viewModel.notifyFetchedDoubtsConsumed()
         }
