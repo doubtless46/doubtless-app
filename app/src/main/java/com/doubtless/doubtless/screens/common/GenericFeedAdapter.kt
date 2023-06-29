@@ -12,6 +12,7 @@ import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.screens.doubt.view.viewholder.DoubtPreviewViewHolder
 import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import com.doubtless.doubtless.screens.home.viewholders.HomeSearchViewHolder
+import com.doubtless.doubtless.screens.poll.ViewPollViewHolder
 
 class GenericFeedAdapter(
     private val genericFeedEntities: MutableList<FeedEntity>,
@@ -26,7 +27,7 @@ class GenericFeedAdapter(
         fun onSubmitFeedbackClicked()
         fun onDeleteAccountClicked()
         fun onCreatePollClicked()
-
+        fun onPollOptionClicked(position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -95,6 +96,19 @@ class GenericFeedAdapter(
                 }
                     )
             }
+
+            FeedEntity.TYPE_POLL -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.view_poll, parent, false)
+                return ViewPollViewHolder(
+                    view = view,
+                    interactionListener = object : ViewPollViewHolder.InteractionListener {
+                        override fun onPollOptionClicked(position: Int) {
+                            interactionListener.onPollOptionClicked(position)
+                        }
+                    }
+                )
+            }
         }
 
         throw Exception("type is not defined")
@@ -110,6 +124,10 @@ class GenericFeedAdapter(
 
         if (holder is DoubtPreviewViewHolder && getItemViewType(position) == FeedEntity.TYPE_SEARCH_RESULT)
             holder.setData(genericFeedEntities[position].search_doubt!!.toDoubtData())
+
+        if (holder is ViewPollViewHolder && getItemViewType(position) == FeedEntity.TYPE_POLL)
+            holder.setData(genericFeedEntities[position])
+
 
         if (position == itemCount - 1) {
             onLastItemReached.invoke()
