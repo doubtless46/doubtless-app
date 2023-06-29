@@ -16,7 +16,7 @@ class AnalyticsTracker constructor(
 
         map["tag"] = tag
 
-        amplitude.track("tags", map)
+        amplitude.track("tag_feed_viewed", map)
     }
 
 
