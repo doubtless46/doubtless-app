@@ -76,14 +76,9 @@ class ViewDoubtsViewModel constructor(
                 }
             }
 
-            val pollOptions = listOf("Option 1", "Option 2", "Option 3")
-            // for page 1 call add search and options button entity
+            // for page 1 call add search entity
             if (_homeEntities.isEmpty())
                 entitiesFromServer.add(0, FeedEntity.getSearchEntity())
-            if (_homeEntities.isEmpty())
-                entitiesFromServer.add(1, FeedEntity.getOptionButtons())
-            if (_homeEntities.isEmpty())
-                entitiesFromServer.add(6, FeedEntity.getPollEntity(pollOptions))
 
             _homeEntities.addAll(entitiesFromServer)
             _fetchedHomeEntities.postValue(Resource.Success(entitiesFromServer))
@@ -104,8 +99,6 @@ class ViewDoubtsViewModel constructor(
             )
             isLoading = false
         }
-
-
     }
 
     fun refreshList() {
