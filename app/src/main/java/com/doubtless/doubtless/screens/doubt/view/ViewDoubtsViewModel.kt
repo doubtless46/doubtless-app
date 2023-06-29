@@ -13,6 +13,7 @@ import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase.Result
 import com.doubtless.doubtless.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.collections.set
 
 class ViewDoubtsViewModel constructor(
     private val fetchHomeFeedUseCase: FetchHomeFeedUseCase,
@@ -35,18 +36,34 @@ class ViewDoubtsViewModel constructor(
         _fetchedHomeEntities.value = Resource.Success(data = null)
     }
 
-    fun fetchDoubts(forPageOne: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
+    fun fetchDoubts(forPageOne: Boolean = false, feedTag: String) =
+        viewModelScope.launch(Dispatchers.IO) {
 
-        if (isLoading) return@launch
+            if (isLoading) return@launch
 
-        isLoading = true
+            isLoading = true
 
-        val currentUser = userManager.getCachedUserData() ?: userManager.getLoggedInUser()
-        currentUser?.let { user ->
+            val currentUser = userManager.getCachedUserData() ?: userManager.getLoggedInUser()
+
+            if (currentUser == null) {
+                // ERROR CASE
+                _fetchedHomeEntities.postValue(
+                    Resource.Error(
+                        message = DoubtlessApp.getInstance().getString(R.string.sign_in_again),
+                        data = null,
+                        error = UserNotFoundException()
+                    )
+                )
+                isLoading = false
+
+                return@launch
+            }
+
             val result = fetchHomeFeedUseCase.fetchFeedSync(
                 request = FetchHomeFeedRequest(
-                    user = user,
-                    fetchFromPage1 = forPageOne
+                    user = currentUser,
+                    fetchFromPage1 = forPageOne,
+                    tag = feedTag
                 )
             )
 
@@ -57,7 +74,7 @@ class ViewDoubtsViewModel constructor(
                 return@launch
             }
 
-            result as FetchHomeFeedUseCase.Result.Success
+            result as Result.Success
 
             if (!forPageOne) {
                 analyticsTracker.trackFeedNextPage(homeEntities.size)
@@ -76,35 +93,19 @@ class ViewDoubtsViewModel constructor(
                 }
             }
 
-            // for page 1 call add search entity
-            if (_homeEntities.isEmpty())
-                entitiesFromServer.add(0, FeedEntity.getSearchEntity())
-
             _homeEntities.addAll(entitiesFromServer)
             _fetchedHomeEntities.postValue(Resource.Success(entitiesFromServer))
             fetchHomeFeedUseCase.notifyDistinctDocsFetched(
                 docsFetched = homeEntities.size
-                        - /* subtract one for search entity, ideally should have counted Type = Doubt size */ 1
             )
-            isLoading = false
-        } ?: kotlin.run {
-            // current user is null
-            // ERROR CASE
-            _fetchedHomeEntities.postValue(
-                Resource.Error(
-                    message = DoubtlessApp.getInstance().getString(R.string.sign_in_again),
-                    data = null,
-                    error = UserNotFoundException()
-                )
-            )
+
             isLoading = false
         }
-    }
 
-    fun refreshList() {
+    fun refreshList(tag: String?) {
         _homeEntities.clear()
         _homeEntitiesIds.clear()
-        fetchDoubts(forPageOne = true)
+        fetchDoubts(forPageOne = true, feedTag = tag!!)
     }
 
     companion object {
@@ -115,7 +116,11 @@ class ViewDoubtsViewModel constructor(
         ) : ViewModelProvider.Factory {
 
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return ViewDoubtsViewModel(fetchHomeFeedUseCase, analyticsTracker, userManager) as T
+                return ViewDoubtsViewModel(
+                    fetchHomeFeedUseCase,
+                    analyticsTracker,
+                    userManager
+                ) as T
             }
         }
     }

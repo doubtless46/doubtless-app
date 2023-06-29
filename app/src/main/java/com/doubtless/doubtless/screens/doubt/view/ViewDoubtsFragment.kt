@@ -1,7 +1,6 @@
 package com.doubtless.doubtless.screens.doubt.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +22,6 @@ import com.doubtless.doubtless.screens.home.entities.FeedConfig
 import com.doubtless.doubtless.screens.main.MainActivity
 import com.doubtless.doubtless.utils.Resource
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.gson.Gson
 
@@ -39,7 +37,7 @@ class ViewDoubtsFragment : Fragment() {
     private lateinit var navigator: FragNavigator
     private lateinit var remoteConfig: FirebaseRemoteConfig
     private lateinit var feedConfig: FeedConfig
-    private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var tag: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,25 +46,21 @@ class ViewDoubtsFragment : Fragment() {
         //enterTransition = inflater.inflateTransition(R.transition.slide)
         // exitTransition = inflater.inflateTransition(R.transition.fade)
 
+        tag = arguments?.getString("tag")!!
+
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
         analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
         remoteConfig = DoubtlessApp.getInstance().getAppCompRoot().getRemoteConfig()
-        feedConfig = FeedConfig.parse(Gson(), remoteConfig)
-            ?: FeedConfig(
-                pageSize = 10,
-                recentPostsCount = 6,
-                feedDebounce = 3000,
-                searchDebounce = 600
-            )
+        feedConfig = FeedConfig.parse(Gson(), remoteConfig) ?: FeedConfig(
+            pageSize = 10, recentPostsCount = 6, feedDebounce = 3000, searchDebounce = 600
+        )
 
         val _navigator = DoubtlessApp.getInstance().getAppCompRoot()
             .getHomeFragNavigator(requireActivity() as MainActivity)
 
-        if (_navigator != null)
-            navigator = _navigator
+        if (_navigator != null) navigator = _navigator
 
         viewModel = getViewModel()
-        viewModel.fetchDoubts(forPageOne = true)
     }
 
     override fun onCreateView(
@@ -79,89 +73,91 @@ class ViewDoubtsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (viewModel.fetchedHomeEntities.value?.data.isNullOrEmpty()) {
+            viewModel.fetchDoubts(forPageOne = true, feedTag = tag)
+        }
+
         // for debouncing
         var lastRefreshed = System.currentTimeMillis()
 
-        binding.llProgressBar.visibility= View.VISIBLE //show progress bar
+        binding.llProgressBar.visibility = View.VISIBLE //show progress bar
 
         binding.layoutSwipe.setOnRefreshListener {
 
             if (System.currentTimeMillis() - lastRefreshed < feedConfig.feedDebounce) {
-                Log.d("feed debounced", feedConfig.feedDebounce.toString())
                 binding.layoutSwipe.isRefreshing = false
                 return@setOnRefreshListener
             }
 
             lastRefreshed = System.currentTimeMillis()
-
             binding.layoutSwipe.isRefreshing = true
-            viewModel.refreshList()
+            viewModel.refreshList(tag = tag)
             adapter.clearCurrentList()
         }
 
-        adapter = GenericFeedAdapter(
-            genericFeedEntities = viewModel.homeEntities.toMutableList(),
-            onLastItemReached = {
-                viewModel.fetchDoubts()
-            },
-            interactionListener = object : GenericFeedAdapter.InteractionListener {
-                override fun onSearchBarClicked() {
-                    navigator.moveToSearchFragment()
-                }
+        if (!::adapter.isInitialized) {
+            adapter =
+                GenericFeedAdapter(genericFeedEntities = viewModel.homeEntities.toMutableList(),
+                    onLastItemReached = {
+                        viewModel.fetchDoubts(feedTag = tag)
+                    },
+                    interactionListener = object : GenericFeedAdapter.InteractionListener {
 
-                override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
-                    // note that this we are not sending a copy of doubtData here,
-                    // hence if netVotes are changed on the other screen then it will change here too.
-                    // this solves our problem but can cause complications on long term.
-                    navigator.moveToDoubtDetailFragment(doubtData)
-                }
+                        override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
+                            // note that this we are not sending a copy of doubtData here,
+                            // hence if netVotes are changed on the other screen then it will change here too.
+                            // this solves our problem but can cause complications on long term.
+                            navigator.moveToDoubtDetailFragment(doubtData)
+                        }
 
-                override fun onSignOutClicked() {
+                        override fun onSignOutClicked() {
 
-                }
+                        }
 
-                override fun onSubmitFeedbackClicked() {
-                }
+                        override fun onSubmitFeedbackClicked() {
+                        }
 
-                override fun onDeleteAccountClicked() {
-                }
-            })
+                        override fun onDeleteAccountClicked() {
+                        }
+                    })
+        }
+
 
         // how is rv restoring its scroll pos when switching tabs?
         binding.doubtsRecyclerView.adapter = adapter
         binding.doubtsRecyclerView.layoutManager = LinearLayoutManager(context)
 
         viewModel.fetchedHomeEntities.observe(viewLifecycleOwner) { result ->
+
             binding.llProgressBar.visibility = View.GONE //hide progress bar
             binding.layoutSwipe.isRefreshing = false
-            result?.let {
-                when (result) {
-                    is Resource.Success -> {
-                        result.data?.let {
-                            adapter.appendDoubts(it)
-                        }
-                    }
-                    is Resource.Error -> {
-                        when (result.error) {
-                            is UserNotFoundException -> {
-                                if (!isAdded) return@observe
-                                FirebaseCrashlytics.getInstance()
-                                    .recordException(Exception("current user is null"))
-                                LoginUtilsImpl.logOutUser(analyticsTracker, requireActivity())
-                                result.message?.let { it1 -> showToast(it1) }
-                            }
-                            else -> {
-                                result.message?.let {
-                                    showToast(it)
-                                }
-                            }
-                        }
-                    }
-                    is Resource.Loading -> {
-                    }
-                }
-            }
 
+            if (result == null) return@observe
+
+            when (result) {
+
+                is Resource.Success<*> -> {
+                    if (result.data == null) return@observe
+                    adapter.appendDoubts(result.data)
+                    viewModel.notifyFetchedDoubtsConsumed()
+                }
+
+                is Resource.Error<*> -> {
+
+                    val message = result.message ?: "some error occurred!"
+
+                    if (result.error is UserNotFoundException) {
+                        FirebaseCrashlytics.getInstance()
+                            .recordException(Exception("current user is null"))
+
+                        LoginUtilsImpl.logOutUser(analyticsTracker, requireActivity())
+                    }
+
+                    showToast(message)
+                }
+
+                is Resource.Loading<*> -> {}
+            }
         }
     }
 
@@ -177,8 +173,7 @@ class ViewDoubtsFragment : Fragment() {
 
     private fun getViewModel(): ViewDoubtsViewModel {
         return ViewModelProvider(
-            owner = this,
-            factory = ViewDoubtsViewModel.Companion.Factory(
+            owner = this, factory = ViewDoubtsViewModel.Companion.Factory(
                 fetchHomeFeedUseCase = DoubtlessApp.getInstance().getAppCompRoot()
                     .getFetchHomeFeedUseCase(feedConfig),
                 analyticsTracker = analyticsTracker,

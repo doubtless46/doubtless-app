@@ -10,6 +10,16 @@ class AnalyticsTracker constructor(
     private val userManager: UserManager
 ) {
 
+    fun trackTagsFragment(tag: String) {
+        val map = hashMapOf<String, String>()
+        map.putAll(getCommonAttrs())
+
+        map["tag"] = tag
+
+        amplitude.track("tag_feed_viewed", map)
+    }
+
+
     fun trackLoginStarted() {
         val map = hashMapOf<String, String>()
         map.putAll(getCommonAttrs())
@@ -58,7 +68,7 @@ class AnalyticsTracker constructor(
 
     fun trackDoubtUpVoted(doubtData: DoubtData) {
         val map = getCommonAttrs().toMutableMap().apply {
-            this["doubt_data"] =  doubtData.toString()
+            this["doubt_data"] = doubtData.toString()
         }
 
         amplitude.track("doubt_upvote", map)
