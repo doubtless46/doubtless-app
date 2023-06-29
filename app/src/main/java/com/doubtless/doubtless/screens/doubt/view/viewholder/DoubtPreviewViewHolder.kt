@@ -107,6 +107,13 @@ class DoubtPreviewViewHolder(
 
         icFire.isVisible = doubtData.isTrending
 
+        if (doubtData.userId == DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
+                .getLoggedInUser()?.id
+        ) {
+            upvotes.isVisible = false
+            downvotes.isVisible = false
+        }
+
         val votingUseCase = DoubtlessApp.getInstance().getAppCompRoot()
             .getDoubtVotingDoubtCase(doubtData.copy())
 
