@@ -89,15 +89,6 @@ class ViewDoubtsViewModel constructor(
             val entitiesFromServer = mutableListOf<FeedEntity>()
 
             result.data.forEach { doubtData ->
-
-                // we got the data for page 2 (lets say) now check if these posts existed on page 1 and add only unique ones.
-                if (_homeEntitiesIds.contains(doubtData.id) == false) {
-                    entitiesFromServer.add(doubtData.toHomeEntity())
-                    _homeEntitiesIds[doubtData.id!!] = 1
-                }
-            }
-
-<<<<<<< HEAD
             _homeEntities.addAll(entitiesFromServer)
             _fetchedHomeEntities.postValue(Resource.Success(entitiesFromServer))
             fetchHomeFeedUseCase.notifyDistinctDocsFetched(
@@ -106,14 +97,14 @@ class ViewDoubtsViewModel constructor(
 
             isLoading = false
         }
-=======
+            val pollOptions = listOf("Option 1", "Option 2", "Option 3")
         // for page 1 call add search and options button entity
         if (_homeEntities.isEmpty())
             entitiesFromServer.add(0, FeedEntity.getSearchEntity())
         if (_homeEntities.isEmpty())
             entitiesFromServer.add(1, FeedEntity.getOptionButtons())
         if(_homeEntities.isEmpty())
-            entitiesFromServer.add(6, FeedEntity.getPollView() )
+            entitiesFromServer.add(6, FeedEntity.getPollEntity(pollOptions) )
 
         _homeEntities.addAll(entitiesFromServer)
         _fetchedHomeEntities.postValue(entitiesFromServer)
@@ -123,7 +114,6 @@ class ViewDoubtsViewModel constructor(
         )
         isLoading = false
     }
->>>>>>> 620bd64 (added create poll button in ViewDoubtsFragment)
 
     fun refreshList(tag: String?) {
         _homeEntities.clear()

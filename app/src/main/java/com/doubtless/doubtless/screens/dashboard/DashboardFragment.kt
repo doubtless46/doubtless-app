@@ -107,9 +107,9 @@ class DashboardFragment : Fragment() {
                     showBottomSheet()
                 }
 
-                override fun onCreatePollClicked() {
+                override fun onCreatePollClicked() {}
 
-                }
+                override fun onPollOptionClicked(position: Int) {}
             })
         }
 
