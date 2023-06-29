@@ -86,9 +86,11 @@ class SearchFragment : Fragment() {
 
 
                 binding.progressSearch.visibility = View.VISIBLE
+                binding.tvNoDoubtsFound.visibility = View.GONE
                 if (it.toString().length <= 1){
                     delay(1000L)
                     binding.progressSearch.visibility = View.GONE
+                    binding.tvNoDoubtsFound.visibility = View.VISIBLE
                     return@launch
                 }
 
@@ -113,6 +115,10 @@ class SearchFragment : Fragment() {
                         it.toGenericEntity()
                     })
                 binding.progressSearch.visibility = View.GONE
+                if (adapter.itemCount==0)
+                    binding.tvNoDoubtsFound.visibility = View.VISIBLE
+                else
+                    binding.tvNoDoubtsFound.visibility = View.GONE
             }
         }
 
