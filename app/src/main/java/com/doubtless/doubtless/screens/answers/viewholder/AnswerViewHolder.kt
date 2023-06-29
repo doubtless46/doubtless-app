@@ -65,7 +65,7 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
         tvYear.text = "| ${answerData.authorYear} Year |"
 
         if (answerData.authorId == DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
-                .getLoggedInUser()?.id
+                .getCachedUserData()?.id
         ) {
             upVote.isVisible = false
             downVote.isVisible = false
