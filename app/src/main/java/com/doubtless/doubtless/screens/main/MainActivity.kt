@@ -8,7 +8,7 @@ import com.doubtless.doubtless.R
 import com.doubtless.doubtless.databinding.ActivityMainBinding
 import com.doubtless.doubtless.navigation.BackPressDispatcher
 import com.doubtless.doubtless.navigation.OnBackPressListener
-import com.doubtless.doubtless.utils.shortToast
+import com.google.android.material.snackbar.Snackbar
 
 
 class MainActivity : AppCompatActivity(), BackPressDispatcher {
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity(), BackPressDispatcher {
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .add(com.doubtless.doubtless.R.id.main_container, MainFragment(), "MainFragment")
+                .add(R.id.main_container, MainFragment(), "MainFragment")
                 .commit()
         }
     }
@@ -62,7 +62,11 @@ class MainActivity : AppCompatActivity(), BackPressDispatcher {
                 doubleBackToExitPressedOnce -> super.onBackPressed()
                 else -> {
                     this.doubleBackToExitPressedOnce = true
-                    shortToast(R.string.press_again_to_exit)
+                    Snackbar.make(
+                        binding.container,
+                        R.string.press_again_to_exit,
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                     Handler(Looper.getMainLooper()).postDelayed({
                         doubleBackToExitPressedOnce = false
                     }, BACKPRESS_DELAY)
