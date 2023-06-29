@@ -27,7 +27,7 @@ class GenericFeedAdapter(
         fun onSubmitFeedbackClicked()
         fun onDeleteAccountClicked()
         fun onCreatePollClicked()
-        fun onPollOptionClicked(position: Int)
+        fun onPollOptionClicked(position: Int, option: String)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -103,8 +103,8 @@ class GenericFeedAdapter(
                 return ViewPollViewHolder(
                     view = view,
                     interactionListener = object : ViewPollViewHolder.InteractionListener {
-                        override fun onPollOptionClicked(position: Int) {
-                            interactionListener.onPollOptionClicked(position)
+                        override fun onPollOptionClicked(position: Int, option: String) {
+                            interactionListener.onPollOptionClicked(position, option)
                         }
                     }
                 )

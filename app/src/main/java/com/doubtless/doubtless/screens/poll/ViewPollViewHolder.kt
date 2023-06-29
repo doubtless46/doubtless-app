@@ -13,7 +13,7 @@ import com.doubtless.doubtless.screens.home.entities.FeedEntity
 class ViewPollViewHolder(val view: View, val interactionListener: InteractionListener):RecyclerView.ViewHolder(view) {
 
     interface InteractionListener{
-        fun onPollOptionClicked(position : Int)
+        fun onPollOptionClicked(position : Int, option: String)
     }
 
     private val userName: TextView
@@ -53,6 +53,7 @@ class ViewPollViewHolder(val view: View, val interactionListener: InteractionLis
             }
         }
     }
+
     private fun createOptionView(option: String, position: Int): View {
         val optionView = LayoutInflater.from(view.context)
             .inflate(R.layout.poll_options_layout, llOptions, false)
@@ -60,10 +61,31 @@ class ViewPollViewHolder(val view: View, val interactionListener: InteractionLis
         tvOption.text = option
 
         optionView.setOnClickListener {
-            interactionListener.onPollOptionClicked(position)
+            interactionListener.onPollOptionClicked(position, option)
+            updateProgress()
         }
 
         return optionView
+    }
+
+    private fun updateProgress() {
+        // Calculate the total number of votes for all options
+        var totalVotes = 0
+        for (i in 0 until llOptions.childCount) {
+            val optionView = llOptions.getChildAt(i) as LinearLayout
+            val voteCount = optionView.findViewById<TextView>(R.id.vote_count).text.toString().toInt()
+            totalVotes += voteCount
+        }
+
+        // Update the progress percentage for each option
+        for (i in 0 until llOptions.childCount) {
+            val optionView = llOptions.getChildAt(i) as LinearLayout
+            val progressPoll = optionView.findViewById<ProgressBar>(R.id.progress_poll)
+            val voteCount = optionView.findViewById<TextView>(R.id.vote_count).text.toString().toInt()
+
+            val progress = if (totalVotes > 0) (voteCount.toFloat() / totalVotes * 100).toInt() else 0
+            progressPoll.progress = progress
+        }
     }
 
 }
