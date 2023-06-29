@@ -88,8 +88,6 @@ class DashboardFragment : Fragment() {
             adapter = GenericFeedAdapter(genericFeedEntities = feedList, onLastItemReached = {
                 viewModel.fetchDoubts()
             }, interactionListener = object : GenericFeedAdapter.InteractionListener {
-                override fun onSearchBarClicked() {
-                }
 
 
                 override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
