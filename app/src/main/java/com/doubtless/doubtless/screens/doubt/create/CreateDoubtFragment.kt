@@ -16,11 +16,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentCreateDoubtBinding
+import com.doubtless.doubtless.navigation.FragNavigator
+import com.doubtless.doubtless.navigation.OnBackPressListener
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.PublishDoubtRequest
 import com.doubtless.doubtless.screens.doubt.usecases.DoubtDataSharedPrefUseCase
 import com.doubtless.doubtless.screens.doubt.usecases.PostDoubtUseCase
+import com.doubtless.doubtless.screens.main.MainActivity
+import com.doubtless.doubtless.screens.main.MainFragment
 import com.doubtless.doubtless.screens.onboarding.OnBoardingAttributes
 import com.doubtless.doubtless.screens.onboarding.usecases.FetchOnBoardingDataUseCase
 import com.google.android.material.chip.Chip
@@ -34,6 +38,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
+/**
+ * NOTE : right now this fragment only opens up from bottom nav so the navigation functionality is coded assuming that.
+ * change things in future if this assumption changes.
+ */
 class CreateDoubtFragment : Fragment() {
     private var _binding: FragmentCreateDoubtBinding? = null
 
@@ -44,6 +52,7 @@ class CreateDoubtFragment : Fragment() {
     private lateinit var analyticsTracker: AnalyticsTracker
     private lateinit var postDoubtUseCase: PostDoubtUseCase
     private lateinit var remoteConfig: FirebaseRemoteConfig
+    private var navigator: FragNavigator? = null
 
     private var maxHeadingCharLimit by Delegates.notNull<Int>()
     private var maxDescriptionCharLimit by Delegates.notNull<Int>()
@@ -56,17 +65,36 @@ class CreateDoubtFragment : Fragment() {
 
     private var onBoardingAttributes: OnBoardingAttributes? = null
 
+    private val onBackPressListener = object : OnBackPressListener {
+        override fun onBackPress(): Boolean {
+
+            val backPressConsumed = navigator?.onBackPress() ?: false
+
+            return if (backPressConsumed)
+                true
+            else {
+                (parentFragment as? MainFragment)?.selectHomeBottomNavElement()
+                true
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         db = Firebase.firestore
-        userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
-        analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
-        doubtDataSharedPrefUseCase =
-            DoubtlessApp.getInstance().getAppCompRoot().getDoubtDataSharedPrefUseCase()
-        onBoardingDataUseCase = DoubtlessApp.getInstance().getAppCompRoot()
-            .getFetchOnBoardingDataUseCase(userManager.getCachedUserData()!!)
-        remoteConfig = DoubtlessApp.getInstance().getAppCompRoot().getRemoteConfig()
-        postDoubtUseCase = DoubtlessApp.getInstance().getAppCompRoot().getPostDoubtUseCase()
+
+        val appComp = DoubtlessApp.getInstance().getAppCompRoot()
+
+        userManager = appComp.getUserManager()
+        analyticsTracker = appComp.getAnalyticsTracker()
+        doubtDataSharedPrefUseCase = appComp.getDoubtDataSharedPrefUseCase()
+        onBoardingDataUseCase =
+            appComp.getFetchOnBoardingDataUseCase(userManager.getCachedUserData()!!)
+        remoteConfig = appComp.getRemoteConfig()
+        postDoubtUseCase = appComp.getPostDoubtUseCase()
+        navigator = appComp.getCreateFragmentNavigator(requireActivity() as MainActivity)
+
         viewModel = ViewModelProvider(
             this,
             CreateDoubtViewModel.Companion.Factory(postDoubtUseCase)
@@ -175,13 +203,18 @@ class CreateDoubtFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as MainActivity).registerBackPress(onBackPressListener)
+    }
+
     override fun onPause() {
         super.onPause()
         doubtDataSharedPrefUseCase.saveDoubtData(
             binding.doubtHeading.text.toString(), binding.doubtDescription.text.toString()
         )
+        (requireActivity() as MainActivity).unregisterBackPress(onBackPressListener)
     }
-
 
     private fun checkText() {
         val errorMessage = isEverythingValid()
@@ -199,7 +232,6 @@ class CreateDoubtFragment : Fragment() {
         binding.postButton.alpha = 0.8f
 
         showConfirmationDialog(getSelectedTags(), keywordsEntered)
-
     }
 
     private fun isEverythingValid(): String? {

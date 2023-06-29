@@ -1,20 +1,15 @@
 package com.doubtless.doubtless.screens.main.bottomNav
 
 import android.content.Context
-import android.os.Bundle
-import android.os.Parcelable
-import android.os.Vibrator
-import android.os.VibratorManager
 import android.util.AttributeSet
 import android.view.View
-import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
-import com.doubtless.doubtless.theming.buttons.SecondaryButton
 
-class RetroBottomNav(
+class BottomNavLayout(
     context: Context,
     attributeSet: AttributeSet
-) : LinearLayout(context, attributeSet) {
+) : ConstraintLayout(context, attributeSet) {
 
     private var currentSelectedIndex: Int? = null
     private val elements: ArrayList<BottomIntractableElement> = arrayListOf()
@@ -44,11 +39,7 @@ class RetroBottomNav(
 
     private fun onNewSelectedIndex(index: Int) {
         onSelectedItemChangedListener?.onNewSelectedIndex(index)
-
         elements[index].onSelected()
-//
-//        (elements[index] as View).layoutParams =
-//            LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f)
     }
 
     private fun notifyAllUnSelectedElements() {
@@ -66,7 +57,10 @@ class RetroBottomNav(
         clickedBtn: BottomIntractableElement
     ) {
         // proceed on only new index selection.
-        if (currentSelectedIndex == idx) return
+        if (currentSelectedIndex == idx) {
+            clickedBtn.onReselected()
+            return
+        }
 
         currentSelectedIndex = idx
         onSelectedItemChangedListener?.onNewSelectedIndex(idx)

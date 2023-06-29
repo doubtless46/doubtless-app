@@ -9,4 +9,6 @@
     <color name="pink">#e090c9</color>
     <color name="orange">#fab679</color>
     <color name="purple">#A93AFF</color>
+    <color name="light_purple">#FAF4FF</color>
+    <color name="separation_grey">#99B8B8B8</color>
 </resources>

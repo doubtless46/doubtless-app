@@ -20,6 +20,7 @@ import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.view.ViewDoubtsViewModel
 import com.doubtless.doubtless.screens.main.MainActivity
+import com.doubtless.doubtless.screens.main.MainFragment
 
 class AnswersFragment : Fragment() {
 
@@ -46,8 +47,23 @@ class AnswersFragment : Fragment() {
         userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
         analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
 
-        val _navigator = DoubtlessApp.getInstance().getAppCompRoot()
-            .getHomeFragNavigator(requireActivity() as MainActivity)
+
+        var _navigator: FragNavigator? = null
+
+        // uuhh!!
+        val currentSelectedFrag =
+            (requireActivity() as MainActivity).getMainFragment()?.getCurrentSelectedElement()
+
+        // encapsulate this logic
+        if (currentSelectedFrag is MainFragment.CurrentSelectedBottomNavFrag.HomeFrag) {
+             _navigator = DoubtlessApp.getInstance().getAppCompRoot()
+                .getHomeFragNavigator(requireActivity() as MainActivity)
+        }
+
+        if (currentSelectedFrag is MainFragment.CurrentSelectedBottomNavFrag.DashboardFrag) {
+            _navigator = DoubtlessApp.getInstance().getAppCompRoot()
+                .getDashboardFragNavigator(requireActivity() as MainActivity)
+        }
 
         if (_navigator != null)
             navigator = _navigator
@@ -122,27 +138,47 @@ class AnswersFragment : Fragment() {
         }
 
         viewModel.answerDoubtEntities.observe(viewLifecycleOwner) {
-            if (it == null) return@observe
-            adapter.appendAnswer(it)
-            viewModel.notifyAnswersConsumed()
+            when (it) {
+                is AnswersViewModel.Result.Loading -> {
+                    binding.progressPostAnswer.visibility = View.VISIBLE
+                }
+
+                is AnswersViewModel.Result.Success -> {
+                    adapter.appendAnswer(it.data)
+                    viewModel.notifyAnswersConsumed()
+                    binding.progressPostAnswer.visibility = View.GONE
+                }
+
+                is AnswersViewModel.Result.Error -> {
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                    binding.progressPostAnswer.visibility = View.GONE
+                }
+            }
         }
 
         viewModel.publishAnswerStatus.observe(viewLifecycleOwner) {
-            if (it is PublishAnswerUseCase.Result.Success) {
-                binding.progressPostAnswer.visibility = View.GONE
-                Toast.makeText(requireContext(), "Successfully posted!", Toast.LENGTH_SHORT).show()
-                adapter.appendAnswerAtFirst(answerData = it.answerData)
-                // this will increase the count across screens as the same reference was passed to the arguments.
-                // Its generally not a good thing to do.t(it.answerData)
-                doubtData.no_answers += 1
-            }
+            when (it) {
+                is PublishAnswerUseCase.Result.Success -> {
 
-            if (it is PublishAnswerUseCase.Result.Error){
-                binding.progressPostAnswer.visibility = View.GONE
-                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
-            }
-            if (it is PublishAnswerUseCase.Result.Loading){
-                binding.progressPostAnswer.visibility = View.VISIBLE
+                    binding.progressPostAnswer.visibility = View.GONE
+
+                    Toast.makeText(requireContext(), "Successfully posted!", Toast.LENGTH_SHORT).show()
+
+                    adapter.appendAnswerAtFirst(answerData = it.answerData)
+
+                    // this will increase the count across screens as the same reference was passed to the arguments.
+                    // Its generally not a good thing to do.
+                    doubtData.no_answers += 1
+                }
+
+                is PublishAnswerUseCase.Result.Error -> {
+                    binding.progressPostAnswer.visibility = View.GONE
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                }
+
+                is PublishAnswerUseCase.Result.Loading -> {
+                    binding.progressPostAnswer.visibility = View.VISIBLE
+                }
             }
         }
     }

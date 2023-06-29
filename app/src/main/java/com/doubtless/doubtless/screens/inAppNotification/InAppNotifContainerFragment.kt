@@ -1,16 +1,20 @@
-package com.doubtless.doubtless.screens.dashboard
+package com.doubtless.doubtless.screens.inAppNotification
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.navigation.FragNavigator
 import com.doubtless.doubtless.navigation.OnBackPressListener
+import com.doubtless.doubtless.screens.dashboard.DashboardFragment
 import com.doubtless.doubtless.screens.main.MainActivity
 import com.doubtless.doubtless.screens.main.MainFragment
 
-class DashboardContainerFragment : Fragment(R.layout.fragment_home) {
+class InAppNotificationContainerFragment: Fragment(R.layout.fragment_home) {
 
     private lateinit var navigator: FragNavigator
 
@@ -19,12 +23,12 @@ class DashboardContainerFragment : Fragment(R.layout.fragment_home) {
 
         if (savedInstanceState == null) {
             childFragmentManager.commit {
-                replace(R.id.bottomNav_child_container, DashboardFragment())
+                replace(R.id.bottomNav_child_container, InAppNotificationFragment())
             }
         }
 
         navigator = DoubtlessApp.getInstance().getAppCompRoot()
-            .getDashboardFragNavigator(requireActivity() as MainActivity)!!
+            .getInAppFragNavigator(requireActivity() as MainActivity)!!
     }
 
     private val onBackPressListener = object : OnBackPressListener {
@@ -50,5 +54,6 @@ class DashboardContainerFragment : Fragment(R.layout.fragment_home) {
         super.onPause()
         (requireActivity() as MainActivity).unregisterBackPress(onBackPressListener)
     }
+
 
 }

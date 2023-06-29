@@ -13,6 +13,8 @@ import com.doubtless.doubtless.screens.dashboard.DashboardFragment
 import com.doubtless.doubtless.screens.doubt.create.CreateDoubtFragment
 import com.doubtless.doubtless.screens.doubt.view.ViewDoubtsFragment
 import com.doubtless.doubtless.screens.home.HomeFragment
+import com.doubtless.doubtless.screens.inAppNotification.InAppNotificationContainerFragment
+import com.doubtless.doubtless.screens.inAppNotification.InAppNotificationFragment
 
 class MainFragment : Fragment() {
 
@@ -20,7 +22,12 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val bottomNavFragments =
-        listOf(HomeFragment(), CreateDoubtFragment(), DashboardContainerFragment())
+        listOf(
+            HomeFragment(),
+            CreateDoubtFragment(),
+            InAppNotificationContainerFragment(),
+            DashboardContainerFragment()
+        )
 
     private var areBottomNavFragmentsAdded = false
 
@@ -76,8 +83,33 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    fun selectHomeBottomNavElement() {
+        if (!binding.btmNavHome.isChecked) {
+            binding.btmNavHome.callOnClick()
+        }
+    }
+
+    sealed class CurrentSelectedBottomNavFrag {
+        object HomeFrag : CurrentSelectedBottomNavFrag()
+        object CreateFrag : CurrentSelectedBottomNavFrag()
+        object InAppNotificationFrag : CurrentSelectedBottomNavFrag()
+        object DashboardFrag : CurrentSelectedBottomNavFrag()
+        object UnknownFrag : CurrentSelectedBottomNavFrag()
+    }
+
+    fun getCurrentSelectedElement(): CurrentSelectedBottomNavFrag {
+
+        val index = binding.retroBottomNav.getCurrentSelectedIndex()
+
+        return when (index) {
+            0 -> CurrentSelectedBottomNavFrag.HomeFrag
+            1 -> CurrentSelectedBottomNavFrag.CreateFrag
+            2 -> CurrentSelectedBottomNavFrag.InAppNotificationFrag
+            3 -> CurrentSelectedBottomNavFrag.DashboardFrag
+            else -> {
+                CurrentSelectedBottomNavFrag.UnknownFrag
+            }
+        }
     }
 
     override fun onDestroyView() {

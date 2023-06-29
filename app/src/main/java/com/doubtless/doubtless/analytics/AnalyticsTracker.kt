@@ -86,7 +86,9 @@ class AnalyticsTracker constructor(
         map["app_version_code"] = BuildConfig.VERSION_CODE.toString()
 
         val user = userManager.getCachedUserData() ?: return map
+
         map["user_id"] = user.id.toString()
+        map["user_email"] = user.email.toString()
 
         if (user.local_user_attr?.tags != null)
             map["user_tags"] = user.local_user_attr.tags.toString()
