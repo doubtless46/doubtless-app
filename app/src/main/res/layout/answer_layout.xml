@@ -106,6 +106,7 @@
             android:layout_height="24dp"
             android:background="@drawable/upvote_icon"
             android:backgroundTint="@color/grey"
+            android:layout_marginTop="12dp"
             android:padding="6dp"
             android:button="@null"
             android:checked="false"
