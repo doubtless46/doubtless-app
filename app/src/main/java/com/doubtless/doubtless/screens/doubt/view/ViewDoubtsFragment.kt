@@ -75,8 +75,6 @@ class ViewDoubtsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (viewModel.fetchedHomeEntities.value?.data.isNullOrEmpty()) {
-
-            Toast.makeText(requireContext(), tag, Toast.LENGTH_SHORT).show()
             viewModel.fetchDoubts(forPageOne = true, feedTag = tag)
         }
 
