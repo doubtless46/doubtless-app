@@ -136,7 +136,8 @@
             android:textColor="@color/grey"
             android:textSize="12dp"
             app:layout_constraintStart_toStartOf="@id/iv_votes"
-            app:layout_constraintTop_toBottomOf="@id/iv_votes" />
+            app:layout_constraintTop_toBottomOf="@id/iv_votes"
+            tools:text="Related to : attendance, marks, teachers" />
 
         <TextView
             android:id="@+id/iv_votes"
@@ -182,28 +183,33 @@
             app:layout_constraintStart_toEndOf="@id/iv_answers"
             app:layout_constraintTop_toTopOf="@id/iv_answers" />
 
-        <ImageView
-            android:id="@+id/iv_upvotes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <CheckBox
+            android:id="@+id/cb_upvotes"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/upvote_icon"
+            android:backgroundTint="@color/grey"
             android:layout_marginTop="8dp"
             android:padding="6dp"
-            android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
+            android:button="@null"
+            android:checked="false"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_tags"
-            app:tint="@color/grey" />
+            />
 
-        <ImageView
-            android:id="@+id/iv_downvote"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <CheckBox
+            android:id="@+id/cb_downvote"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/upvote_icon"
             android:layout_marginStart="16dp"
             android:padding="6dp"
             android:rotation="180"
-            android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
-            app:layout_constraintStart_toEndOf="@id/iv_upvotes"
-            app:layout_constraintTop_toTopOf="@id/iv_upvotes"
-            app:tint="@color/grey" />
+            android:backgroundTint="@color/grey"
+            android:button="@null"
+            android:checked="false"
+            app:layout_constraintStart_toEndOf="@id/cb_upvotes"
+            app:layout_constraintTop_toTopOf="@id/cb_upvotes" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

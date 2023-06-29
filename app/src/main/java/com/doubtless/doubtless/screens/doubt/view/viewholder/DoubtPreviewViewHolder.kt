@@ -1,13 +1,10 @@
 package com.doubtless.doubtless.screens.doubt.view.viewholder
 
-import android.content.res.ColorStateList
 import android.text.util.Linkify
-import android.util.Log
 import android.view.View
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -17,6 +14,7 @@ import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.utils.Utils
 import com.doubtless.doubtless.utils.Utils.flatten
+import com.doubtless.doubtless.utils.addStateListAnimation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,8 +38,8 @@ class DoubtPreviewViewHolder(
     private val description: TextView
     private val ivDp: ImageView
     private val tvNetVotes: TextView
-    private val ivUpvotes: ImageView
-    private val ivDownvotes: ImageView
+    private val upvotes: CheckBox
+    private val downvotes: CheckBox
     private val tvAnswers: TextView
     private val tvTags: TextView
     private val tvCollege: TextView
@@ -60,11 +58,11 @@ class DoubtPreviewViewHolder(
         tvAnswers = view.findViewById(R.id.tv_answers)
         tvTags = view.findViewById(R.id.tv_tags)
         tvCollege = view.findViewById(R.id.user_college)
-        ivUpvotes = view.findViewById(R.id.iv_upvotes)
-        ivDownvotes = view.findViewById(R.id.iv_downvote)
+        upvotes = view.findViewById(R.id.cb_upvotes)
+        downvotes = view.findViewById(R.id.cb_downvote)
 
-        ivUpvotes.isVisible = showVotingLayout
-        ivDownvotes.isVisible = showVotingLayout
+        upvotes.isVisible = showVotingLayout
+        downvotes.isVisible = showVotingLayout
     }
 
     fun setData(doubtData: DoubtData) {
@@ -114,8 +112,11 @@ class DoubtPreviewViewHolder(
 
         setVotesUi(doubtData, votingUseCase)
 
-        ivUpvotes.setOnClickListener {
+
+        upvotes.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
+                if (it.stateListAnimator == null)
+                    it.addStateListAnimation(R.animator.scale_votes_icon)
 
                 val result = votingUseCase.upvoteDoubt()
 
@@ -130,8 +131,10 @@ class DoubtPreviewViewHolder(
             }
         }
 
-        ivDownvotes.setOnClickListener {
+        downvotes.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
+                if (it.stateListAnimator == null)
+                    it.addStateListAnimation(R.animator.scale_votes_icon)
 
                 val result = votingUseCase.downVoteDoubt()
 
@@ -148,23 +151,22 @@ class DoubtPreviewViewHolder(
     }
 
     private fun setVotesUi(doubtData: DoubtData, votingUseCase: VotingUseCase) {
-        ivDownvotes.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_baseline_thumb_up_off_alt_24))
-
-        ivUpvotes.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_baseline_thumb_up_off_alt_24))
-        // ivUpvotes.setColorFilter(ContextCompat.getColor(itemView.context, R.color.grey), android.graphics.PorterDuff.Mode.SRC_IN);
-
         tvNetVotes.text = floor(doubtData.netVotes).toInt().toString()
-
         CoroutineScope(Dispatchers.Main).launch {
-            val currentState = votingUseCase.getUserCurrentState()
-
-            if (currentState == VotingUseCase.UPVOTED) {
-                ivUpvotes.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_baseline_thumb_up_filled))
-        //      ivUpvotes.setColorFilter(ContextCompat.getColor(itemView.context, R.color.purple), android.graphics.PorterDuff.Mode.SRC_IN);
+            when (votingUseCase.getUserCurrentState()) {
+                VotingUseCase.UPVOTED -> {
+                    downvotes.isClickable = false
+                    upvotes.isChecked = true
+                }
+                VotingUseCase.DOWNVOTED -> {
+                    upvotes.isClickable = false
+                    downvotes.isChecked = true
+                }
+                else -> {
+                    downvotes.isClickable = true
+                    upvotes.isClickable = true
+                }
             }
-
-            if (currentState == VotingUseCase.DOWNVOTED)
-                ivDownvotes.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_baseline_thumb_up_filled))
         }
     }
 }
