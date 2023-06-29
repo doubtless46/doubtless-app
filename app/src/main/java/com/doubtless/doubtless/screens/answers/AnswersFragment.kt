@@ -120,7 +120,7 @@ class AnswersFragment : Fragment() {
                                 authorPhotoUrl = userManager.getCachedUserData()!!.photoUrl,
                                 authorCollege = userManager.getCachedUserData()!!.local_user_attr!!.college,
                                 authorYear = userManager.getCachedUserData()!!.local_user_attr!!.year,
-                                description = publishAnswerDTO.description
+                                description = publishAnswerDTO.description,
                             )
                         )
                     }

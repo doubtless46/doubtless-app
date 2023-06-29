@@ -53,12 +53,12 @@
             android:id="@+id/user_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="2dp"
             android:fontFamily="@font/poppins"
             android:text="| 1st year |"
             android:textColor="@color/grey"
             android:textSize="12dp"
-            app:layout_constraintStart_toEndOf="@id/tv_author_name"
+            app:layout_constraintStart_toEndOf="@+id/user_badge"
             app:layout_constraintTop_toTopOf="@id/tv_author_name" />
 
         <TextView
@@ -71,6 +71,18 @@
             android:textSize="12dp"
             app:layout_constraintStart_toEndOf="@id/user_year"
             app:layout_constraintTop_toTopOf="@id/user_year" />
+
+        <ImageView
+            android:id="@+id/user_badge"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:src="@drawable/ic_verified"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_author_name"
+            app:layout_constraintStart_toEndOf="@+id/tv_author_name"
+            app:layout_constraintTop_toTopOf="@+id/tv_author_name"
+            app:tint="@color/purple" />
 
         <TextView
             android:id="@+id/author_doubt_timestamp_2"
@@ -104,12 +116,12 @@
             android:id="@+id/cb_upvote"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/upvote_icon"
             android:backgroundTint="@color/grey"
-            android:layout_marginTop="12dp"
-            android:padding="6dp"
             android:button="@null"
             android:checked="false"
+            android:padding="6dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/author_answer_description_2" />
 
@@ -131,11 +143,11 @@
             android:id="@+id/cb_downvote"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_marginStart="6dp"
             android:background="@drawable/upvote_icon"
             android:backgroundTint="@color/grey"
             android:button="@null"
             android:checked="false"
-            android:layout_marginStart="6dp"
             android:padding="6dp"
             android:rotation="180"
             app:layout_constraintStart_toEndOf="@id/tv_votes"

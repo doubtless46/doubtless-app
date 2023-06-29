@@ -67,12 +67,12 @@
             android:id="@+id/user_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="2dp"
             android:fontFamily="@font/poppins"
             android:text="| 4th year |"
             android:textColor="@color/grey"
             android:textSize="12dp"
-            app:layout_constraintStart_toEndOf="@id/tv_username"
+            app:layout_constraintStart_toEndOf="@+id/user_badge"
             app:layout_constraintTop_toTopOf="@id/tv_username" />
 
         <TextView
@@ -89,13 +89,14 @@
             app:layout_constraintTop_toTopOf="@id/tv_username" />
 
         <ImageView
-            android:id="@+id/ic_fire"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_fire_24"
+            android:id="@+id/user_badge"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:src="@drawable/ic_verified"
             android:visibility="invisible"
-            app:layout_constraintStart_toEndOf="@id/user_college"
+            app:layout_constraintBottom_toTopOf="@+id/author_doubt_timestamp"
+            app:layout_constraintStart_toEndOf="@+id/tv_username"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/purple" />
 
@@ -187,27 +188,26 @@
             android:id="@+id/cb_upvotes"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/upvote_icon"
             android:backgroundTint="@color/grey"
-            android:layout_marginTop="8dp"
-            android:padding="6dp"
             android:button="@null"
             android:checked="false"
+            android:padding="6dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_tags"
-            />
+            app:layout_constraintTop_toBottomOf="@id/tv_tags" />
 
         <CheckBox
             android:id="@+id/cb_downvote"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:background="@drawable/upvote_icon"
             android:layout_marginStart="16dp"
-            android:padding="6dp"
-            android:rotation="180"
+            android:background="@drawable/upvote_icon"
             android:backgroundTint="@color/grey"
             android:button="@null"
             android:checked="false"
+            android:padding="6dp"
+            android:rotation="180"
             app:layout_constraintStart_toEndOf="@id/cb_upvotes"
             app:layout_constraintTop_toTopOf="@id/cb_upvotes" />
 

@@ -64,8 +64,12 @@ data class DoubtData(
     @SerializedName("is_trending")
     @get:PropertyName("is_trending")
     @set:PropertyName("is_trending")
-    var isTrending: Boolean = false
-): Parcelable {
+    var isTrending: Boolean = false,
+    @SerializedName("xp_count")
+    @get:PropertyName("xp_count")
+    @set:PropertyName("xp_count")
+    var xpCount: Long = 0
+) : Parcelable {
     companion object {
         fun parse(documentSnapshot: DocumentSnapshot?): DoubtData? {
             return try {
@@ -101,5 +105,7 @@ data class PublishDoubtRequest(
     @SerializedName("tags")
     var tags: List<String>? = null,
     @SerializedName("keywords")
-    var keywords: List<String>? = null
+    var keywords: List<String>? = null,
+    @SerializedName("xp_count")
+    var xpCount: Long? = 0
 )
