@@ -18,6 +18,7 @@ import com.doubtless.doubtless.screens.common.GenericFeedAdapter
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.main.MainActivity
 import com.doubtless.doubtless.screens.search.usecases.FetchSearchResultsUseCase
+import com.doubtless.doubtless.utils.hideSoftKeyboard
 import kotlinx.coroutines.*
 
 class SearchFragment : Fragment() {
@@ -115,6 +116,8 @@ class SearchFragment : Fragment() {
                         it.toGenericEntity()
                     })
                 binding.progressSearch.visibility = View.GONE
+                requireView().hideSoftKeyboard()
+                binding.etSearch.clearFocus()
             }
         }
 
