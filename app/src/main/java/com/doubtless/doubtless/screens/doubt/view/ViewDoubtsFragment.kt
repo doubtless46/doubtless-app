@@ -137,8 +137,6 @@ class ViewDoubtsFragment : Fragment() {
             result?.let {
                 when (result) {
                     is Resource.Success<*> -> {
-                        Log.i("Results", "result.toString()")
-
                         result.data?.let {
                             adapter.appendDoubts(it)
 
@@ -164,8 +162,6 @@ class ViewDoubtsFragment : Fragment() {
                     }
 
                     is Resource.Loading<*> -> {
-                        Log.i("Results", "result.toString()")
-
                     }
                 }
             }

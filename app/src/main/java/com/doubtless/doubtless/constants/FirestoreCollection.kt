@@ -1,7 +1,5 @@
 package com.doubtless.doubtless.constants
 
-import com.doubtless.doubtless.BuildConfig
-
 class FirestoreCollection {
 
     companion object {

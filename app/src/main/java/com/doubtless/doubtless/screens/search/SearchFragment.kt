@@ -18,12 +18,12 @@ import com.doubtless.doubtless.screens.common.GenericFeedAdapter
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.main.MainActivity
 import com.doubtless.doubtless.screens.search.usecases.FetchSearchResultsUseCase
+import com.doubtless.doubtless.utils.hideSoftKeyboard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import com.doubtless.doubtless.utils.hideSoftKeyboard
 
 class SearchFragment : Fragment() {
 
