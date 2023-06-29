@@ -86,7 +86,6 @@ class ViewDoubtsFragment : Fragment() {
         binding.layoutSwipe.setOnRefreshListener {
 
             if (System.currentTimeMillis() - lastRefreshed < feedConfig.feedDebounce) {
-                Log.d("feed debounced", feedConfig.feedDebounce.toString())
                 binding.layoutSwipe.isRefreshing = false
                 return@setOnRefreshListener
             }
@@ -130,40 +129,36 @@ class ViewDoubtsFragment : Fragment() {
         binding.doubtsRecyclerView.layoutManager = LinearLayoutManager(context)
 
         viewModel.fetchedHomeEntities.observe(viewLifecycleOwner) { result ->
+
             binding.llProgressBar.visibility = View.GONE //hide progress bar
             binding.layoutSwipe.isRefreshing = false
-            result?.let {
-                when (result) {
-                    is Resource.Success<*> -> {
-                        result.data?.let {
-                            adapter.appendDoubts(it)
 
-                        }
-                    }
+            if (result == null) return@observe
 
-                    is Resource.Error<*> -> {
-                        when (result.error) {
-                            is UserNotFoundException -> {
-                                if (!isAdded) return@observe
-                                FirebaseCrashlytics.getInstance()
-                                    .recordException(Exception("current user is null"))
-                                LoginUtilsImpl.logOutUser(analyticsTracker, requireActivity())
-                                result.message?.let { it1 -> showToast(it1) }
-                            }
+            when (result) {
 
-                            else -> {
-                                result.message?.let {
-                                    showToast(it)
-                                }
-                            }
-                        }
-                    }
-
-                    is Resource.Loading<*> -> {
-                    }
+                is Resource.Success<*> -> {
+                    if (result.data == null) return@observe
+                    adapter.appendDoubts(result.data)
+                    viewModel.notifyFetchedDoubtsConsumed()
                 }
-            }
 
+                is Resource.Error<*> -> {
+
+                    val message = result.message ?: "some error occurred!"
+
+                    if (result.error is UserNotFoundException) {
+                        FirebaseCrashlytics.getInstance()
+                            .recordException(Exception("current user is null"))
+
+                        LoginUtilsImpl.logOutUser(analyticsTracker, requireActivity())
+                    }
+
+                    showToast(message)
+                }
+
+                is Resource.Loading<*> -> {}
+            }
         }
     }
 

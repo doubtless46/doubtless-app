@@ -48,50 +48,8 @@ class ViewDoubtsViewModel constructor(
             isLoading = true
 
             val currentUser = userManager.getCachedUserData() ?: userManager.getLoggedInUser()
-            currentUser?.let { user ->
-                val result = fetchHomeFeedUseCase.fetchFeedSync(
-                    request = FetchHomeFeedRequest(
-                        user = user,
-                        fetchFromPage1 = forPageOne,
-                        tag = feedTag
-                    )
-                )
 
-                if (result is Result.ListEnded || result is Result.Error) {
-                    // ERROR CASE
-                    _fetchedHomeEntities.postValue(Resource.Error())
-                    isLoading = false
-                    return@launch
-                }
-
-                result as Result.Success
-
-                if (!forPageOne) {
-                    analyticsTracker.trackFeedNextPage(homeEntities.size)
-                } else {
-                    analyticsTracker.trackFeedRefresh()
-                }
-
-                val entitiesFromServer = mutableListOf<FeedEntity>()
-
-                result.data.forEach { doubtData ->
-
-                    // we got the data for page 2 (lets say) now check if these posts existed on page 1 and add only unique ones.
-                    if (_homeEntitiesIds.contains(doubtData.id) == false) {
-                        entitiesFromServer.add(doubtData.toHomeEntity())
-                        _homeEntitiesIds[doubtData.id!!] = 1
-                    }
-                }
-
-                _homeEntities.addAll(entitiesFromServer)
-                _fetchedHomeEntities.postValue(Resource.Success(entitiesFromServer))
-                fetchHomeFeedUseCase.notifyDistinctDocsFetched(
-                    docsFetched = homeEntities.size
-                            - /* subtract one for search entity, ideally should have counted Type = Doubt size */ 1
-                )
-                isLoading = false
-            } ?: kotlin.run {
-                // current user is null
+            if (currentUser == null) {
                 // ERROR CASE
                 _fetchedHomeEntities.postValue(
                     Resource.Error(
@@ -101,7 +59,51 @@ class ViewDoubtsViewModel constructor(
                     )
                 )
                 isLoading = false
+
+                return@launch
             }
+
+            val result = fetchHomeFeedUseCase.fetchFeedSync(
+                request = FetchHomeFeedRequest(
+                    user = currentUser,
+                    fetchFromPage1 = forPageOne,
+                    tag = feedTag
+                )
+            )
+
+            if (result is Result.ListEnded || result is Result.Error) {
+                // ERROR CASE
+                _fetchedHomeEntities.postValue(Resource.Error())
+                isLoading = false
+                return@launch
+            }
+
+            result as Result.Success
+
+            if (!forPageOne) {
+                analyticsTracker.trackFeedNextPage(homeEntities.size)
+            } else {
+                analyticsTracker.trackFeedRefresh()
+            }
+
+            val entitiesFromServer = mutableListOf<FeedEntity>()
+
+            result.data.forEach { doubtData ->
+
+                // we got the data for page 2 (lets say) now check if these posts existed on page 1 and add only unique ones.
+                if (_homeEntitiesIds.contains(doubtData.id) == false) {
+                    entitiesFromServer.add(doubtData.toHomeEntity())
+                    _homeEntitiesIds[doubtData.id!!] = 1
+                }
+            }
+
+            _homeEntities.addAll(entitiesFromServer)
+            _fetchedHomeEntities.postValue(Resource.Success(entitiesFromServer))
+            fetchHomeFeedUseCase.notifyDistinctDocsFetched(
+                docsFetched = homeEntities.size
+            )
+
+            isLoading = false
         }
 
     fun refreshList(tag: String?) {
