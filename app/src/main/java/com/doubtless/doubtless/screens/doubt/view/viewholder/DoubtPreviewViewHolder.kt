@@ -90,7 +90,11 @@ class DoubtPreviewViewHolder(
 
         tvNetVotes.text = kotlin.math.floor(doubtData.netVotes).toInt().toString()
 
-        tvYear.text = "| ${doubtData.year} Year |"
+        if (doubtData.year.equals("passout", ignoreCase = true)) {
+            tvYear.text = "| ${doubtData.year} |"
+        } else {
+            tvYear.text = "| ${doubtData.year} Year |"
+        }
 
         description.text = doubtData.description?.trim()
         description.isVisible = !doubtData.description.isNullOrEmpty()
