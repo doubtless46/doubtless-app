@@ -24,7 +24,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.doubtless.doubtless.utils.hideSoftKeyboard
-import kotlinx.coroutines.*
 
 class SearchFragment : Fragment() {
 

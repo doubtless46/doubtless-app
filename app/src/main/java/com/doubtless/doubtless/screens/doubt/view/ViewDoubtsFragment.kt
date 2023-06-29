@@ -20,7 +20,6 @@ import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.common.GenericFeedAdapter
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.home.entities.FeedConfig
-import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import com.doubtless.doubtless.screens.main.MainActivity
 import com.doubtless.doubtless.utils.Resource
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -75,7 +74,9 @@ class ViewDoubtsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (viewModel.fetchedHomeEntities.value.isNullOrEmpty()) {
+        if (viewModel.fetchedHomeEntities.value?.data.isNullOrEmpty()) {
+
+            Toast.makeText(requireContext(), tag, Toast.LENGTH_SHORT).show()
             viewModel.fetchDoubts(forPageOne = true, feedTag = tag)
         }
 
@@ -136,10 +137,14 @@ class ViewDoubtsFragment : Fragment() {
             result?.let {
                 when (result) {
                     is Resource.Success<*> -> {
+                        Log.i("Results", "result.toString()")
+
                         result.data?.let {
-                            adapter.appendDoubts(it as List<FeedEntity>)
+                            adapter.appendDoubts(it)
+
                         }
                     }
+
                     is Resource.Error<*> -> {
                         when (result.error) {
                             is UserNotFoundException -> {
@@ -149,6 +154,7 @@ class ViewDoubtsFragment : Fragment() {
                                 LoginUtilsImpl.logOutUser(analyticsTracker, requireActivity())
                                 result.message?.let { it1 -> showToast(it1) }
                             }
+
                             else -> {
                                 result.message?.let {
                                     showToast(it)
@@ -156,7 +162,10 @@ class ViewDoubtsFragment : Fragment() {
                             }
                         }
                     }
+
                     is Resource.Loading<*> -> {
+                        Log.i("Results", "result.toString()")
+
                     }
                 }
             }
