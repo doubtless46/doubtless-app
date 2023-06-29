@@ -1,6 +1,7 @@
 package com.doubtless.doubtless.screens.answers.viewholder
 
 import android.view.View
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -11,11 +12,11 @@ import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.answers.AnswerData
 import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.utils.Utils
+import com.doubtless.doubtless.utils.addStateListAnimation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Date
-import kotlin.math.ceil
+import java.util.*
 import kotlin.math.floor
 
 
@@ -32,8 +33,8 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
     private val ivDp: ImageView
     private val tvYear: TextView
     private val tvVotes: TextView
-    private val ivUpVote: ImageView
-    private val ivDownVote: ImageView
+    private val upVote: CheckBox
+    private val downVote: CheckBox
 
     init {
         authorName = itemView.findViewById(R.id.tv_author_name)
@@ -42,8 +43,8 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
         ivDp = itemView.findViewById(R.id.iv_dp_author)
         tvYear = itemView.findViewById(R.id.user_year)
         tvVotes = itemView.findViewById(R.id.tv_votes)
-        ivUpVote = itemView.findViewById(R.id.iv_votes)
-        ivDownVote = itemView.findViewById(R.id.iv_downvote)
+        upVote = itemView.findViewById(R.id.cb_upvote)
+        downVote = itemView.findViewById(R.id.cb_downvote)
     }
 
     fun setData(answerData: AnswerData) {
@@ -66,8 +67,10 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
         val votingUseCase = DoubtlessApp.getInstance().getAppCompRoot().getAnswerVotingDoubtCase(answerData.copy())
         setVotesUi(answerData, votingUseCase)
 
-        ivUpVote.setOnClickListener {
+        upVote.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
+                if (it.stateListAnimator == null)
+                    it.addStateListAnimation(R.animator.scale_votes_icon)
 
                 val result = votingUseCase.upvoteDoubt()
 
@@ -81,8 +84,10 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
             }
         }
 
-        ivDownVote.setOnClickListener {
+        downVote.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
+                if (it.stateListAnimator == null)
+                    it.addStateListAnimation(R.animator.scale_votes_icon)
 
                 val result = votingUseCase.downVoteDoubt()
 
@@ -102,19 +107,22 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
     }
 
     private fun setVotesUi(answerData: AnswerData, votingUseCase: VotingUseCase) {
-        ivDownVote.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_baseline_thumb_up_off_alt_24))
-        ivUpVote.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_baseline_thumb_up_off_alt_24))
         tvVotes.text = floor(answerData.netVotes).toInt().toString()
-
         CoroutineScope(Dispatchers.Main).launch {
-            val currentState = votingUseCase.getUserCurrentState()
-
-            if (currentState == VotingUseCase.UPVOTED)
-                ivUpVote.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_baseline_thumb_up_filled))
-
-            if (currentState == VotingUseCase.DOWNVOTED)
-                ivDownVote.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_baseline_thumb_up_filled))
+            when (votingUseCase.getUserCurrentState()) {
+                VotingUseCase.UPVOTED -> {
+                    downVote.isClickable = false
+                    upVote.isChecked = true
+                }
+                VotingUseCase.DOWNVOTED -> {
+                    upVote.isClickable = false
+                    downVote.isChecked = true
+                }
+                else -> {
+                    downVote.isClickable = true
+                    upVote.isClickable = true
+                }
+            }
         }
     }
-
 }

@@ -100,15 +100,17 @@
             app:layout_constraintStart_toStartOf="@+id/tv_author_name"
             app:layout_constraintTop_toBottomOf="@+id/iv_dp_author" />
 
-        <ImageView
-            android:id="@+id/iv_votes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <CheckBox
+            android:id="@+id/cb_upvote"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/upvote_icon"
+            android:backgroundTint="@color/grey"
             android:padding="6dp"
-            android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
+            android:button="@null"
+            android:checked="false"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/author_answer_description_2"
-            app:tint="@color/grey" />
+            app:layout_constraintTop_toBottomOf="@id/author_answer_description_2" />
 
         <TextView
             android:id="@+id/tv_votes"
@@ -120,20 +122,23 @@
             android:text="211"
             android:textColor="@color/grey"
             android:textSize="14dp"
-            app:layout_constraintBottom_toBottomOf="@id/iv_votes"
-            app:layout_constraintStart_toEndOf="@id/iv_votes"
-            app:layout_constraintTop_toTopOf="@id/iv_votes" />
+            app:layout_constraintBottom_toBottomOf="@id/cb_upvote"
+            app:layout_constraintStart_toEndOf="@id/cb_upvote"
+            app:layout_constraintTop_toTopOf="@id/cb_upvote" />
 
-        <ImageView
-            android:id="@+id/iv_downvote"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <CheckBox
+            android:id="@+id/cb_downvote"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/upvote_icon"
+            android:backgroundTint="@color/grey"
+            android:button="@null"
+            android:checked="false"
             android:layout_marginStart="6dp"
             android:padding="6dp"
             android:rotation="180"
-            android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
             app:layout_constraintStart_toEndOf="@id/tv_votes"
-            app:layout_constraintTop_toTopOf="@id/iv_votes"
+            app:layout_constraintTop_toTopOf="@id/cb_upvote"
             app:tint="@color/grey" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
