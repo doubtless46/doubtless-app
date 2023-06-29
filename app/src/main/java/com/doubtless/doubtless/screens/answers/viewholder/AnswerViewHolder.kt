@@ -35,6 +35,7 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
     private val tvVotes: TextView
     private val upVote: CheckBox
     private val downVote: CheckBox
+    private val tvCollege: TextView
 
     init {
         authorName = itemView.findViewById(R.id.tv_author_name)
@@ -45,6 +46,7 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
         tvVotes = itemView.findViewById(R.id.tv_votes)
         upVote = itemView.findViewById(R.id.cb_upvote)
         downVote = itemView.findViewById(R.id.cb_downvote)
+        tvCollege = itemView.findViewById(R.id.tv_college)
     }
 
     fun setData(answerData: AnswerData, answerVotingUseCase: VotingUseCase) {
@@ -62,8 +64,14 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
         }
 
         description.text = answerData.description
-        tvYear.text = "| ${answerData.authorYear} Year |"
 
+        if (answerData.authorYear.equals("passout", ignoreCase = true)) {
+            tvYear.text = "| ${answerData.authorYear} |"
+        } else {
+            tvYear.text = "| ${answerData.authorYear} Year |"
+        }
+
+        tvCollege.text = answerData.authorCollege
         setVotesUi(answerData, answerVotingUseCase)
 
         upVote.setOnClickListener {
@@ -107,16 +115,21 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
 
     private fun setVotesUi(answerData: AnswerData, votingUseCase: VotingUseCase) {
         tvVotes.text = floor(answerData.netVotes).toInt().toString()
+
         CoroutineScope(Dispatchers.Main).launch {
+
             when (votingUseCase.getUserCurrentState()) {
+
                 VotingUseCase.UPVOTED -> {
                     downVote.isClickable = false
                     upVote.isChecked = true
                 }
+
                 VotingUseCase.DOWNVOTED -> {
                     upVote.isClickable = false
                     downVote.isChecked = true
                 }
+
                 else -> {
                     downVote.isClickable = true
                     upVote.isClickable = true
