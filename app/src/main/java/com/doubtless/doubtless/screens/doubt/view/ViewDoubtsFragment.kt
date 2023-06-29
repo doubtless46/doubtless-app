@@ -5,20 +5,24 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionInflater
 import com.doubtless.doubtless.DoubtlessApp
-import com.doubtless.doubtless.R
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentViewDoubtsBinding
 import com.doubtless.doubtless.navigation.FragNavigator
-import com.doubtless.doubtless.screens.common.GenericFeedAdapter
+import com.doubtless.doubtless.screens.auth.exception.UserNotFoundException
+import com.doubtless.doubtless.screens.auth.login.LoginUtilsImpl
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.common.GenericFeedAdapter
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.home.entities.FeedConfig
 import com.doubtless.doubtless.screens.main.MainActivity
+import com.doubtless.doubtless.utils.Resource
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.gson.Gson
@@ -127,13 +131,43 @@ class ViewDoubtsFragment : Fragment() {
         binding.doubtsRecyclerView.adapter = adapter
         binding.doubtsRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        viewModel.fetchedHomeEntities.observe(viewLifecycleOwner) {
-            binding.llProgressBar.visibility= View.GONE //hide progress bar
-            if (it == null) return@observe
-            adapter.appendDoubts(it)
-            viewModel.notifyFetchedDoubtsConsumed()
+        viewModel.fetchedHomeEntities.observe(viewLifecycleOwner) { result ->
+            binding.llProgressBar.visibility = View.GONE //hide progress bar
             binding.layoutSwipe.isRefreshing = false
+            result?.let {
+                when (result) {
+                    is Resource.Success -> {
+                        result.data?.let {
+                            adapter.appendDoubts(it)
+                        }
+                    }
+                    is Resource.Error -> {
+                        when (result.error) {
+                            is UserNotFoundException -> {
+                                if (!isAdded) return@observe
+                                FirebaseCrashlytics.getInstance()
+                                    .recordException(Exception("current user is null"))
+                                LoginUtilsImpl.logOutUser(analyticsTracker, requireActivity())
+                                result.message?.let { it1 -> showToast(it1) }
+                            }
+                            else -> {
+                                result.message?.let {
+                                    showToast(it)
+                                }
+                            }
+                        }
+                    }
+                    is Resource.Loading -> {
+                    }
+                }
+            }
+
         }
+    }
+
+    private fun showToast(msg: String) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT)
+            .show()
     }
 
     override fun onDestroyView() {

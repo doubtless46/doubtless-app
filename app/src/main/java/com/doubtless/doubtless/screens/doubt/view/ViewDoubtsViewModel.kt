@@ -1,11 +1,16 @@
 package com.doubtless.doubtless.screens.doubt.view
 
 import androidx.lifecycle.*
+import com.doubtless.doubtless.DoubtlessApp
+import com.doubtless.doubtless.R
 import com.doubtless.doubtless.analytics.AnalyticsTracker
+import com.doubtless.doubtless.screens.auth.exception.UserNotFoundException
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase
-import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase.*
+import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase.FetchHomeFeedRequest
+import com.doubtless.doubtless.screens.home.usecases.FetchHomeFeedUseCase.Result
+import com.doubtless.doubtless.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -22,12 +27,12 @@ class ViewDoubtsViewModel constructor(
 
     private var isLoading = false
 
-    private val _fetchedHomeEntities = MutableLiveData<List<FeedEntity>?>()
-    val fetchedHomeEntities: LiveData<List<FeedEntity>?> =
+    private val _fetchedHomeEntities = MutableLiveData<Resource<List<FeedEntity>?>>()
+    val fetchedHomeEntities: LiveData<Resource<List<FeedEntity>?>> =
         _fetchedHomeEntities // TODO : use Result here!
 
     fun notifyFetchedDoubtsConsumed() {
-        _fetchedHomeEntities.value = null
+        _fetchedHomeEntities.value = Resource.Success(data = null)
     }
 
     fun fetchDoubts(forPageOne: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
@@ -36,50 +41,64 @@ class ViewDoubtsViewModel constructor(
 
         isLoading = true
 
-        val result = fetchHomeFeedUseCase.fetchFeedSync(
-            request = FetchHomeFeedRequest(
-                user = userManager.getCachedUserData()!!,
-                fetchFromPage1 = forPageOne
+        val currentUser = userManager.getCachedUserData() ?: userManager.getLoggedInUser()
+        currentUser?.let { user ->
+            val result = fetchHomeFeedUseCase.fetchFeedSync(
+                request = FetchHomeFeedRequest(
+                    user = user,
+                    fetchFromPage1 = forPageOne
+                )
             )
-        )
 
-        if (result is Result.ListEnded || result is Result.Error) {
-            // ERROR CASE
-            _fetchedHomeEntities.postValue(null)
-            isLoading = false
-            return@launch
-        }
-
-        result as FetchHomeFeedUseCase.Result.Success
-
-        if (!forPageOne) {
-            analyticsTracker.trackFeedNextPage(homeEntities.size)
-        } else {
-            analyticsTracker.trackFeedRefresh()
-        }
-
-        val entitiesFromServer = mutableListOf<FeedEntity>()
-
-        result.data.forEach { doubtData ->
-
-            // we got the data for page 2 (lets say) now check if these posts existed on page 1 and add only unique ones.
-            if (_homeEntitiesIds.contains(doubtData.id) == false) {
-                entitiesFromServer.add(doubtData.toHomeEntity())
-                _homeEntitiesIds[doubtData.id!!] = 1
+            if (result is Result.ListEnded || result is Result.Error) {
+                // ERROR CASE
+                _fetchedHomeEntities.postValue(Resource.Error())
+                isLoading = false
+                return@launch
             }
+
+            result as FetchHomeFeedUseCase.Result.Success
+
+            if (!forPageOne) {
+                analyticsTracker.trackFeedNextPage(homeEntities.size)
+            } else {
+                analyticsTracker.trackFeedRefresh()
+            }
+
+            val entitiesFromServer = mutableListOf<FeedEntity>()
+
+            result.data.forEach { doubtData ->
+
+                // we got the data for page 2 (lets say) now check if these posts existed on page 1 and add only unique ones.
+                if (_homeEntitiesIds.contains(doubtData.id) == false) {
+                    entitiesFromServer.add(doubtData.toHomeEntity())
+                    _homeEntitiesIds[doubtData.id!!] = 1
+                }
+            }
+
+            // for page 1 call add search entity
+            if (_homeEntities.isEmpty())
+                entitiesFromServer.add(0, FeedEntity.getSearchEntity())
+
+            _homeEntities.addAll(entitiesFromServer)
+            _fetchedHomeEntities.postValue(Resource.Success(entitiesFromServer))
+            fetchHomeFeedUseCase.notifyDistinctDocsFetched(
+                docsFetched = homeEntities.size
+                        - /* subtract one for search entity, ideally should have counted Type = Doubt size */ 1
+            )
+            isLoading = false
+        } ?: kotlin.run {
+            // current user is null
+            // ERROR CASE
+            _fetchedHomeEntities.postValue(
+                Resource.Error(
+                    message = DoubtlessApp.getInstance().getString(R.string.sign_in_again),
+                    data = null,
+                    error = UserNotFoundException()
+                )
+            )
+            isLoading = false
         }
-
-        // for page 1 call add search entity
-        if (_homeEntities.isEmpty())
-            entitiesFromServer.add(0, FeedEntity.getSearchEntity())
-
-        _homeEntities.addAll(entitiesFromServer)
-        _fetchedHomeEntities.postValue(entitiesFromServer)
-        fetchHomeFeedUseCase.notifyDistinctDocsFetched(
-            docsFetched = homeEntities.size
-                    - /* subtract one for search entity, ideally should have counted Type = Doubt size */ 1
-        )
-        isLoading = false
     }
 
     fun refreshList() {
