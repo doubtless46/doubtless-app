@@ -24,11 +24,7 @@ import com.doubtless.doubtless.screens.dashboard.usecases.DeleteAccountUseCase
 import com.doubtless.doubtless.screens.dashboard.usecases.FetchUserDataUseCase
 import com.doubtless.doubtless.screens.dashboard.usecases.FetchUserFeedByDateUseCase
 import com.doubtless.doubtless.screens.doubt.DoubtData
-import com.doubtless.doubtless.screens.doubt.usecases.DoubtDataSharedPrefUseCase
-import com.doubtless.doubtless.screens.doubt.usecases.FetchDoubtDataFromDoubtIdUseCase
-import com.doubtless.doubtless.screens.doubt.usecases.FetchFilterTagsUseCase
-import com.doubtless.doubtless.screens.doubt.usecases.PostDoubtUseCase
-import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
+import com.doubtless.doubtless.screens.doubt.usecases.*
 import com.doubtless.doubtless.screens.home.entities.FeedConfig
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByDateUseCase
 import com.doubtless.doubtless.screens.home.usecases.FetchFeedByPopularityUseCase

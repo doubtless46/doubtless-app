@@ -1,6 +1,5 @@
 package com.doubtless.doubtless.screens.home.usecases
 
-import android.os.UserManager
 import android.util.Log
 import androidx.annotation.WorkerThread
 import com.doubtless.doubtless.constants.FirestoreCollection

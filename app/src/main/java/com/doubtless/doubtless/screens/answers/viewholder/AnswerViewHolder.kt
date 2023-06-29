@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.answers.AnswerData
 import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
@@ -16,7 +17,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
-import java.util.Date
 import kotlin.math.floor
 
 
@@ -69,6 +69,12 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
             tvYear.text = "| ${answerData.authorYear} |"
         } else {
             tvYear.text = "| ${answerData.authorYear} Year |"
+        }
+        if (answerData.authorId == DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
+                .getCachedUserData()?.id
+        ) {
+            upVote.isVisible = false
+            downVote.isVisible = false
         }
 
         tvCollege.text = answerData.authorCollege

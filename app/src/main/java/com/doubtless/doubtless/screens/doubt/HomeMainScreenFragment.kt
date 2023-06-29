@@ -15,7 +15,7 @@ import com.doubtless.doubtless.screens.doubt.view.HomeMainScreenViewModel
 import com.doubtless.doubtless.screens.main.MainActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import java.util.Locale
+import java.util.*
 
 
 class HomeMainScreenFragment : Fragment() {
