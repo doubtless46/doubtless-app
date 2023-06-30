@@ -8,7 +8,6 @@ import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.dashboard.viewholder.UserProfileViewHolder
 import com.doubtless.doubtless.screens.doubt.DoubtData
-import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.screens.doubt.view.viewholder.DoubtPreviewViewHolder
 import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import com.doubtless.doubtless.screens.home.viewholders.HomeSearchViewHolder
@@ -27,7 +26,7 @@ class GenericFeedAdapter(
         fun onSubmitFeedbackClicked()
         fun onDeleteAccountClicked()
         fun onCreatePollClicked()
-        fun onPollOptionClicked(position: Int)
+        fun onPollOptionClicked(position: Int, option: String)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -103,8 +102,8 @@ class GenericFeedAdapter(
                 return ViewPollViewHolder(
                     view = view,
                     interactionListener = object : ViewPollViewHolder.InteractionListener {
-                        override fun onPollOptionClicked(position: Int) {
-                            interactionListener.onPollOptionClicked(position)
+                        override fun onPollOptionClicked(position: Int, option: String) {
+                            interactionListener.onPollOptionClicked(position, option)
                         }
                     }
                 )
