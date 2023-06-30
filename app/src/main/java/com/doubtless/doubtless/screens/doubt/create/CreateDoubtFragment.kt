@@ -70,8 +70,7 @@ class CreateDoubtFragment : Fragment() {
 
             val backPressConsumed = navigator?.onBackPress() ?: false
 
-            return if (backPressConsumed)
-                true
+            return if (backPressConsumed) true
             else {
                 (parentFragment as? MainFragment)?.selectHomeBottomNavElement()
                 true
@@ -96,8 +95,7 @@ class CreateDoubtFragment : Fragment() {
         navigator = appComp.getCreateFragmentNavigator(requireActivity() as MainActivity)
 
         viewModel = ViewModelProvider(
-            this,
-            CreateDoubtViewModel.Companion.Factory(postDoubtUseCase)
+            this, CreateDoubtViewModel.Companion.Factory(postDoubtUseCase)
         )[CreateDoubtViewModel::class.java]
     }
 
@@ -126,11 +124,8 @@ class CreateDoubtFragment : Fragment() {
             } else {
                 isButtonClicked = false
                 binding.postButton.alpha = 1f
-                Toast.makeText(
-                    /* context = */ context,
-                    /* text = */
-                    "${(result as CreateDoubtViewModel.Result.Error).message}",
-                    /* duration = */
+                Toast.makeText(/* context = */ context,/* text = */
+                    "${(result as CreateDoubtViewModel.Result.Error).message}",/* duration = */
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -253,11 +248,9 @@ class CreateDoubtFragment : Fragment() {
 
         val size = getSelectedTags().size
 
-        if (size > 3)
-            return "More than 3 Tags are not allowed!"
+        if (size > 3) return "More than 3 Tags are not allowed!"
 
-        if (size == 0)
-            return "Please select a tag!"
+        if (size == 0) return "Please select a tag!"
 
         return null
     }
@@ -279,7 +272,8 @@ class CreateDoubtFragment : Fragment() {
                 createDoubt(
                     binding.doubtHeading.text.toString(),
                     binding.doubtDescription.text.toString(),
-                    tags, keywords,
+                    tags,
+                    keywords,
                     userManager.getCachedUserData()!!
                 )
                 dialogInterface.dismiss()
@@ -297,8 +291,7 @@ class CreateDoubtFragment : Fragment() {
             val jsonObject = Gson().fromJson(maxCharLimit, Map::class.java) as Map<*, *>
 
             maxHeadingCharLimit = (jsonObject["max_heading_char_limit"] as Double).toInt()
-            maxDescriptionCharLimit =
-                (jsonObject["max_description_char_limit"] as Double).toInt()
+            maxDescriptionCharLimit = (jsonObject["max_description_char_limit"] as Double).toInt()
             maxKeywordsLimit = (jsonObject["keywords_limit"] as Double).toInt()
 
             setMaxCharacterLimit(maxHeadingCharLimit, maxDescriptionCharLimit, maxKeywordsLimit)
@@ -309,9 +302,7 @@ class CreateDoubtFragment : Fragment() {
     }
 
     private fun setMaxCharacterLimit(
-        maxHeadingCharLimit: Int,
-        maxDescriptionCharLimit: Int,
-        maxKeywordsLimit: Int
+        maxHeadingCharLimit: Int, maxDescriptionCharLimit: Int, maxKeywordsLimit: Int
     ) {
         binding.doubtHeading.filters =
             arrayOf<InputFilter>(InputFilter.LengthFilter(maxHeadingCharLimit))
@@ -320,11 +311,7 @@ class CreateDoubtFragment : Fragment() {
     }
 
     private fun createDoubt(
-        heading: String,
-        description: String,
-        tags: List<String>,
-        keywords: List<String>,
-        user: User
+        heading: String, description: String, tags: List<String>, keywords: List<String>, user: User
     ) {
         viewModel.postDoubt(
             PublishDoubtRequest(
@@ -337,7 +324,8 @@ class CreateDoubtFragment : Fragment() {
                 description = description,
                 netVotes = 0f,
                 tags = tags,
-                keywords = keywords
+                keywords = keywords,
+                xpCount = 0
             )
         )
     }

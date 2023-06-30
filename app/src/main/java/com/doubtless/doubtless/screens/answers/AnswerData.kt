@@ -119,7 +119,9 @@ data class PublishAnswerRequest(
     @SerializedName("author_year")
     var authorYear: String? = null,
     @SerializedName("description")
-    var description: String? = null
+    var description: String? = null,
+    @SerializedName("xp_count")
+    var xpCount: Long = 0
 ) {
     companion object {
         fun toAnswerData(
@@ -135,7 +137,8 @@ data class PublishAnswerRequest(
                 authorYear = publishAnswerRequest.authorYear,
                 description = publishAnswerRequest.description,
                 netVotes = 0f,
-                date = Date()
+                date = Date(),
+                xpCount = publishAnswerRequest.xpCount
             )
         }
     }
@@ -176,7 +179,11 @@ data class PublishAnswerResponse(
     @SerializedName("net_votes")
     @get:PropertyName("net_votes")
     @set:PropertyName("net_votes")
-    var netVotes: Float = 0f
+    var netVotes: Float = 0f,
+    @SerializedName("xp_count")
+    @get:PropertyName("xp_count")
+    @set:PropertyName("xp_count")
+    var xpCount: Long = 0
 ) {
     fun toAnswerData(): AnswerData {
         return AnswerData(
@@ -189,7 +196,8 @@ data class PublishAnswerResponse(
             authorYear = this.authorYear,
             description = this.description,
             netVotes = this.netVotes,
-            date = null
+            date = null,
+            xpCount = this.xpCount
         )
     }
 }
