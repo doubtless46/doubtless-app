@@ -76,20 +76,14 @@ class ViewDoubtsViewModel constructor(
                 }
             }
 
-            // we got the data for page 2 (lets say) now check if these posts existed on page 1 and add only unique ones.
-            if (_homeEntitiesIds.contains(doubtData.id) == false) {
-                entitiesFromServer.add(doubtData.toHomeEntity())
-                _homeEntitiesIds[doubtData.id!!] = 1
-            }
-        }
-        val pollOptions = listOf("Option 1", "Option 2", "Option 3")
-        // for page 1 call add search and options button entity
-        if (_homeEntities.isEmpty())
-            entitiesFromServer.add(0, FeedEntity.getSearchEntity())
-        if (_homeEntities.isEmpty())
-            entitiesFromServer.add(1, FeedEntity.getOptionButtons())
-        if(_homeEntities.isEmpty())
-            entitiesFromServer.add(6, FeedEntity.getPollEntity(pollOptions) )
+            val pollOptions = listOf("Option 1", "Option 2", "Option 3")
+            // for page 1 call add search and options button entity
+            if (_homeEntities.isEmpty())
+                entitiesFromServer.add(0, FeedEntity.getSearchEntity())
+            if (_homeEntities.isEmpty())
+                entitiesFromServer.add(1, FeedEntity.getOptionButtons())
+            if (_homeEntities.isEmpty())
+                entitiesFromServer.add(6, FeedEntity.getPollEntity(pollOptions))
 
             _homeEntities.addAll(entitiesFromServer)
             _fetchedHomeEntities.postValue(Resource.Success(entitiesFromServer))
@@ -110,6 +104,8 @@ class ViewDoubtsViewModel constructor(
             )
             isLoading = false
         }
+
+
     }
 
     fun refreshList() {
