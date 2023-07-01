@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
+import com.doubtless.doubtless.constants.GamificationConstants
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.utils.Utils
@@ -109,7 +110,7 @@ class DoubtPreviewViewHolder(
         Glide.with(ivDp).load(doubtData.userPhotoUrl).circleCrop()
             .into(ivDp)
 
-        userBadge.isVisible = doubtData.xpCount > 1000
+        userBadge.isVisible = doubtData.xpCount > GamificationConstants.MENTOR_XP_THRESHOLD
 
         val votingUseCase = DoubtlessApp.getInstance().getAppCompRoot()
             .getDoubtVotingDoubtCase(doubtData.copy())

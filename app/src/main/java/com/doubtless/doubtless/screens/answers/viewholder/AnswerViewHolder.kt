@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.doubtless.doubtless.R
+import com.doubtless.doubtless.constants.GamificationConstants
 import com.doubtless.doubtless.screens.answers.AnswerData
 import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.utils.Utils
@@ -64,7 +65,7 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
             time.isVisible = false
         }
 
-        userBadge.isVisible = answerData.xpCount!! > 1000
+        userBadge.isVisible = answerData.xpCount!! > GamificationConstants.MENTOR_XP_THRESHOLD
         description.text = answerData.description
 
         if (answerData.authorYear.equals("passout", ignoreCase = true)) {
