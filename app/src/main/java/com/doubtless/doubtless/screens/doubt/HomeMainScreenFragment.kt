@@ -77,7 +77,7 @@ class HomeMainScreenFragment : Fragment() {
         }.toMutableList()
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            if (position == 0) {
+            if (position == 1) {
                 tab.text = "${userManager.getCachedUserData()?.local_user_attr!!.college!!} only"
                 return@TabLayoutMediator
             }

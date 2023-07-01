@@ -325,7 +325,7 @@ class CreateDoubtFragment : Fragment() {
                 netVotes = 0f,
                 tags = tags,
                 keywords = keywords,
-                xpCount = 0
+                xpCount = user.xpCount
             )
         )
     }

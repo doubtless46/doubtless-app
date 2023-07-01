@@ -1,16 +1,15 @@
 package com.doubtless.doubtless.screens.answers
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionInflater
 import com.doubtless.doubtless.DoubtlessApp
-import com.doubtless.doubtless.R
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentAnswersBinding
 import com.doubtless.doubtless.navigation.FragNavigator
@@ -18,7 +17,6 @@ import com.doubtless.doubtless.screens.answers.usecases.PublishAnswerUseCase
 import com.doubtless.doubtless.screens.answers.viewholder.EnterAnswerViewHolder
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.doubt.DoubtData
-import com.doubtless.doubtless.screens.doubt.view.ViewDoubtsViewModel
 import com.doubtless.doubtless.screens.main.MainActivity
 import com.doubtless.doubtless.screens.main.MainFragment
 
@@ -56,7 +54,7 @@ class AnswersFragment : Fragment() {
 
         // encapsulate this logic
         if (currentSelectedFrag is MainFragment.CurrentSelectedBottomNavFrag.HomeFrag) {
-             _navigator = DoubtlessApp.getInstance().getAppCompRoot()
+            _navigator = DoubtlessApp.getInstance().getAppCompRoot()
                 .getHomeFragNavigator(requireActivity() as MainActivity)
         }
 
@@ -121,7 +119,7 @@ class AnswersFragment : Fragment() {
                                 authorCollege = userManager.getCachedUserData()!!.local_user_attr!!.college,
                                 authorYear = userManager.getCachedUserData()!!.local_user_attr!!.year,
                                 description = publishAnswerDTO.description,
-                                xpCount = 0
+                                xpCount = userManager.getCachedUserData()!!.xpCount ?: 0
                             )
                         )
                     }
@@ -163,7 +161,8 @@ class AnswersFragment : Fragment() {
 
                     binding.progressPostAnswer.visibility = View.GONE
 
-                    Toast.makeText(requireContext(), "Successfully posted!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Successfully posted!", Toast.LENGTH_SHORT)
+                        .show()
 
                     adapter.appendAnswerAtFirst(answerData = it.answerData)
 

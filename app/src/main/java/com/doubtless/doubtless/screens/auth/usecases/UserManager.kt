@@ -8,7 +8,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import java.util.*
+import java.util.UUID
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -19,7 +19,12 @@ class UserManager constructor(
 ) {
 
     sealed class Result(user: User? = null, isNewUser: Boolean?, error: String? = null) {
-        class Success(val user: User, val isNewUser: Boolean, val isOldUserWithNoOnboarding: Boolean) : Result(user, isNewUser)
+        class Success(
+            val user: User,
+            val isNewUser: Boolean,
+            val isOldUserWithNoOnboarding: Boolean
+        ) : Result(user, isNewUser)
+
         class Error(val message: String) : Result(null, null, message)
         class LoggedOut : Result(null, null, null)
     }
@@ -69,7 +74,8 @@ class UserManager constructor(
         if (result is UserDataServerUseCase.Result.NewUser) {
             userDataStorageUseCase.setUserData(result.newUser)
             cachedUserData = result.newUser
-            return Result.Success(result.newUser,
+            return Result.Success(
+                result.newUser,
                 isNewUser = true,
                 isOldUserWithNoOnboarding = false
             )
@@ -78,7 +84,8 @@ class UserManager constructor(
         if (result is UserDataServerUseCase.Result.OldUseWithNoOnboardingData) {
             userDataStorageUseCase.setUserData(result.oldUser)
             cachedUserData = result.oldUser
-            return Result.Success(result.oldUser,
+            return Result.Success(
+                result.oldUser,
                 isNewUser = false,
                 isOldUserWithNoOnboarding = true
             )
@@ -87,7 +94,8 @@ class UserManager constructor(
         if (result is UserDataServerUseCase.Result.OldUser) {
             userDataStorageUseCase.setUserData(result.oldUser)
             cachedUserData = result.oldUser
-            return Result.Success(result.oldUser,
+            return Result.Success(
+                result.oldUser,
                 isNewUser = false,
                 isOldUserWithNoOnboarding = false
             )

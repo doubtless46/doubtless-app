@@ -107,5 +107,5 @@ data class PublishDoubtRequest(
     @SerializedName("keywords")
     var keywords: List<String>? = null,
     @SerializedName("xp_count")
-    var xpCount: Long? = 0
+    var xpCount: Long = 0
 )
