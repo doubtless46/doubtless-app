@@ -1,11 +1,7 @@
 package com.doubtless.doubtless.screens.answers
 
-import android.os.Handler
-import android.os.Looper
-import android.widget.Toast
 import com.doubtless.doubtless.DoubtlessApp
 import com.google.errorprone.annotations.Keep
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.PropertyName
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ServerTimestamp
@@ -56,6 +52,10 @@ data class AnswerData(
     @get:PropertyName("created_on")
     @set:PropertyName("created_on")
     var date: Date? = null,
+    @SerializedName("xp_count")
+    @get:PropertyName("xp_count")
+    @set:PropertyName("xp_count")
+    var xpCount: Long? = 0,
 ) {
 
     companion object {
@@ -77,7 +77,8 @@ data class AnswerData(
                                 authorYear = answerSnapshot.getField("author_year"),
                                 description = answerSnapshot.getField("description"),
                                 netVotes = (answerSnapshot.getField("net_votes") as Float?) ?: 0f,
-                                date = answerSnapshot.getField("created_on")
+                                date = answerSnapshot.getField("created_on"),
+                                xpCount = (answerSnapshot.getField("xp_count") as Long?) ?: 0
                             )
                         )
                     } catch (e: Exception) {
@@ -96,7 +97,8 @@ data class AnswerData(
                 type = AnswerDoubtEntity.TYPE_ANSWER,
                 doubt = null,
                 answer = answerData,
-                answerVotingUseCase = DoubtlessApp.getInstance().getAppCompRoot().getAnswerVotingDoubtCase(answerData)
+                answerVotingUseCase = DoubtlessApp.getInstance().getAppCompRoot()
+                    .getAnswerVotingDoubtCase(answerData)
             )
         }
     }
@@ -117,7 +119,9 @@ data class PublishAnswerRequest(
     @SerializedName("author_year")
     var authorYear: String? = null,
     @SerializedName("description")
-    var description: String? = null
+    var description: String? = null,
+    @SerializedName("xp_count")
+    var xpCount: Long = 0
 ) {
     companion object {
         fun toAnswerData(
@@ -133,7 +137,8 @@ data class PublishAnswerRequest(
                 authorYear = publishAnswerRequest.authorYear,
                 description = publishAnswerRequest.description,
                 netVotes = 0f,
-                date = Date()
+                date = Date(),
+                xpCount = publishAnswerRequest.xpCount
             )
         }
     }
@@ -174,7 +179,11 @@ data class PublishAnswerResponse(
     @SerializedName("net_votes")
     @get:PropertyName("net_votes")
     @set:PropertyName("net_votes")
-    var netVotes: Float = 0f
+    var netVotes: Float = 0f,
+    @SerializedName("xp_count")
+    @get:PropertyName("xp_count")
+    @set:PropertyName("xp_count")
+    var xpCount: Long = 0
 ) {
     fun toAnswerData(): AnswerData {
         return AnswerData(
@@ -187,7 +196,8 @@ data class PublishAnswerResponse(
             authorYear = this.authorYear,
             description = this.description,
             netVotes = this.netVotes,
-            date = null
+            date = null,
+            xpCount = this.xpCount
         )
     }
 }

@@ -29,6 +29,10 @@ data class User(
     @get:PropertyName("photoUrl")
     @set:PropertyName("photoUrl")
     var photoUrl: String? = null,
+    @SerializedName("xpCount")
+    @get:PropertyName("xpCount")
+    @set:PropertyName("xpCount")
+    var xpCount: Long = 0,
     @get:Exclude val document_id: String? = null,
     @get:Exclude val local_user_attr: UserAttributes? = null
 )

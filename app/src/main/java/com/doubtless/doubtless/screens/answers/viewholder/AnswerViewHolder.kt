@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.doubtless.doubtless.R
+import com.doubtless.doubtless.constants.GamificationConstants
 import com.doubtless.doubtless.screens.answers.AnswerData
 import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.utils.Utils
@@ -15,7 +16,6 @@ import com.doubtless.doubtless.utils.addStateListAnimation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
 import java.util.Date
 import kotlin.math.floor
 
@@ -36,6 +36,7 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
     private val upVote: CheckBox
     private val downVote: CheckBox
     private val tvCollege: TextView
+    private val userBadge: ImageView
 
     init {
         authorName = itemView.findViewById(R.id.tv_author_name)
@@ -47,6 +48,7 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
         upVote = itemView.findViewById(R.id.cb_upvote)
         downVote = itemView.findViewById(R.id.cb_downvote)
         tvCollege = itemView.findViewById(R.id.tv_college)
+        userBadge = itemView.findViewById(R.id.user_badge)
     }
 
     fun setData(answerData: AnswerData, answerVotingUseCase: VotingUseCase) {
@@ -63,6 +65,7 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
             time.isVisible = false
         }
 
+        userBadge.isVisible = answerData.xpCount!! > GamificationConstants.MENTOR_XP_THRESHOLD
         description.text = answerData.description
 
         if (answerData.authorYear.equals("passout", ignoreCase = true)) {

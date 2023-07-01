@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
+import com.doubtless.doubtless.constants.GamificationConstants
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.utils.Utils
@@ -18,7 +19,7 @@ import com.doubtless.doubtless.utils.addStateListAnimation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Date
 import kotlin.math.floor
 
 class DoubtPreviewViewHolder(
@@ -44,7 +45,7 @@ class DoubtPreviewViewHolder(
     private val tvTags: TextView
     private val tvCollege: TextView
     private val tvYear: TextView = itemView.findViewById(R.id.user_year)
-    private val icFire: ImageView = itemView.findViewById(R.id.ic_fire)
+    private val userBadge: ImageView = itemView.findViewById(R.id.user_badge)
 
     private val analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
 
@@ -109,7 +110,7 @@ class DoubtPreviewViewHolder(
         Glide.with(ivDp).load(doubtData.userPhotoUrl).circleCrop()
             .into(ivDp)
 
-        icFire.isVisible = doubtData.isTrending
+        userBadge.isVisible = doubtData.xpCount > GamificationConstants.MENTOR_XP_THRESHOLD
 
         val votingUseCase = DoubtlessApp.getInstance().getAppCompRoot()
             .getDoubtVotingDoubtCase(doubtData.copy())
@@ -162,10 +163,12 @@ class DoubtPreviewViewHolder(
                     downvotes.isClickable = false
                     upvotes.isChecked = true
                 }
+
                 VotingUseCase.DOWNVOTED -> {
                     upvotes.isClickable = false
                     downvotes.isChecked = true
                 }
+
                 else -> {
                     downvotes.isClickable = true
                     upvotes.isClickable = true
