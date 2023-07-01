@@ -17,12 +17,14 @@ class HomeMainScreenViewModel constructor(
     private val _tags = MutableLiveData<List<String>>()
     val tags: LiveData<List<String>> = _tags
 
+    private val startTags = listOf(FirestoreCollection.TAG_ALL, FirestoreCollection.TAG_MY_COLLEGE)
+
     fun fetchTags() = viewModelScope.launch(Dispatchers.IO) {
 
         val result = fetchFilterTagsUseCase.fetchTagsFromFirebase()
 
         if (result is FetchFilterTagsUseCase.Result.Error) {
-            _tags.postValue(listOf(FirestoreCollection.TAG_MY_COLLEGE, FirestoreCollection.TAG_ALL))
+            _tags.postValue(startTags)
             return@launch
         }
 
@@ -30,8 +32,7 @@ class HomeMainScreenViewModel constructor(
 
         val tags = result.data.toMutableList()
         tags.addAll(
-            0,
-            listOf(FirestoreCollection.TAG_MY_COLLEGE, FirestoreCollection.TAG_ALL)
+            0, startTags
         )
         _tags.postValue(tags)
     }
