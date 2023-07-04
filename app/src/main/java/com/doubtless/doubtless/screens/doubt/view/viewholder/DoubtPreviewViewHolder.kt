@@ -103,7 +103,7 @@ class DoubtPreviewViewHolder(
         tvAnswers.text = doubtData.no_answers.toString()
 
         if (!doubtData.tags.isNullOrEmpty())
-            tvTags.text = "Related to : " + doubtData.tags!!.flatten()
+            tvTags.text = "tags : " + doubtData.tags!!.flatten()
         else
             tvTags.isVisible = false
 

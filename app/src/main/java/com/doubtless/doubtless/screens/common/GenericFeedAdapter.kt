@@ -46,7 +46,7 @@ class GenericFeedAdapter(
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.doubt_layout, parent, false)
                 return DoubtPreviewViewHolder(view = view,
-                    showVotingLayout = false,
+                    showVotingLayout = true,
                     interactionListener = object : DoubtPreviewViewHolder.InteractionListener {
                         override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
                             interactionListener.onDoubtClicked(doubtData, position)

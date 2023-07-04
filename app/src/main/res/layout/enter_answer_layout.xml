@@ -16,8 +16,9 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#99B8B8B8" />
+        android:layout_height="8dp"
+        android:visibility="gone"
+        android:background="@color/separation_grey" />
 
     <!--    android:background="#99CCCCCC"-->
 
@@ -26,7 +27,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingStart="22dp"
-        android:paddingTop="15dp"
+        android:paddingTop="24dp"
         android:paddingBottom="10dp">
 
         <ImageView

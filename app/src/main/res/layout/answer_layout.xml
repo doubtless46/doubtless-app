@@ -5,9 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="0dp"
-    android:layout_marginEnd="0dp"
-    android:layout_marginBottom="0dp"
     android:padding="10dp"
     app:cardBackgroundColor="@color/cream"
     app:cardCornerRadius="0dp"
@@ -16,17 +13,19 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#99B8B8B8" />
+        android:layout_height="8dp"
+        android:background="@color/separation_grey"
+        android:visibility="gone" />
 
     <!--    android:background="#99CCCCCC"-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
         android:orientation="vertical"
         android:paddingStart="22dp"
-        android:paddingTop="15dp"
+        android:paddingTop="12dp"
         android:paddingBottom="10dp">
 
         <ImageView
@@ -117,26 +116,27 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
             android:background="@drawable/upvote_icon"
             android:backgroundTint="@color/grey"
             android:button="@null"
             android:checked="false"
             android:padding="6dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_votes"
             app:layout_constraintTop_toBottomOf="@id/author_answer_description_2" />
 
         <TextView
             android:id="@+id/tv_votes"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginStart="6dp"
+            android:layout_marginEnd="12dp"
             android:fontFamily="@font/poppins"
             android:gravity="center"
             android:text="211"
             android:textColor="@color/grey"
             android:textSize="14dp"
             app:layout_constraintBottom_toBottomOf="@id/cb_upvote"
-            app:layout_constraintStart_toEndOf="@id/cb_upvote"
+            app:layout_constraintEnd_toStartOf="@id/cb_downvote"
             app:layout_constraintTop_toTopOf="@id/cb_upvote" />
 
         <CheckBox
@@ -150,7 +150,7 @@
             android:checked="false"
             android:padding="6dp"
             android:rotation="180"
-            app:layout_constraintStart_toEndOf="@id/tv_votes"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/cb_upvote"
             app:tint="@color/grey" />
 

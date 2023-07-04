@@ -13,11 +13,6 @@
     app:cardElevation="0dp"
     tools:ignore="HardcodedText">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/separation_grey" />
-
     <!--    99B8B8B8-->
     <!--    #99DDDDDD-->
 
@@ -26,8 +21,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingStart="16dp"
-        android:paddingTop="14dp"
-        android:paddingBottom="14dp">
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp">
 
         <ImageView
             android:id="@+id/iv_dp"
@@ -105,12 +101,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
             android:fontFamily="@font/poppins"
+            android:lineSpacingExtra="-4dp"
             android:text="Some secrets of how I got 2 job offers in 4th semester!"
             android:textColor="@color/black"
-            android:textSize="16dp"
-            android:textStyle="bold"
+            android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_dp" />
@@ -119,7 +114,6 @@
             android:id="@+id/user_doubt_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:fontFamily="@font/poppins"
             android:text="Find a curated list of secrets of how I cracked companies like gfg &amp; rooter ->"
             android:textColor="@color/black"
@@ -127,90 +121,105 @@
             app:layout_constraintTop_toBottomOf="@id/user_doubt_heading" />
 
 
-        <TextView
-            android:id="@+id/tv_tags"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:fontFamily="@font/poppins"
-            android:text="Related to : attendance, marks, teachers"
-            android:textColor="@color/grey"
-            android:textSize="12dp"
-            app:layout_constraintStart_toStartOf="@id/iv_votes"
-            app:layout_constraintTop_toBottomOf="@id/iv_votes"
-            tools:text="Related to : attendance, marks, teachers" />
+        <View
+            android:id="@+id/sep_doubt_desc"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/grey"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/user_doubt_description" />
 
         <TextView
-            android:id="@+id/iv_votes"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_tags"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:text="Votes"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/poppins"
+            android:textColor="@color/grey"
             android:textSize="12dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/user_doubt_description" />
+            app:layout_constraintEnd_toStartOf="@id/iv_answers"
+            app:layout_constraintStart_toStartOf="@id/user_doubt_description"
+            app:layout_constraintTop_toBottomOf="@id/user_doubt_description"
+            tools:text="tags : attendance, marks, teachers" />
 
         <TextView
             android:id="@+id/tv_votes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
             android:fontFamily="@font/poppins"
             android:text="211"
-            android:textSize="12dp"
-            app:layout_constraintStart_toEndOf="@id/iv_votes"
-            app:layout_constraintTop_toTopOf="@id/iv_votes" />
+            android:textSize="14dp"
+            app:layout_constraintBottom_toBottomOf="@id/cb_downvote"
+            app:layout_constraintEnd_toStartOf="@id/cb_downvote"
+            app:layout_constraintTop_toTopOf="@id/cb_downvote" />
 
-
-        <TextView
+        <ImageView
             android:id="@+id/iv_answers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:text="Answers"
-            android:textSize="12dp"
-            app:layout_constraintStart_toEndOf="@id/tv_votes"
-            app:layout_constraintTop_toTopOf="@id/iv_votes" />
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_outline_comment_24"
+            app:layout_constraintBottom_toBottomOf="@id/cb_upvotes"
+            app:layout_constraintEnd_toStartOf="@id/tv_answers"
+            app:layout_constraintTop_toTopOf="@id/cb_upvotes"
+            app:tint="@color/grey" />
 
         <TextView
             android:id="@+id/tv_answers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
+            android:layout_marginEnd="16dp"
             android:fontFamily="@font/poppins"
-            android:text="23"
-            android:textColor="@color/grey"
-            android:textSize="12dp"
-            app:layout_constraintStart_toEndOf="@id/iv_answers"
-            app:layout_constraintTop_toTopOf="@id/iv_answers" />
+            android:text="211"
+            android:textSize="14dp"
+            app:layout_constraintBottom_toBottomOf="@id/cb_downvote"
+            app:layout_constraintEnd_toStartOf="@id/cb_upvotes"
+            app:layout_constraintTop_toTopOf="@id/cb_downvote" />
 
         <CheckBox
             android:id="@+id/cb_upvotes"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/upvote_icon"
             android:backgroundTint="@color/grey"
             android:button="@null"
             android:checked="false"
-            android:padding="6dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_tags" />
+            app:layout_constraintBottom_toBottomOf="@id/tv_tags"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toStartOf="@id/tv_votes"
+            app:layout_constraintTop_toTopOf="@id/tv_tags"
+            app:layout_constraintWidth_percent="0.07" />
 
         <CheckBox
             android:id="@+id/cb_downvote"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="12dp"
             android:background="@drawable/upvote_icon"
             android:backgroundTint="@color/grey"
             android:button="@null"
             android:checked="false"
             android:padding="6dp"
             android:rotation="180"
-            app:layout_constraintStart_toEndOf="@id/cb_upvotes"
-            app:layout_constraintTop_toTopOf="@id/cb_upvotes" />
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/cb_upvotes"
+            app:layout_constraintWidth_percent="0.07" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_gravity="bottom"
+        android:background="@color/separation_grey" />
+
 </androidx.cardview.widget.CardView>
