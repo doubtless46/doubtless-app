@@ -73,7 +73,7 @@ class ViewDoubtsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (viewModel.fetchedHomeEntities.value?.data.isNullOrEmpty()) {
+        if (viewModel.homeEntities.isEmpty()) {
             viewModel.fetchDoubts(forPageOne = true, feedTag = tag)
         }
 
