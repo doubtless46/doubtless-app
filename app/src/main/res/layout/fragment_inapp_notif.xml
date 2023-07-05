@@ -23,7 +23,7 @@
             android:fontFamily="@font/poppins"
             android:text="Notifications"
             android:textColor="@color/white"
-            android:textSize="14dp"
+            android:textSize="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

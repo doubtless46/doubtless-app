@@ -2,35 +2,41 @@
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="24dp"
-    app:cardBackgroundColor="@color/cream">
+    android:elevation="0dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@color/purple"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv_userImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:id="@+id/cv_user_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="60dp"
+            android:layout_marginStart="16dp"
             android:elevation="12dp"
-            android:innerRadius="0dp"
-            android:shape="ring"
-            android:thicknessRatio="1.9"
-            app:cardCornerRadius="50dp">
+            app:cardCornerRadius="50dp"
+            app:cardElevation="1dp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_thumbnail"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_thumbnail">
 
             <ImageView
                 android:id="@+id/iv_user_image"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_user" />
         </androidx.cardview.widget.CardView>
 
@@ -39,19 +45,40 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="4dp"
-            android:text="User Name"
+            android:layout_marginTop="14dp"
+            android:fontFamily="@font/poppins"
             android:textColor="@color/black"
-            android:textSize="14dp" />
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="@id/cv_user_image"
+            app:layout_constraintTop_toBottomOf="@id/cv_user_image"
+            tools:text="Siddharth Sharma" />
 
         <TextView
             android:id="@+id/tv_user_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            android:text="user@gmail.com"
-            android:textSize="14dp" />
+            android:layout_marginTop="0dp"
+            android:fontFamily="@font/poppins"
+            android:text="siddharthsharma@gmail.com"
+            android:textSize="14dp"
+            app:layout_constraintStart_toStartOf="@id/tv_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_name" />
+
+        <TextView
+            android:id="@+id/tv_bio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/poppins"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_user_email"
+            app:layout_constraintTop_toBottomOf="@id/tv_user_email"
+            android:text="SDE-1 @Rooter, Looking forward to push great products!" />
 
         <com.doubtless.doubtless.theming.buttons.SecondaryButton
             android:id="@+id/btn_signout"
@@ -59,6 +86,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:text="SIGN OUT" />
 
         <TextView
@@ -70,7 +100,10 @@
             android:background="@android:color/transparent"
             android:elevation="8dp"
             android:text="Delete Account"
-            android:textSize="12dp" />
+            android:textSize="12dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/btnFeedback"
@@ -81,8 +114,18 @@
             android:background="@android:color/transparent"
             android:elevation="8dp"
             android:text="Submit Feedback"
-            android:textSize="12dp" />
+            android:textSize="12dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_gravity="bottom"
+            android:background="@color/separation_grey"
+            app:layout_constraintTop_toBottomOf="@id/tv_bio"
+            android:layout_marginTop="16dp"/>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

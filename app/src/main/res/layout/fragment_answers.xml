@@ -33,7 +33,7 @@
             android:fontFamily="@font/poppins"
             android:text="Doubt Details"
             android:textColor="@color/white"
-            android:textSize="14dp" />
+            android:textSize="16dp" />
 
     </LinearLayout>
 
