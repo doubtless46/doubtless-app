@@ -19,7 +19,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:paddingStart="16dp"
         android:paddingTop="16dp"
         android:paddingEnd="16dp"
@@ -139,7 +138,7 @@
             android:layout_marginEnd="12dp"
             android:fontFamily="@font/poppins"
             android:textColor="@color/grey"
-            android:textSize="14dp"
+            android:textSize="12dp"
             app:layout_constraintEnd_toStartOf="@id/iv_answers"
             app:layout_constraintStart_toStartOf="@id/user_doubt_description"
             app:layout_constraintTop_toBottomOf="@id/user_doubt_description"
@@ -173,8 +172,8 @@
             android:id="@+id/tv_answers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="18dp"
             android:fontFamily="@font/poppins"
             android:text="211"
             android:textSize="14dp"
@@ -213,6 +212,18 @@
             app:layout_constraintTop_toTopOf="@id/cb_upvotes"
             app:layout_constraintWidth_percent="0.07" />
 
+        <LinearLayout
+            android:id="@+id/ll_answered_mentor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/tv_answers"
+            app:layout_constraintStart_toEndOf="@id/tv_answers"
+            app:layout_constraintTop_toTopOf="@id/tv_answers">
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

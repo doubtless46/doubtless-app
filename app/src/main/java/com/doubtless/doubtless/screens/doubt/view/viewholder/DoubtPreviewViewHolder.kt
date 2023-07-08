@@ -2,8 +2,10 @@ package com.doubtless.doubtless.screens.doubt.view.viewholder
 
 import android.text.util.Linkify
 import android.view.View
+import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +17,9 @@ import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.utils.Utils
 import com.doubtless.doubtless.utils.Utils.flatten
+import com.doubtless.doubtless.utils.Utils.toPx
 import com.doubtless.doubtless.utils.addStateListAnimation
+import com.google.api.Distribution.BucketOptions.Linear
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,6 +50,7 @@ class DoubtPreviewViewHolder(
     private val tvCollege: TextView
     private val tvYear: TextView = itemView.findViewById(R.id.user_year)
     private val userBadge: ImageView = itemView.findViewById(R.id.user_badge)
+    private val llMentorsDp: LinearLayout = itemView.findViewById(R.id.ll_answered_mentor)
 
     private val analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
 
@@ -112,6 +117,8 @@ class DoubtPreviewViewHolder(
 
         userBadge.isVisible = doubtData.xpCount > GamificationConstants.MENTOR_XP_THRESHOLD
 
+        setupMentorsWhoInteractedDpUi(doubtData)
+
         val votingUseCase = DoubtlessApp.getInstance().getAppCompRoot()
             .getDoubtVotingDoubtCase(doubtData.copy())
 
@@ -153,6 +160,36 @@ class DoubtPreviewViewHolder(
                 setVotesUi(doubtData, votingUseCase)
             }
         }
+    }
+
+    private fun setupMentorsWhoInteractedDpUi(doubtData: DoubtData) {
+
+        // reset view state first!
+        val dpsCount = llMentorsDp.childCount - 3
+
+        if (dpsCount > 0) {
+            repeat(dpsCount) {
+                llMentorsDp.removeView(llMentorsDp.getChildAt(it + 3)) // 3,4,5..
+            }
+        }
+
+        // then setup ui
+        doubtData.mentorsDpWhoInteracted.forEach {
+            if (it.isEmpty()) return@forEach
+
+            val view = ImageView(itemView.context)
+            view.layoutParams = LinearLayout.LayoutParams(22.toPx().toInt(), 22.toPx().toInt())
+                .apply {
+                    this.marginStart = 4.toPx().toInt()
+                }
+
+            Glide.with(itemView.context).load(it).circleCrop().into(view)
+
+            llMentorsDp.addView(view)
+        }
+
+        llMentorsDp.isVisible = !doubtData.mentorsDpWhoInteracted.isEmpty()
+
     }
 
     private fun setVotesUi(doubtData: DoubtData, votingUseCase: VotingUseCase) {
