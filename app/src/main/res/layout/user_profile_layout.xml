@@ -78,7 +78,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/tv_user_email"
             app:layout_constraintTop_toBottomOf="@id/tv_user_email"
-            android:text="SDE-1 @Rooter, Looking forward to push great products!" />
+            android:text="#internship #resume review #" />
 
         <com.doubtless.doubtless.theming.buttons.SecondaryButton
             android:id="@+id/btn_signout"
@@ -86,9 +86,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="@id/tv_bio"
+            app:layout_constraintTop_toBottomOf="@id/tv_bio"
             app:text="SIGN OUT" />
 
         <TextView
@@ -124,7 +124,7 @@
             android:layout_height="8dp"
             android:layout_gravity="bottom"
             android:background="@color/separation_grey"
-            app:layout_constraintTop_toBottomOf="@id/tv_bio"
+            app:layout_constraintTop_toBottomOf="@id/btn_signout"
             android:layout_marginTop="16dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

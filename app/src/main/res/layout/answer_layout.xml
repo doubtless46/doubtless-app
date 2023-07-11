@@ -115,7 +115,7 @@
             android:id="@+id/cb_upvote"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="2dp"
             android:layout_marginEnd="12dp"
             android:background="@drawable/upvote_icon"
             android:backgroundTint="@color/grey"

@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
@@ -67,6 +68,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupUi() {
         window.statusBarColor = getColor(R.color.purple)
+
+        findViewById<View>(R.id.view_sep).isVisible = false
 
         Glide.with(this)
             .load("https://lh3.googleusercontent.com/a/AGNmyxaceCDqTACCSoa1e3VimHXoAEQ4IBSYbPk8YTU-J5U=s96-c")
