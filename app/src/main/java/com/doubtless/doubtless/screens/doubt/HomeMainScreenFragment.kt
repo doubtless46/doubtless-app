@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.doubtless.doubtless.DoubtlessApp
+import com.doubtless.doubtless.R
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.databinding.FragmentHomeMainScreenBinding
 import com.doubtless.doubtless.navigation.FragNavigator
@@ -30,6 +31,7 @@ class HomeMainScreenFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeMainScreenBinding.inflate(inflater, container, false)
+        requireActivity().window.statusBarColor = requireContext().getColor(R.color.purple)
         return binding.root
     }
 
@@ -88,6 +90,7 @@ class HomeMainScreenFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 analyticsTracker.trackTagsFragment(capitalizedTagList[tab!!.position])
             }
+
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
 

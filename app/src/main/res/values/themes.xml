@@ -14,7 +14,7 @@
         <!-- set light themed system bars i.e dark icon on white bg -->
 
         <item name="android:statusBarColor">@color/cream</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar">false</item>
 
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:navigationBarColor">@color/cream</item>

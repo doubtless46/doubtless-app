@@ -25,6 +25,12 @@ object Utils {
         }
     }
 
+    fun Int.toPx() = TypedValue.applyDimension(
+        /* unit = */ TypedValue.COMPLEX_UNIT_DIP,
+        /* value = */ this.toFloat(),
+        /* metrics = */ Resources.getSystem().displayMetrics
+    )
+
     fun List<String>.flatten(): String {
         var string = ""
 

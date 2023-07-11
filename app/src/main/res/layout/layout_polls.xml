@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardElevation="0dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="22dp">
+
+        <ImageView
+            android:id="@+id/iv_dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="-2dp"
+            android:fontFamily="@font/poppins"
+            android:text="Siddharth Sharma"
+            android:textColor="@color/black"
+            android:textSize="12dp"
+            app:layout_constraintStart_toEndOf="@id/iv_dp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/author_doubt_timestamp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-3dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/poppins"
+            android:text="2 hours ago"
+            android:textColor="@color/grey"
+            android:textSize="12dp"
+            app:layout_constraintStart_toStartOf="@id/tv_username"
+            app:layout_constraintTop_toBottomOf="@id/tv_username" />
+
+        <TextView
+            android:id="@+id/user_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:fontFamily="@font/poppins"
+            android:text="| 4th year |"
+            android:textColor="@color/grey"
+            android:textSize="12dp"
+            app:layout_constraintStart_toEndOf="@+id/user_badge"
+            app:layout_constraintTop_toTopOf="@id/tv_username" />
+
+        <TextView
+            android:id="@+id/user_college"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/poppins"
+            android:text="MSIT"
+            android:textColor="@color/grey"
+            android:textSize="12dp"
+            app:layout_constraintStart_toEndOf="@id/user_year"
+            app:layout_constraintTop_toTopOf="@id/tv_username" />
+
+        <ImageView
+            android:id="@+id/user_badge"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:src="@drawable/ic_verified"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/author_doubt_timestamp"
+            app:layout_constraintStart_toEndOf="@+id/tv_username"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/purple" />
+
+        <TextView
+            android:id="@+id/user_doubt_heading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins"
+            android:lineSpacingExtra="-4dp"
+            android:text="Some secrets of how I got 2 job offers in 4th semester!"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_dp" />
+
+        <LinearLayout
+            android:id="@+id/ll_polls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/user_doubt_heading">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/black"
+                app:strokeWidth="0.5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:paddingHorizontal="14dp"
+                    android:paddingVertical="8dp"
+                    android:text="Yes, I am already in !"
+                    android:textColor="@color/black"
+                    android:textSize="14dp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/black"
+                app:strokeWidth="0.5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:paddingHorizontal="14dp"
+                    android:paddingVertical="8dp"
+                    android:text="No, I don't like it !"
+                    android:textColor="@color/black"
+                    android:textSize="14dp" />
+
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_tags"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/poppins"
+            android:textColor="@color/grey"
+            android:textSize="12dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@id/iv_answers"
+            app:layout_constraintStart_toStartOf="@id/ll_polls"
+            app:layout_constraintTop_toBottomOf="@id/ll_polls"
+            tools:text="tags : attendance, marks, teachers" />
+
+        <TextView
+            android:id="@+id/tv_votes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/poppins"
+            android:text="211"
+            android:textSize="14dp"
+            app:layout_constraintBottom_toBottomOf="@id/cb_downvote"
+            app:layout_constraintEnd_toStartOf="@id/cb_downvote"
+            app:layout_constraintTop_toTopOf="@id/cb_downvote" />
+
+        <ImageView
+            android:id="@+id/iv_answers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_outline_comment_24"
+            app:layout_constraintBottom_toBottomOf="@id/cb_upvotes"
+            app:layout_constraintEnd_toStartOf="@id/tv_answers"
+            app:layout_constraintTop_toTopOf="@id/cb_upvotes"
+            app:tint="@color/grey" />
+
+        <TextView
+            android:id="@+id/tv_answers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="18dp"
+            android:fontFamily="@font/poppins"
+            android:text="211"
+            android:textSize="14dp"
+            app:layout_constraintBottom_toBottomOf="@id/cb_downvote"
+            app:layout_constraintEnd_toStartOf="@id/cb_upvotes"
+            app:layout_constraintTop_toTopOf="@id/cb_downvote" />
+
+        <CheckBox
+            android:id="@+id/cb_upvotes"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/upvote_icon"
+            android:backgroundTint="@color/grey"
+            android:button="@null"
+            android:checked="false"
+            app:layout_constraintBottom_toBottomOf="@id/tv_tags"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toStartOf="@id/tv_votes"
+            app:layout_constraintTop_toTopOf="@id/tv_tags"
+            app:layout_constraintWidth_percent="0.07" />
+
+        <CheckBox
+            android:id="@+id/cb_downvote"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/upvote_icon"
+            android:backgroundTint="@color/grey"
+            android:button="@null"
+            android:checked="false"
+            android:padding="6dp"
+            android:rotation="180"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/cb_upvotes"
+            app:layout_constraintWidth_percent="0.07" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_gravity="bottom"
+        android:background="@color/separation_grey" />
+
+</androidx.cardview.widget.CardView>
