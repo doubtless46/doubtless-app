@@ -2,6 +2,7 @@ package com.doubtless.doubtless.screens.home.usecases
 
 import com.doubtless.doubtless.constants.FirestoreCollection
 import com.doubtless.doubtless.screens.doubt.DoubtData
+import com.doubtless.doubtless.screens.doubt.usecases.FetchInteractedMentorDataForDoubt
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
@@ -10,6 +11,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 class FetchFeedByDateUseCase constructor(
+    private val fetchInteractedMentorDataForDoubt: FetchInteractedMentorDataForDoubt,
     private val firestore: FirebaseFirestore
 ) {
 
@@ -66,17 +68,18 @@ class FetchFeedByDateUseCase constructor(
         }
 
     @kotlin.jvm.Throws(Exception::class)
-    private fun getDoubtDataList(result: QuerySnapshot?): List<DoubtData> {
+    private suspend fun getDoubtDataList(result: QuerySnapshot?): List<DoubtData> =
+        withContext(Dispatchers.IO) {
 
-        val doubtDataList = mutableListOf<DoubtData>()
+            val doubtDataList = mutableListOf<DoubtData>()
 
-        result!!.documents.forEach {
-            val doubtData = DoubtData.parse(it) ?: return@forEach
-            doubtDataList.add(doubtData)
+            result!!.documents.forEach {
+                val doubtData = DoubtData.parse(it) ?: return@forEach
+                doubtDataList.add(doubtData)
+            }
+
+            return@withContext doubtDataList
         }
-
-        return doubtDataList
-    }
 
 
 }

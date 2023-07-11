@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.theming.buttons.SecondaryButton
+import com.doubtless.doubtless.utils.Utils.flatten
 
 class UserProfileViewHolder(view: View, private val interactionListener: InteractionListener) :
     RecyclerView.ViewHolder(view) {
@@ -24,6 +25,7 @@ class UserProfileViewHolder(view: View, private val interactionListener: Interac
     private val signOutButton: SecondaryButton
     private val submitFeedback: TextView
     private val deleteAccount: TextView
+    private val tvBio: TextView
 
 
     init {
@@ -33,6 +35,7 @@ class UserProfileViewHolder(view: View, private val interactionListener: Interac
         signOutButton = view.findViewById(R.id.btn_signout)
         submitFeedback = view.findViewById(R.id.btnFeedback)
         deleteAccount = view.findViewById(R.id.btn_delete_account)
+        tvBio = view.findViewById(R.id.tv_bio)
     }
 
     fun setData(userManager: UserManager) {
@@ -51,6 +54,15 @@ class UserProfileViewHolder(view: View, private val interactionListener: Interac
 
         userName.text = userManager.getCachedUserData()!!.name
         userEmail.text = userManager.getCachedUserData()!!.email
+
+        var tags = ""
+
+        userManager.getCachedUserData()!!.local_user_attr!!.tags?.forEach {
+            tags += "#$it "
+        }
+
+        tvBio.text = tags
+
         Glide.with(userImage).load(userManager.getCachedUserData()!!.photoUrl).circleCrop()
             .into(userImage)
     }

@@ -68,7 +68,8 @@ data class DoubtData(
     @SerializedName("xp_count")
     @get:PropertyName("xp_count")
     @set:PropertyName("xp_count")
-    var xpCount: Long = 0
+    var xpCount: Long = 0,
+    var mentorsDpWhoInteracted: List<String> = mutableListOf()
 ) : Parcelable {
     companion object {
         fun parse(documentSnapshot: DocumentSnapshot?): DoubtData? {

@@ -10,7 +10,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp">
+        android:background="@color/purple"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:elevation="12dp">
 
         <ImageView
             android:id="@+id/ic_search"
@@ -19,7 +22,8 @@
             android:src="@drawable/ic_outline_search_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
 
         <TextView
             android:id="@+id/tv_search"
@@ -29,7 +33,7 @@
             android:gravity="start"
             android:padding="12dp"
             android:text="Search for already asked doubts"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@id/ic_search"
             app:layout_constraintTop_toTopOf="parent" />
@@ -38,10 +42,15 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
-        app:tabTextAppearance="@style/FilterTagTabLayoutTextAppearance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabMode="scrollable" />
+        android:backgroundTint="@color/purple"
+        app:tabBackground="@color/purple"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextColor="@color/separation_grey"
+        android:elevation="12dp"
+        app:tabTextAppearance="@style/FilterTagTabLayoutTextAppearance" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
