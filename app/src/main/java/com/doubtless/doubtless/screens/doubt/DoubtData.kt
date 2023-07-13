@@ -69,7 +69,11 @@ data class DoubtData(
     @get:PropertyName("xp_count")
     @set:PropertyName("xp_count")
     var xpCount: Long = 0,
-    var mentorsDpWhoInteracted: List<String> = mutableListOf()
+    var mentorsDpWhoInteracted: List<String> = mutableListOf(),
+    @SerializedName("iv_content")
+    @get:PropertyName("image_content_url")
+    @set:PropertyName("image_content_url")
+    var imageContentUrl: String? = null
 ) : Parcelable {
     companion object {
         fun parse(documentSnapshot: DocumentSnapshot?): DoubtData? {
