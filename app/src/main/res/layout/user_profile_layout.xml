@@ -14,8 +14,9 @@
         <ImageView
             android:id="@+id/iv_thumbnail"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:background="@color/purple"
+            android:layout_height="0dp"
+            android:src="@drawable/user_profile_thumnail"
+            app:layout_constraintDimensionRatio="5:2"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView

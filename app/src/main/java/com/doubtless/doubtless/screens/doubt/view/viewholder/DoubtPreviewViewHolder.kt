@@ -2,7 +2,6 @@ package com.doubtless.doubtless.screens.doubt.view.viewholder
 
 import android.text.util.Linkify
 import android.view.View
-import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -19,7 +18,6 @@ import com.doubtless.doubtless.utils.Utils
 import com.doubtless.doubtless.utils.Utils.flatten
 import com.doubtless.doubtless.utils.Utils.toPx
 import com.doubtless.doubtless.utils.addStateListAnimation
-import com.google.api.Distribution.BucketOptions.Linear
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,6 +49,7 @@ class DoubtPreviewViewHolder(
     private val tvYear: TextView = itemView.findViewById(R.id.user_year)
     private val userBadge: ImageView = itemView.findViewById(R.id.user_badge)
     private val llMentorsDp: LinearLayout = itemView.findViewById(R.id.ll_answered_mentor)
+    private val ivContent: ImageView = itemView.findViewById(R.id.iv_content)
 
     private val analyticsTracker = DoubtlessApp.getInstance().getAppCompRoot().getAnalyticsTracker()
 
@@ -107,17 +106,40 @@ class DoubtPreviewViewHolder(
 
         tvAnswers.text = doubtData.no_answers.toString()
 
-        if (!doubtData.tags.isNullOrEmpty())
-            tvTags.text = "tags : " + doubtData.tags!!.flatten()
-        else
+        if (!doubtData.tags.isNullOrEmpty()) {
+            var tags = ""
+
+            doubtData.tags?.forEach {
+                tags += "#$it "
+            }
+
+            tvTags.text = tags
+
+        } else
             tvTags.isVisible = false
 
         Glide.with(ivDp).load(doubtData.userPhotoUrl).circleCrop()
             .into(ivDp)
 
+        // image content
+        if (!doubtData.imageContentUrl.isNullOrEmpty()) {
+
+            ivContent.isVisible = true
+
+            Glide.with(itemView.context)
+                .load(doubtData.imageContentUrl)
+                .into(ivContent)
+
+        } else {
+            ivContent.isVisible = false
+        }
+
         userBadge.isVisible = doubtData.xpCount > GamificationConstants.MENTOR_XP_THRESHOLD
 
+
         setupMentorsWhoInteractedDpUi(doubtData)
+
+        // voting ui
 
         val votingUseCase = DoubtlessApp.getInstance().getAppCompRoot()
             .getDoubtVotingDoubtCase(doubtData.copy())

@@ -15,8 +15,8 @@ android {
         applicationId "com.doubtless.doubtless"
         minSdk 28
         targetSdk 33
-        versionCode 8
-        versionName "0.1.5-ui-revamp"
+        versionCode 9
+        versionName "0.1.6-feed-promo"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.debug
