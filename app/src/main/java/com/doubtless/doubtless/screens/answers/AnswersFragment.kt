@@ -63,6 +63,11 @@ class AnswersFragment : Fragment() {
                 .getDashboardFragNavigator(requireActivity() as MainActivity)
         }
 
+        if (currentSelectedFrag is MainFragment.CurrentSelectedBottomNavFrag.InAppNotificationFrag) {
+            _navigator = DoubtlessApp.getInstance().getAppCompRoot()
+                .getInAppFragNavigator(requireActivity() as MainActivity)
+        }
+
         if (_navigator != null) navigator = _navigator
 
         val _doubtData = arguments?.getParcelable("doubt_data") as DoubtData?
