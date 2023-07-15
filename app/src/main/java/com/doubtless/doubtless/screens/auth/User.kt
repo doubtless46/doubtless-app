@@ -1,13 +1,17 @@
 package com.doubtless.doubtless.screens.auth
 
+import android.os.Parcelable
 import androidx.annotation.Keep
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.IgnoreExtraProperties
 import com.google.firebase.firestore.PropertyName
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 @IgnoreExtraProperties
 @Keep
+@Parcelize
 data class User(
     @SerializedName("id")
     @get:PropertyName("id")
@@ -32,12 +36,23 @@ data class User(
     @SerializedName("xpCount")
     @get:PropertyName("xpCount")
     @set:PropertyName("xpCount")
-    var xpCount: Long = 0,
+    var xpCount: Long? = 0,
     @get:Exclude val document_id: String? = null,
-    @get:Exclude val local_user_attr: UserAttributes? = null
-)
+    @get:Exclude var local_user_attr: UserAttributes? = null
+) : Parcelable {
+    companion object {
+        fun parse(documentSnapshot: DocumentSnapshot?): User? {
+            return try {
+                documentSnapshot!!.toObject(User::class.java)
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+}
 
 @Keep
+@Parcelize
 data class UserAttributes(
     val tags: List<String>? = null,
     val hobbies: List<String>? = null,
@@ -45,4 +60,14 @@ data class UserAttributes(
     val department: String? = null,
     val college: String? = null,
     val purpose: String? = null
-)
+) : Parcelable {
+    companion object {
+        fun parse(documentSnapshot: DocumentSnapshot?): UserAttributes? {
+            return try {
+                documentSnapshot!!.toObject(UserAttributes::class.java)
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+}

@@ -59,6 +59,10 @@ class SearchFragment : Fragment() {
             adapter = GenericFeedAdapter(genericFeedEntities = mutableListOf(),
                 onLastItemReached = {},
                 interactionListener = object : GenericFeedAdapter.InteractionListener {
+                    override fun onUserImageClicked(userId: String) {
+                        navigator.moveToOtherUsersProfileFragment(userId)
+                    }
+
                     override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
                         analyticsTracker.trackSearchedDoubtClicked(doubtData.copy())
                         navigator.moveToDoubtDetailFragment(doubtData)

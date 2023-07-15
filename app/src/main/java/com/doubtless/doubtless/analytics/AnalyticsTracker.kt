@@ -101,16 +101,16 @@ class AnalyticsTracker constructor(
         map["user_email"] = user.email.toString()
 
         if (user.local_user_attr?.tags != null)
-            map["user_tags"] = user.local_user_attr.tags.toString()
+            map["user_tags"] = user.local_user_attr!!.tags.toString()
 
         if (user.local_user_attr?.year != null)
-            map["user_year"] = user.local_user_attr.year.toString()
+            map["user_year"] = user.local_user_attr!!.year.toString()
 
         if (user.local_user_attr?.college != null)
-            map["user_college"] = user.local_user_attr.college.toString()
+            map["user_college"] = user.local_user_attr!!.college.toString()
 
         if (user.local_user_attr?.department != null)
-            map["user_department"] = user.local_user_attr.department.toString()
+            map["user_department"] = user.local_user_attr!!.department.toString()
 
         return map
     }

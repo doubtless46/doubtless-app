@@ -6,11 +6,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.doubtless.doubtless.R
-import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.theming.buttons.SecondaryButton
-import com.doubtless.doubtless.utils.Utils.flatten
 
-class UserProfileViewHolder(view: View, private val interactionListener: InteractionListener) :
+class UserProfileViewHolder(
+    view: View,
+    private val interactionListener: InteractionListener,
+    private val otherUser: Boolean
+) :
     RecyclerView.ViewHolder(view) {
 
     interface InteractionListener {
@@ -38,7 +41,11 @@ class UserProfileViewHolder(view: View, private val interactionListener: Interac
         tvBio = view.findViewById(R.id.tv_bio)
     }
 
-    fun setData(userManager: UserManager) {
+    fun setData(user: User) {
+
+        if (otherUser) {
+            signOutButton.visibility = View.GONE
+        }
 
         deleteAccount.setOnClickListener {
             interactionListener.onDeleteAccountClicked()
@@ -52,18 +59,18 @@ class UserProfileViewHolder(view: View, private val interactionListener: Interac
             interactionListener.onSubmitFeedbackClicked()
         }
 
-        userName.text = userManager.getCachedUserData()!!.name
-        userEmail.text = userManager.getCachedUserData()!!.email
+        userName.text = user.name
+        userEmail.text = user.email
 
         var tags = ""
 
-        userManager.getCachedUserData()!!.local_user_attr!!.tags?.forEach {
+        user.local_user_attr?.tags?.forEach {
             tags += "#$it "
         }
 
         tvBio.text = tags
 
-        Glide.with(userImage).load(userManager.getCachedUserData()!!.photoUrl).circleCrop()
+        Glide.with(userImage).load(user.photoUrl).circleCrop()
             .into(userImage)
     }
 }

@@ -74,13 +74,6 @@ class DashboardViewModel(
             }
         }
 
-
-        // for page 1 call add user profile entity
-//        if (_homeEntities.isEmpty()) entitiesFromServer.add(
-//            0,
-//            FeedEntity(FeedEntity.TYPE_USER_PROFILE, null)
-//        )
-
         _homeEntities.addAll(entitiesFromServer)
         _fetchedHomeEntities.postValue(entitiesFromServer)
         fetchUserDataUseCase.notifyDistinctDocsFetched(

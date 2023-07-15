@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.answers.AnswersFragment
 import com.doubtless.doubtless.screens.doubt.DoubtData
+import com.doubtless.doubtless.screens.profile.OtherUsersProfileFragment
 import com.doubtless.doubtless.screens.search.SearchFragment
 
 class FragNavigator constructor(
@@ -39,6 +40,20 @@ class FragNavigator constructor(
                 /* popExit = */ R.anim.slide_out_right
             )
             .replace(containerId, AnswersFragment.getInstance(doubtData))
+            .addToBackStack(null)
+            .setReorderingAllowed(true)
+            .commitAllowingStateLoss()
+    }
+
+    fun moveToOtherUsersProfileFragment(userId: String) {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                /* enter = */ R.anim.slide_in_right,
+                /* exit = */ R.anim.slide_out_left,
+                /* popEnter = */ R.anim.slide_in_left,
+                /* popExit = */ R.anim.slide_out_right
+            )
+            .replace(containerId, OtherUsersProfileFragment.getInstance(userId))
             .addToBackStack(null)
             .setReorderingAllowed(true)
             .commitAllowingStateLoss()

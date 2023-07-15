@@ -88,6 +88,8 @@ class DashboardFragment : Fragment() {
             adapter = GenericFeedAdapter(genericFeedEntities = feedList, onLastItemReached = {
                 viewModel.fetchDoubts()
             }, interactionListener = object : GenericFeedAdapter.InteractionListener {
+                override fun onUserImageClicked(userId: String) {
+                }
 
 
                 override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
@@ -109,8 +111,8 @@ class DashboardFragment : Fragment() {
             })
         }
 
-        binding.doubtsRecyclerView.adapter = adapter
-        binding.doubtsRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.profileRecyclerView.adapter = adapter
+        binding.profileRecyclerView.layoutManager = LinearLayoutManager(context)
 
         viewModel.fetchedHomeEntities.observe(viewLifecycleOwner) {
             if (it == null) return@observe

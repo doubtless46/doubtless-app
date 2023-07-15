@@ -2,7 +2,7 @@ package com.doubtless.doubtless.screens.dashboard.usecases
 
 import android.util.Log
 import com.doubtless.doubtless.constants.FirestoreCollection
-import com.doubtless.doubtless.screens.auth.usecases.UserManager
+import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -24,15 +24,15 @@ class FetchUserFeedByDateUseCase constructor(
     private var lastDoubtData: DoubtData? = null
 
     suspend fun getFeedData(
-        request: FetchUserDataUseCase.FetchUserFeedRequest, userManager: UserManager
+        request: FetchUserDataUseCase.FetchUserFeedRequest, user: User
     ): Result = withContext(Dispatchers.IO) {
 
         try {
             var query = firestore.collection(FirestoreCollection.AllDoubts).whereEqualTo(
-                "author_id", userManager.getCachedUserData()!!.id
+                "author_id", user.id
             ).orderBy("created_on", Query.Direction.DESCENDING)
 
-            if (lastDoubtData != null && request.fetchFromPage1 == false) {
+            if (lastDoubtData != null && !request.fetchFromPage1) {
                 query = query.startAfter(lastDoubtData!!.date)
             }
 
