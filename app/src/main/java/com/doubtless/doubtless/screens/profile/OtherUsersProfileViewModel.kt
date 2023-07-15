@@ -1,6 +1,5 @@
 package com.doubtless.doubtless.screens.profile
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,32 +34,42 @@ class OtherUsersProfileViewModel(
         _fetchedHomeEntities.postValue(null)
     }
 
-    fun fetchUserDetails(userId: String, forPageOne: Boolean = false) =
+    fun fetchUserDetails(userId: String) = viewModelScope.launch(Dispatchers.IO) {
+        if (isLoading) return@launch
+
+        isLoading = true
+
+        val userDataResult = fetchUserDataUseCase.fetchUserDetails(
+            request = FetchUserDataUseCase.FetchUserFeedRequest(
+                user = User(
+                    userId
+                )
+            )
+        )
+        if (userDataResult is FetchUserDataUseCase.UserDetailsResult.Error) {
+            _fetchedUserData.postValue(null)
+            isLoading = false
+            return@launch
+        }
+        userDataResult as FetchUserDataUseCase.UserDetailsResult.Success
+        _fetchedUserData.postValue(userDataResult.user)
+
+        isLoading = false
+    }
+
+    fun fetchDoubts(userId: String, forPageOne: Boolean = false) =
         viewModelScope.launch(Dispatchers.IO) {
 
             if (isLoading) return@launch
 
             isLoading = true
 
-            val request = FetchUserDataUseCase.FetchUserFeedRequest(
-                user = User(
-                    userId
-                ), fetchFromPage1 = forPageOne
-            )
-
-            val userDataResult = fetchUserDataUseCase.fetchUserDetails(request)
-            if (userDataResult is FetchUserDataUseCase.UserDetailsResult.Error) {
-                Log.i("UserDetails", userDataResult.message)
-                _fetchedUserData.postValue(null)
-                isLoading = false
-                return@launch
-            }
-            userDataResult as FetchUserDataUseCase.UserDetailsResult.Success
-            _fetchedUserData.postValue(userDataResult.user)
-
-
             val result = fetchUserDataUseCase.fetchFeedSync(
-                request = request
+                request = FetchUserDataUseCase.FetchUserFeedRequest(
+                    user = User(
+                        userId
+                    ), fetchFromPage1 = forPageOne
+                )
             )
 
             if (result is FetchUserDataUseCase.Result.ListEnded || result is FetchUserDataUseCase.Result.Error) {

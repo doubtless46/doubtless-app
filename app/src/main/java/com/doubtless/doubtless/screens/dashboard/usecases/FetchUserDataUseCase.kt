@@ -54,17 +54,17 @@ class FetchUserDataUseCase constructor(
                     .get().await()
 
                 var userData = User()
-                querySnapshot.documents.forEach() {
-                    val user = User.parse(it) ?: return@forEach
+                querySnapshot.documents[0].let {
+                    val user = User.parse(it) ?: return@let
                     userData = user
 
                     val localUserAttrCollectionRef =
                         it.reference.collection("user_attr")
-                    val localUserAttrQuerySnapshot = localUserAttrCollectionRef.get().await()
+                    val userAttrQuerySnapshot = localUserAttrCollectionRef.get().await()
 
 
-                    if (!localUserAttrQuerySnapshot.isEmpty) {
-                        localUserAttrQuerySnapshot.documents.forEach { it ->
+                    if (!userAttrQuerySnapshot.isEmpty) {
+                        userAttrQuerySnapshot.documents.forEach { it ->
                             val userAttr = UserAttributes.parse(it) ?: return@forEach
                             user.local_user_attr = userAttr
                         }

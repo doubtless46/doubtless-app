@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -83,7 +82,7 @@ class OtherUsersProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (onCreateEventUnConsumed) {
-            viewModel.fetchUserDetails(userId, true)
+            viewModel.fetchDoubts(userId, true)
             onCreateEventUnConsumed = false
         }
 
@@ -94,59 +93,39 @@ class OtherUsersProfileFragment : Fragment() {
         var doubts: List<FeedEntity>? = null
 
         viewModel.fetchedUserData.observe(viewLifecycleOwner) {
-            it?.let { user ->
-                userData = user
-                if (!::adapter.isInitialized) {
-                    adapter = GenericFeedAdapter(
-                        genericFeedEntities = feedList,
-                        user = user,
-                        onLastItemReached = {
-                            viewModel.fetchUserDetails(userId)
-                        },
-                        interactionListener = object : GenericFeedAdapter.InteractionListener {
-                            override fun onUserImageClicked(userId: String) {}
+            if (it == null) return@observe
 
-                            override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
-                                navigator.moveToDoubtDetailFragment(doubtData)
-                            }
+            viewModel.fetchDoubts(userId)
 
-                            override fun onSignOutClicked() {}
 
-                            override fun onSubmitFeedbackClicked() {}
+            val user = it
+            userData = user
 
-                            override fun onDeleteAccountClicked() {}
+            if (!::adapter.isInitialized) {
+                adapter = GenericFeedAdapter(
+                    genericFeedEntities = feedList,
+                    user = user,
+                    onLastItemReached = {
+                        viewModel.fetchDoubts(userId)
+                    },
+                    interactionListener = object : GenericFeedAdapter.InteractionListener {
+                        override fun onUserImageClicked(userId: String) {}
+
+                        override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
+                            navigator.moveToDoubtDetailFragment(doubtData)
                         }
-                    )
-                    binding.profileRecyclerView.adapter = adapter
-                    binding.profileRecyclerView.layoutManager = LinearLayoutManager(context)
-                }
-            }
-        }
 
-        if (userData != null) {
-            adapter = GenericFeedAdapter(
-                genericFeedEntities = feedList,
-                user = userData!!,
-                onLastItemReached = {
-                    viewModel.fetchUserDetails(userId)
-                },
-                interactionListener = object : GenericFeedAdapter.InteractionListener {
-                    override fun onUserImageClicked(userId: String) {}
+                        override fun onSignOutClicked() {}
 
-                    override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
-                        navigator.moveToDoubtDetailFragment(doubtData)
+                        override fun onSubmitFeedbackClicked() {}
+
+                        override fun onDeleteAccountClicked() {}
                     }
-
-                    override fun onSignOutClicked() {}
-
-                    override fun onSubmitFeedbackClicked() {}
-
-                    override fun onDeleteAccountClicked() {}
-                }
-            )
-
+                )
+            }
             binding.profileRecyclerView.adapter = adapter
             binding.profileRecyclerView.layoutManager = LinearLayoutManager(context)
+
         }
 
         viewModel.fetchedHomeEntities.observe(viewLifecycleOwner) {
