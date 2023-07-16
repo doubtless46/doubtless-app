@@ -107,7 +107,7 @@ class ViewDoubtsViewModel constructor(
             entitiesFromServer.add(6, FeedEntity.getPollEntity(pollOptions) )
 
         _homeEntities.addAll(entitiesFromServer)
-        _fetchedHomeEntities.postValue(entitiesFromServer)
+        _fetchedHomeEntities.postValue(Resource.Success(entitiesFromServer))
         fetchHomeFeedUseCase.notifyDistinctDocsFetched(
             docsFetched = homeEntities.size
                     - /* subtract one for search entity, ideally should have counted Type = Doubt size */ 1
