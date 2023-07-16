@@ -54,6 +54,18 @@
             app:layout_constraintTop_toBottomOf="@id/cv_user_image"
             tools:text="Siddharth Sharma" />
 
+        <ImageView
+            android:id="@+id/user_badge"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="2dp"
+            android:src="@drawable/ic_verified"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_name"
+            app:layout_constraintStart_toEndOf="@+id/tv_name"
+            app:layout_constraintTop_toTopOf="@id/tv_name"
+            app:tint="@color/purple" />
+
         <TextView
             android:id="@+id/tv_user_email"
             android:layout_width="wrap_content"

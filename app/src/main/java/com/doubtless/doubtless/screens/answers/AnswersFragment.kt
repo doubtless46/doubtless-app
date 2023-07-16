@@ -119,7 +119,8 @@ class AnswersFragment : Fragment() {
                                 authorCollege = userManager.getCachedUserData()!!.local_user_attr!!.college,
                                 authorYear = userManager.getCachedUserData()!!.local_user_attr!!.year,
                                 description = publishAnswerDTO.description,
-                                xpCount = userManager.getCachedUserData()!!.xpCount ?: 0
+                                xpCount = userManager.getCachedUserData()!!.xpCount ?: 0,
+                                isAnonymous = publishAnswerDTO.isAnonymous
                             )
                         )
                     }

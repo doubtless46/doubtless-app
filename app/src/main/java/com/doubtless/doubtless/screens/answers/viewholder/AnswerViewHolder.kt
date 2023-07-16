@@ -57,7 +57,11 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
             interactionListener.onAnswerClicked(answerData, adapterPosition)
         }
 
-        authorName.text = answerData.authorName
+        if (answerData.isAnonymous) {
+            authorName.text = "unknown user"
+        } else {
+            authorName.text = answerData.authorName
+        }
 
         try {
             time.text = Utils.getTimeAgo(Date(answerData.date.toString()))
@@ -111,8 +115,12 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
             }
         }
 
-        Glide.with(ivDp).load(answerData.authorPhotoUrl).circleCrop()
-            .into(ivDp)
+        if (!answerData.isAnonymous) {
+            Glide.with(ivDp).load(answerData.authorPhotoUrl).circleCrop()
+                .into(ivDp)
+        } else {
+            ivDp.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_user))
+        }
 
     }
 

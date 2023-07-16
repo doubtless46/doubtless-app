@@ -17,8 +17,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="8dp"
-        android:visibility="gone"
-        android:background="@color/separation_grey" />
+        android:background="@color/separation_grey"
+        android:visibility="gone" />
 
     <!--    android:background="#99CCCCCC"-->
 
@@ -95,11 +95,22 @@
             android:id="@+id/btn_publish"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="12dp"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/enter_answer_description"
             app:layout_constraintTop_toBottomOf="@id/enter_answer_description"
             app:text="Post" />
+
+        <com.doubtless.doubtless.theming.buttons.SecondaryButton
+            android:id="@+id/btn_publish_unknown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="24dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/btn_publish"
+            app:layout_constraintTop_toBottomOf="@id/enter_answer_description"
+            app:text="Post as Unknown" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

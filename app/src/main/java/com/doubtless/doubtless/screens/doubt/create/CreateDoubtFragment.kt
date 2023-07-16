@@ -166,7 +166,13 @@ class CreateDoubtFragment : Fragment() {
         // post button
         binding.postButton.setOnClickListener {
             if (!isButtonClicked) {
-                checkText()
+                checkText(false)
+            }
+        }
+
+        binding.btnPostUnknown.setOnClickListener {
+            if (!isButtonClicked) {
+                checkText(true)
             }
         }
 
@@ -211,7 +217,7 @@ class CreateDoubtFragment : Fragment() {
         (requireActivity() as MainActivity).unregisterBackPress(onBackPressListener)
     }
 
-    private fun checkText() {
+    private fun checkText(isAnonymous: Boolean) {
         val errorMessage = isEverythingValid()
 
         if (errorMessage != null) {
@@ -226,7 +232,7 @@ class CreateDoubtFragment : Fragment() {
         binding.postButton.isClickable = false
         binding.postButton.alpha = 0.8f
 
-        showConfirmationDialog(getSelectedTags(), keywordsEntered)
+        showConfirmationDialog(getSelectedTags(), keywordsEntered, isAnonymous)
     }
 
     private fun isEverythingValid(): String? {
@@ -265,16 +271,17 @@ class CreateDoubtFragment : Fragment() {
         return checkedTags
     }
 
-    private fun showConfirmationDialog(tags: List<String>, keywords: List<String>) {
+    private fun showConfirmationDialog(tags: List<String>, keywords: List<String>, isAnonymous: Boolean) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Confirmation").setMessage("Are you sure you want to post?")
             .setPositiveButton("Post") { dialogInterface: DialogInterface, _: Int ->
                 createDoubt(
-                    binding.doubtHeading.text.toString(),
-                    binding.doubtDescription.text.toString(),
-                    tags,
-                    keywords,
-                    userManager.getCachedUserData()!!
+                    heading = binding.doubtHeading.text.toString(),
+                    description = binding.doubtDescription.text.toString(),
+                    tags = tags,
+                    keywords = keywords,
+                    user = userManager.getCachedUserData()!!,
+                    isAnonymous = isAnonymous
                 )
                 dialogInterface.dismiss()
             }.setNegativeButton("Cancel") { dialogInterface: DialogInterface, _: Int ->
@@ -311,7 +318,7 @@ class CreateDoubtFragment : Fragment() {
     }
 
     private fun createDoubt(
-        heading: String, description: String, tags: List<String>, keywords: List<String>, user: User
+        heading: String, description: String, tags: List<String>, keywords: List<String>, isAnonymous: Boolean , user: User
     ) {
         viewModel.postDoubt(
             PublishDoubtRequest(
@@ -325,7 +332,8 @@ class CreateDoubtFragment : Fragment() {
                 netVotes = 0f,
                 tags = tags,
                 keywords = keywords,
-                xpCount = user.xpCount
+                xpCount = user.xpCount,
+                isAnonymous = isAnonymous
             )
         )
     }

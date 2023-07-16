@@ -73,8 +73,13 @@ data class DoubtData(
     @SerializedName("iv_content")
     @get:PropertyName("image_content_url")
     @set:PropertyName("image_content_url")
-    var imageContentUrl: String? = null
+    var imageContentUrl: String? = null,
+    @SerializedName("is_anonymous")
+    @get:PropertyName("is_anonymous")
+    @set:PropertyName("is_anonymous")
+    var isAnonymous: Boolean = false
 ) : Parcelable {
+
     companion object {
         fun parse(documentSnapshot: DocumentSnapshot?): DoubtData? {
             return try {
@@ -112,5 +117,7 @@ data class PublishDoubtRequest(
     @SerializedName("keywords")
     var keywords: List<String>? = null,
     @SerializedName("xp_count")
-    var xpCount: Long = 0
+    var xpCount: Long = 0,
+    @SerializedName("is_anonymous")
+    var isAnonymous: Boolean = false
 )

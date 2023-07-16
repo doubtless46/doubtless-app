@@ -56,6 +56,10 @@ data class AnswerData(
     @get:PropertyName("xp_count")
     @set:PropertyName("xp_count")
     var xpCount: Long? = 0,
+    @SerializedName("is_anonymous")
+    @get:PropertyName("is_anonymous")
+    @set:PropertyName("is_anonymous")
+    var isAnonymous: Boolean = false
 ) {
 
     companion object {
@@ -78,7 +82,8 @@ data class AnswerData(
                                 description = answerSnapshot.getField("description"),
                                 netVotes = (answerSnapshot.getField("net_votes") as Float?) ?: 0f,
                                 date = answerSnapshot.getField("created_on"),
-                                xpCount = (answerSnapshot.getField("xp_count") as Long?) ?: 0
+                                xpCount = (answerSnapshot.getField("xp_count") as Long?) ?: 0,
+                                isAnonymous = (answerSnapshot.getField("is_anonymous") as Boolean?) ?: false
                             )
                         )
                     } catch (e: Exception) {
@@ -121,7 +126,9 @@ data class PublishAnswerRequest(
     @SerializedName("description")
     var description: String? = null,
     @SerializedName("xp_count")
-    var xpCount: Long = 0
+    var xpCount: Long = 0,
+    @SerializedName("is_anonymous")
+    var isAnonymous: Boolean = false
 ) {
     companion object {
         fun toAnswerData(
@@ -138,7 +145,8 @@ data class PublishAnswerRequest(
                 description = publishAnswerRequest.description,
                 netVotes = 0f,
                 date = Date(),
-                xpCount = publishAnswerRequest.xpCount
+                xpCount = publishAnswerRequest.xpCount,
+                isAnonymous = publishAnswerRequest.isAnonymous
             )
         }
     }
@@ -183,7 +191,9 @@ data class PublishAnswerResponse(
     @SerializedName("xp_count")
     @get:PropertyName("xp_count")
     @set:PropertyName("xp_count")
-    var xpCount: Long = 0
+    var xpCount: Long = 0,
+    @SerializedName("is_anonymous")
+    var isAnonymous: Boolean = false
 ) {
     fun toAnswerData(): AnswerData {
         return AnswerData(
@@ -197,7 +207,8 @@ data class PublishAnswerResponse(
             description = this.description,
             netVotes = this.netVotes,
             date = null,
-            xpCount = this.xpCount
+            xpCount = this.xpCount,
+            isAnonymous = this.isAnonymous
         )
     }
 }

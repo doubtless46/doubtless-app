@@ -3,9 +3,11 @@ package com.doubtless.doubtless.screens.dashboard.viewholder
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.doubtless.doubtless.R
+import com.doubtless.doubtless.constants.GamificationConstants
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.theming.buttons.SecondaryButton
 import com.doubtless.doubtless.utils.Utils.flatten
@@ -26,7 +28,7 @@ class UserProfileViewHolder(view: View, private val interactionListener: Interac
     private val submitFeedback: TextView
     private val deleteAccount: TextView
     private val tvBio: TextView
-
+    private val ivUserBadge: ImageView
 
     init {
         userName = view.findViewById(R.id.tv_name)
@@ -36,6 +38,7 @@ class UserProfileViewHolder(view: View, private val interactionListener: Interac
         submitFeedback = view.findViewById(R.id.btnFeedback)
         deleteAccount = view.findViewById(R.id.btn_delete_account)
         tvBio = view.findViewById(R.id.tv_bio)
+        ivUserBadge = view.findViewById(R.id.user_badge)
     }
 
     fun setData(userManager: UserManager) {
@@ -60,6 +63,8 @@ class UserProfileViewHolder(view: View, private val interactionListener: Interac
         userManager.getCachedUserData()!!.local_user_attr!!.tags?.forEach {
             tags += "#$it "
         }
+
+        ivUserBadge.isVisible = userManager.getCachedUserData()!!.xpCount >= GamificationConstants.MENTOR_XP_THRESHOLD
 
         tvBio.text = tags
 

@@ -81,7 +81,11 @@ class DoubtPreviewViewHolder(
             description.autoLinkMask = Linkify.WEB_URLS
         }
 
-        userName.text = doubtData.userName!!.split(" ").first()
+        if (doubtData.isAnonymous) {
+            userName.text = "unknown user"
+        } else {
+            userName.text = doubtData.userName!!.split(" ").first()
+        }
 
         tvCollege.text = doubtData.college
 
@@ -118,8 +122,12 @@ class DoubtPreviewViewHolder(
         } else
             tvTags.isVisible = false
 
-        Glide.with(ivDp).load(doubtData.userPhotoUrl).circleCrop()
-            .into(ivDp)
+        if (!doubtData.isAnonymous) {
+            Glide.with(ivDp).load(doubtData.userPhotoUrl).circleCrop()
+                .into(ivDp)
+        } else {
+            ivDp.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_user))
+        }
 
         // image content
         if (!doubtData.imageContentUrl.isNullOrEmpty()) {

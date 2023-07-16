@@ -19,7 +19,8 @@ class EnterAnswerViewHolder(itemView: View, private val interactionListener: Int
     RecyclerView.ViewHolder(itemView) {
 
     data class PublishAnswerDTO(
-        val description: String
+        val description: String,
+        val isAnonymous: Boolean
     )
 
     interface InteractionListener {
@@ -28,6 +29,7 @@ class EnterAnswerViewHolder(itemView: View, private val interactionListener: Int
 
     private val etAnswer: EditText = itemView.findViewById(R.id.enter_answer_description)
     private val btnPublish: View = itemView.findViewById(R.id.btn_publish)
+    private val btnPublishUnknown: View = itemView.findViewById(R.id.btn_publish_unknown)
     private val authorName: TextView
     private val ivDp: ImageView
     private val tvCollege: TextView = itemView.findViewById(R.id.tv_college)
@@ -41,13 +43,28 @@ class EnterAnswerViewHolder(itemView: View, private val interactionListener: Int
         etAnswer.addTextChangedListener {
             if (it.toString().isEmpty()) {
                 btnPublish.isVisible = false
+                btnPublishUnknown.isVisible = false
             } else {
+
                 btnPublish.isVisible = true
-                btnPublish.setOnClickListener {
-                    interactionListener.onAnswerPublish(PublishAnswerDTO(etAnswer.text.toString()))
-                    etAnswer.setText("")
-                }
+                btnPublishUnknown.isVisible = true
             }
+        }
+
+        btnPublish.setOnClickListener {
+            interactionListener.onAnswerPublish(PublishAnswerDTO(
+                description = etAnswer.text.toString(),
+                isAnonymous = false
+            ))
+            etAnswer.setText("")
+        }
+
+        btnPublishUnknown.setOnClickListener {
+            interactionListener.onAnswerPublish(PublishAnswerDTO(
+                description = etAnswer.text.toString(),
+                isAnonymous = true
+            ))
+            etAnswer.setText("")
         }
     }
 
