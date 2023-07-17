@@ -11,15 +11,10 @@ data class FeedEntity(
 ) {
     companion object {
         const val TYPE_DOUBT = 1
-        const val TYPE_SEARCH = 2
-        const val TYPE_SEARCH_RESULT = 3
-        const val TYPE_USER_PROFILE = 4
-        const val TYPE_BUTTONS = 5
-        const val TYPE_POLL = 6
-
-        fun getSearchEntity(): FeedEntity {
-            return FeedEntity(TYPE_SEARCH, null, null)
-        }
+        const val TYPE_SEARCH_RESULT = 2
+        const val TYPE_USER_PROFILE = 3
+        const val TYPE_BUTTONS = 4
+        const val TYPE_POLL = 5
 
         fun getOptionButtons(): FeedEntity{
             return FeedEntity(TYPE_BUTTONS, null, null)

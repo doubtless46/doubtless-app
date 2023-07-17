@@ -47,6 +47,11 @@ class FragNavigator constructor(
 
     fun moveToCreatePollFragment(){
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+            /* enter = */ R.anim.slide_in_right,
+            /* exit = */ R.anim.slide_out_left,
+            /* popEnter = */ R.anim.slide_in_left,
+            /* popExit = */ R.anim.slide_out_right)
             .replace(containerId, CreatePollFragment())
             .addToBackStack(null)
             .setReorderingAllowed(true)

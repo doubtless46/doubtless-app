@@ -22,7 +22,7 @@ import kotlin.collections.set
 class ViewDoubtsViewModel constructor(
     private val fetchHomeFeedUseCase: FetchHomeFeedUseCase,
     private val analyticsTracker: AnalyticsTracker,
-    private val userManager: UserManager
+    private val userManager: UserManager,
 ) : ViewModel() {
 
     private val _homeEntities = mutableListOf<FeedEntity>()
@@ -88,32 +88,32 @@ class ViewDoubtsViewModel constructor(
 
             val entitiesFromServer = mutableListOf<FeedEntity>()
 
+            val pollOptions = listOf("Krishna", "Sneha", "Dhiraj")
+            if (_homeEntities.isEmpty()) {
+                entitiesFromServer.add(FeedEntity.getOptionButtons())
+                entitiesFromServer.add(FeedEntity.getPollEntity(pollOptions))
+            }
+
+
             result.data.forEach { doubtData ->
+                _homeEntities.addAll(entitiesFromServer)
+                _fetchedHomeEntities.postValue(Resource.Success(entitiesFromServer))
+                fetchHomeFeedUseCase.notifyDistinctDocsFetched(
+                    docsFetched = homeEntities.size
+                )
+
+                isLoading = false
+            }
+
+
             _homeEntities.addAll(entitiesFromServer)
             _fetchedHomeEntities.postValue(Resource.Success(entitiesFromServer))
             fetchHomeFeedUseCase.notifyDistinctDocsFetched(
                 docsFetched = homeEntities.size
+                        - /* subtract one for search entity, ideally should have counted Type = Doubt size */ 1
             )
-
             isLoading = false
         }
-            val pollOptions = listOf("Option 1", "Option 2", "Option 3")
-        // for page 1 call add search and options button entity
-        if (_homeEntities.isEmpty())
-            entitiesFromServer.add(0, FeedEntity.getSearchEntity())
-        if (_homeEntities.isEmpty())
-            entitiesFromServer.add(1, FeedEntity.getOptionButtons())
-        if(_homeEntities.isEmpty())
-            entitiesFromServer.add(6, FeedEntity.getPollEntity(pollOptions) )
-
-        _homeEntities.addAll(entitiesFromServer)
-        _fetchedHomeEntities.postValue(Resource.Success(entitiesFromServer))
-        fetchHomeFeedUseCase.notifyDistinctDocsFetched(
-            docsFetched = homeEntities.size
-                    - /* subtract one for search entity, ideally should have counted Type = Doubt size */ 1
-        )
-        isLoading = false
-    }
 
     fun refreshList(tag: String?) {
         _homeEntities.clear()
@@ -125,7 +125,7 @@ class ViewDoubtsViewModel constructor(
         class Factory constructor(
             private val fetchHomeFeedUseCase: FetchHomeFeedUseCase,
             private val analyticsTracker: AnalyticsTracker,
-            private val userManager: UserManager
+            private val userManager: UserManager,
         ) : ViewModelProvider.Factory {
 
             override fun <T : ViewModel> create(modelClass: Class<T>): T {

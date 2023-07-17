@@ -5,6 +5,7 @@ import android.content.Intent
 import com.doubtless.doubtless.screens.onboarding.OnBoardingActivity
 import com.doubtless.doubtless.screens.auth.LoginActivity
 import com.doubtless.doubtless.screens.main.MainActivity
+import com.doubtless.doubtless.screens.poll.CreatePollFragment
 
 class Router {
 
@@ -22,5 +23,4 @@ class Router {
         val i = Intent(activity, OnBoardingActivity::class.java)
         activity.startActivity(i)
     }
-
 }
