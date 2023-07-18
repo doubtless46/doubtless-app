@@ -1,18 +1,13 @@
 package com.doubtless.doubtless.screens.answers
 
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
 import com.doubtless.doubtless.screens.answers.viewholder.AnswerViewHolder
 import com.doubtless.doubtless.screens.answers.viewholder.EnterAnswerViewHolder
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.doubt.DoubtData
-import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.screens.doubt.view.viewholder.DoubtPreviewViewHolder
 
 class AnswerDoubtsAdapter(
@@ -23,6 +18,7 @@ class AnswerDoubtsAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface InteractionListener {
+        fun onUserImageClicked(userId: String)
         fun onLayoutClicked()
         fun onDoubtClicked(doubtData: DoubtData, position: Int)
         fun onAnswerClicked(answerData: AnswerData, position: Int)
@@ -40,6 +36,12 @@ class AnswerDoubtsAdapter(
                         override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
                             interactionListener.onDoubtClicked(doubtData, position)
                         }
+
+                        override fun onUserImageClicked(userId: String) {
+                            interactionListener.onUserImageClicked(userId)
+
+                        }
+
                     }, showVotingLayout = true
                 )
             }
@@ -58,6 +60,10 @@ class AnswerDoubtsAdapter(
             AnswerDoubtEntity.TYPE_ANSWER -> {
                 val view = inflater.inflate(R.layout.answer_layout, parent, false)
                 return AnswerViewHolder(view, object : AnswerViewHolder.InteractionListener {
+                    override fun onUserImageClicked(userId: String) {
+                        interactionListener.onUserImageClicked(userId)
+                    }
+
                     override fun onAnswerClicked(answerData: AnswerData, position: Int) {
                         interactionListener.onAnswerClicked(answerData, position)
                     }
@@ -75,7 +81,10 @@ class AnswerDoubtsAdapter(
             holder.setData(doubtAnswerEntities[position].doubt!!)
 
         if (holder is AnswerViewHolder)
-            holder.setData(doubtAnswerEntities[position].answer!!, doubtAnswerEntities[position].answerVotingUseCase!!)
+            holder.setData(
+                doubtAnswerEntities[position].answer!!,
+                doubtAnswerEntities[position].answerVotingUseCase!!
+            )
 
         if (holder is EnterAnswerViewHolder)
             holder.setData(user)

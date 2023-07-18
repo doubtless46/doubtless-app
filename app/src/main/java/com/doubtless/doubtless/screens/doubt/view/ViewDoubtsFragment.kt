@@ -102,6 +102,11 @@ class ViewDoubtsFragment : Fragment() {
                         viewModel.fetchDoubts(feedTag = tag)
                     },
                     interactionListener = object : GenericFeedAdapter.InteractionListener {
+                        override fun onUserImageClicked(userId: String) {
+                            if (userId != userManager.getCachedUserData()!!.id) navigator.moveToOtherUsersProfileFragment(
+                                userId
+                            )
+                        }
 
                         override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
                             // note that this we are not sending a copy of doubtData here,
@@ -162,8 +167,7 @@ class ViewDoubtsFragment : Fragment() {
     }
 
     private fun showToast(msg: String) {
-        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT)
-            .show()
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

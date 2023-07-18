@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.doubtless.doubtless.DoubtlessApp
 import com.doubtless.doubtless.R
+import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.dashboard.viewholder.UserProfileViewHolder
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.view.viewholder.DoubtPreviewViewHolder
@@ -14,10 +15,14 @@ import com.doubtless.doubtless.screens.home.entities.FeedEntity
 class GenericFeedAdapter(
     private val genericFeedEntities: MutableList<FeedEntity>,
     private val onLastItemReached: () -> Unit,
-    private val interactionListener: InteractionListener
+    private val interactionListener: InteractionListener,
+    private val user: User = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
+        .getCachedUserData()!!
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface InteractionListener {
+
+        fun onUserImageClicked(doubtData: String)
         fun onDoubtClicked(doubtData: DoubtData, position: Int)
         fun onSignOutClicked()
         fun onSubmitFeedbackClicked()
@@ -31,8 +36,10 @@ class GenericFeedAdapter(
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.user_profile_layout, parent, false)
                 return UserProfileViewHolder(
-                    view,
-                    object : UserProfileViewHolder.InteractionListener {
+                    view = view,
+                    otherUser = user.id != DoubtlessApp.getInstance().getAppCompRoot()
+                        .getUserManager().getCachedUserData()!!.id,
+                    interactionListener = object : UserProfileViewHolder.InteractionListener {
                         override fun onDeleteAccountClicked() =
                             interactionListener.onDeleteAccountClicked()
 
@@ -51,6 +58,10 @@ class GenericFeedAdapter(
                         override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
                             interactionListener.onDoubtClicked(doubtData, position)
                         }
+
+                        override fun onUserImageClicked(userId: String) {
+                            interactionListener.onUserImageClicked(userId)
+                        }
                     })
             }
 
@@ -63,6 +74,10 @@ class GenericFeedAdapter(
                         override fun onDoubtClicked(doubtData: DoubtData, position: Int) {
                             interactionListener.onDoubtClicked(doubtData, position)
                         }
+
+                        override fun onUserImageClicked(userId: String) {
+                            interactionListener.onUserImageClicked(userId)
+                        }
                     })
             }
         }
@@ -72,7 +87,7 @@ class GenericFeedAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is UserProfileViewHolder) holder.setData(
-            userManager = DoubtlessApp.getInstance().getAppCompRoot().getUserManager()
+            user = user
         )
 
         if (holder is DoubtPreviewViewHolder && getItemViewType(position) == FeedEntity.TYPE_DOUBT) holder.setData(

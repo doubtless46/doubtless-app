@@ -8,14 +8,14 @@ import androidx.lifecycle.viewModelScope
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.screens.auth.usecases.UserManager
 import com.doubtless.doubtless.screens.dashboard.usecases.DeleteAccountUseCase
-import com.doubtless.doubtless.screens.dashboard.usecases.FetchUserDataUseCase
+import com.doubtless.doubtless.screens.dashboard.usecases.FetchUserProfileFeedUseCase
 import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DashboardViewModel(
     private val deleteAccountUseCase: DeleteAccountUseCase,
-    private val fetchUserDataUseCase: FetchUserDataUseCase,
+    private val fetchUserProfileFeedUseCase: FetchUserProfileFeedUseCase,
     private val analyticsTracker: AnalyticsTracker,
     private val userManager: UserManager
 ) : ViewModel() {
@@ -43,20 +43,20 @@ class DashboardViewModel(
         if (isLoading) return@launch
 
         isLoading = true
-        val result = fetchUserDataUseCase.fetchFeedSync(
-            request = FetchUserDataUseCase.FetchUserFeedRequest(
+        val result = fetchUserProfileFeedUseCase.fetchFeedSync(
+            request = FetchUserProfileFeedUseCase.FetchUserFeedRequest(
                 user = userManager.getCachedUserData()!!, fetchFromPage1 = forPageOne
             )
         )
 
-        if (result is FetchUserDataUseCase.Result.ListEnded || result is FetchUserDataUseCase.Result.Error) {
+        if (result is FetchUserProfileFeedUseCase.Result.ListEnded || result is FetchUserProfileFeedUseCase.Result.Error) {
             // ERROR CASE
             _fetchedHomeEntities.postValue(null)
             isLoading = false
             return@launch
         }
 
-        result as FetchUserDataUseCase.Result.Success
+        result as FetchUserProfileFeedUseCase.Result.Success
 
         if (!forPageOne) {
             analyticsTracker.trackFeedNextPage(homeEntities.size)
@@ -74,16 +74,9 @@ class DashboardViewModel(
             }
         }
 
-
-        // for page 1 call add user profile entity
-//        if (_homeEntities.isEmpty()) entitiesFromServer.add(
-//            0,
-//            FeedEntity(FeedEntity.TYPE_USER_PROFILE, null)
-//        )
-
         _homeEntities.addAll(entitiesFromServer)
         _fetchedHomeEntities.postValue(entitiesFromServer)
-        fetchUserDataUseCase.notifyDistinctDocsFetched(
+        fetchUserProfileFeedUseCase.notifyDistinctDocsFetched(
             docsFetched = homeEntities.size
 //                    - /* subtract one for search entity, ideally should have counted Type = Doubt size */ 1
         )
@@ -113,14 +106,14 @@ class DashboardViewModel(
     companion object {
         class Factory constructor(
             private val deleteAccountUseCase: DeleteAccountUseCase,
-            private val fetchUserDataUseCase: FetchUserDataUseCase,
+            private val fetchUserProfileFeedUseCase: FetchUserProfileFeedUseCase,
             private val analyticsTracker: AnalyticsTracker,
             private val userManager: UserManager
         ) : ViewModelProvider.Factory {
 
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return DashboardViewModel(
-                    deleteAccountUseCase, fetchUserDataUseCase, analyticsTracker, userManager
+                    deleteAccountUseCase, fetchUserProfileFeedUseCase, analyticsTracker, userManager
                 ) as T
             }
         }

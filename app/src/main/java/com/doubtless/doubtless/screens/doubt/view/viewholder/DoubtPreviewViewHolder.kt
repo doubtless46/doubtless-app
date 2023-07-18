@@ -15,7 +15,6 @@ import com.doubtless.doubtless.constants.GamificationConstants
 import com.doubtless.doubtless.screens.doubt.DoubtData
 import com.doubtless.doubtless.screens.doubt.usecases.VotingUseCase
 import com.doubtless.doubtless.utils.Utils
-import com.doubtless.doubtless.utils.Utils.flatten
 import com.doubtless.doubtless.utils.Utils.toPx
 import com.doubtless.doubtless.utils.addStateListAnimation
 import kotlinx.coroutines.CoroutineScope
@@ -33,6 +32,7 @@ class DoubtPreviewViewHolder(
 
     interface InteractionListener {
         fun onDoubtClicked(doubtData: DoubtData, position: Int)
+        fun onUserImageClicked(userId: String)
     }
 
     private val userName: TextView
@@ -74,6 +74,10 @@ class DoubtPreviewViewHolder(
 
         itemView.setOnClickListener {
             interactionListener.onDoubtClicked(doubtData, adapterPosition)
+        }
+
+        ivDp.setOnClickListener {
+            interactionListener.onUserImageClicked(doubtData.userId!!)
         }
 
         if (showVotingLayout) {

@@ -24,6 +24,7 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
     RecyclerView.ViewHolder(itemView) {
 
     interface InteractionListener {
+        fun onUserImageClicked(userId: String)
         fun onAnswerClicked(answerData: AnswerData, position: Int)
     }
 
@@ -55,6 +56,10 @@ class AnswerViewHolder(itemView: View, private val interactionListener: Interact
 
         itemView.setOnClickListener {
             interactionListener.onAnswerClicked(answerData, adapterPosition)
+        }
+
+        ivDp.setOnClickListener {
+            interactionListener.onUserImageClicked(answerData.authorId!!)
         }
 
         authorName.text = answerData.authorName

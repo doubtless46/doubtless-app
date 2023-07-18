@@ -63,8 +63,12 @@ class AnswersFragment : Fragment() {
                 .getDashboardFragNavigator(requireActivity() as MainActivity)
         }
 
-        if (_navigator != null)
-            navigator = _navigator
+        if (currentSelectedFrag is MainFragment.CurrentSelectedBottomNavFrag.InAppNotificationFrag) {
+            _navigator = DoubtlessApp.getInstance().getAppCompRoot()
+                .getInAppFragNavigator(requireActivity() as MainActivity)
+        }
+
+        if (_navigator != null) navigator = _navigator
 
         val _doubtData = arguments?.getParcelable("doubt_data") as DoubtData?
 
@@ -89,14 +93,21 @@ class AnswersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         if (!::adapter.isInitialized) {
-            adapter = AnswerDoubtsAdapter(
-                user = userManager.getCachedUserData()!!,
+            adapter = AnswerDoubtsAdapter(user = userManager.getCachedUserData()!!,
                 doubtAnswerEntities = mutableListOf(),
                 onLastItemReached = {
                     /* no-op */
                 },
                 interactionListener = object : AnswerDoubtsAdapter.InteractionListener {
+                    override fun onUserImageClicked(userId: String) {
+                        if (userId != userManager.getCachedUserData()!!.id) navigator.moveToOtherUsersProfileFragment(
+                            userId
+                        )
+                    }
+
                     override fun onLayoutClicked() {
 
                     }
@@ -124,8 +135,7 @@ class AnswersFragment : Fragment() {
                         )
                     }
 
-                }
-            )
+                })
         }
 
         binding.answerRecyclerView.adapter = adapter
@@ -185,8 +195,7 @@ class AnswersFragment : Fragment() {
 
     private fun getViewModel(doubtData: DoubtData): AnswersViewModel {
         return ViewModelProvider(
-            owner = this,
-            factory = AnswersViewModel.Companion.Factory(
+            owner = this, factory = AnswersViewModel.Companion.Factory(
                 userManager = userManager,
                 fetchAnswerUseCase = DoubtlessApp.getInstance().getAppCompRoot()
                     .getFetchAnswerUseCase(doubtData.id!!),
