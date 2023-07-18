@@ -168,8 +168,8 @@ class DashboardFragment : Fragment() {
             owner = this, factory = DashboardViewModel.Companion.Factory(
                 deleteAccountUseCase = DoubtlessApp.getInstance().getAppCompRoot()
                     .getDeleteAccountUseCase(),
-                fetchUserDataUseCase = DoubtlessApp.getInstance().getAppCompRoot()
-                    .getFetchUserDataUseCase(),
+                fetchUserProfileFeedUseCase = DoubtlessApp.getInstance().getAppCompRoot()
+                    .getFetchUserProfileFeedUseCase(),
                 analyticsTracker = tracker,
                 userManager = userManager
             )

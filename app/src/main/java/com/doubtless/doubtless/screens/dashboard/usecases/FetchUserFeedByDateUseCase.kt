@@ -24,7 +24,7 @@ class FetchUserFeedByDateUseCase constructor(
     private var lastDoubtData: DoubtData? = null
 
     suspend fun getFeedData(
-        request: FetchUserDataUseCase.FetchUserFeedRequest, user: User
+        request: FetchUserProfileFeedUseCase.FetchUserFeedRequest, user: User
     ): Result = withContext(Dispatchers.IO) {
 
         try {

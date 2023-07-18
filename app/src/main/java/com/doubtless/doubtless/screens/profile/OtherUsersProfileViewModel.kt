@@ -7,13 +7,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.doubtless.doubtless.analytics.AnalyticsTracker
 import com.doubtless.doubtless.screens.auth.User
-import com.doubtless.doubtless.screens.dashboard.usecases.FetchUserDataUseCase
+import com.doubtless.doubtless.screens.dashboard.usecases.FetchUserProfileFeedUseCase
 import com.doubtless.doubtless.screens.home.entities.FeedEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class OtherUsersProfileViewModel(
-    private val fetchUserDataUseCase: FetchUserDataUseCase,
+    private val fetchUserProfileFeedUseCase: FetchUserProfileFeedUseCase,
     private val analyticsTracker: AnalyticsTracker
 ) : ViewModel() {
 
@@ -39,19 +39,19 @@ class OtherUsersProfileViewModel(
 
         isLoading = true
 
-        val userDataResult = fetchUserDataUseCase.fetchUserDetails(
-            request = FetchUserDataUseCase.FetchUserFeedRequest(
+        val userDataResult = fetchUserProfileFeedUseCase.fetchUserDetails(
+            request = FetchUserProfileFeedUseCase.FetchUserFeedRequest(
                 user = User(
                     userId
                 )
             )
         )
-        if (userDataResult is FetchUserDataUseCase.UserDetailsResult.Error) {
+        if (userDataResult is FetchUserProfileFeedUseCase.UserDetailsResult.Error) {
             _fetchedUserData.postValue(null)
             isLoading = false
             return@launch
         }
-        userDataResult as FetchUserDataUseCase.UserDetailsResult.Success
+        userDataResult as FetchUserProfileFeedUseCase.UserDetailsResult.Success
         _fetchedUserData.postValue(userDataResult.user)
 
         isLoading = false
@@ -64,22 +64,22 @@ class OtherUsersProfileViewModel(
 
             isLoading = true
 
-            val result = fetchUserDataUseCase.fetchFeedSync(
-                request = FetchUserDataUseCase.FetchUserFeedRequest(
+            val result = fetchUserProfileFeedUseCase.fetchFeedSync(
+                request = FetchUserProfileFeedUseCase.FetchUserFeedRequest(
                     user = User(
                         userId
                     ), fetchFromPage1 = forPageOne
                 )
             )
 
-            if (result is FetchUserDataUseCase.Result.ListEnded || result is FetchUserDataUseCase.Result.Error) {
+            if (result is FetchUserProfileFeedUseCase.Result.ListEnded || result is FetchUserProfileFeedUseCase.Result.Error) {
                 // ERROR CASE
                 _fetchedHomeEntities.postValue(null)
                 isLoading = false
                 return@launch
             }
 
-            result as FetchUserDataUseCase.Result.Success
+            result as FetchUserProfileFeedUseCase.Result.Success
 
             if (!forPageOne) {
                 analyticsTracker.trackFeedNextPage(homeEntities.size)
@@ -99,7 +99,7 @@ class OtherUsersProfileViewModel(
 
             _homeEntities.addAll(entitiesFromServer)
             _fetchedHomeEntities.postValue(entitiesFromServer)
-            fetchUserDataUseCase.notifyDistinctDocsFetched(
+            fetchUserProfileFeedUseCase.notifyDistinctDocsFetched(
                 docsFetched = homeEntities.size
 //                    - /* subtract one for search entity, ideally should have counted Type = Doubt size */ 1
             )
@@ -109,13 +109,13 @@ class OtherUsersProfileViewModel(
 
     companion object {
         class Factory constructor(
-            private val fetchUserDataUseCase: FetchUserDataUseCase,
+            private val fetchUserProfileFeedUseCase: FetchUserProfileFeedUseCase,
             private val analyticsTracker: AnalyticsTracker
         ) : ViewModelProvider.Factory {
 
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return OtherUsersProfileViewModel(
-                    fetchUserDataUseCase, analyticsTracker
+                    fetchUserProfileFeedUseCase, analyticsTracker
 
                 ) as T
             }

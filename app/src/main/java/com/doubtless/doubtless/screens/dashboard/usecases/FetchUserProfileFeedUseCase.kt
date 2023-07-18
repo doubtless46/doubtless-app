@@ -1,7 +1,6 @@
 package com.doubtless.doubtless.screens.dashboard.usecases
 
 import android.util.Log
-import androidx.annotation.WorkerThread
 import com.doubtless.doubtless.constants.FirestoreCollection
 import com.doubtless.doubtless.screens.auth.User
 import com.doubtless.doubtless.screens.auth.UserAttributes
@@ -15,7 +14,7 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-class FetchUserDataUseCase constructor(
+class FetchUserProfileFeedUseCase constructor(
     private val fetchUserFeedByDateUseCase: FetchUserFeedByDateUseCase,
     private val firestore: FirebaseFirestore,
 ) {
@@ -58,31 +57,24 @@ class FetchUserDataUseCase constructor(
                     val user = User.parse(it) ?: return@let
                     userData = user
 
-                    val localUserAttrCollectionRef =
+                    val userAttrCollectionRef =
                         it.reference.collection("user_attr")
-                    val userAttrQuerySnapshot = localUserAttrCollectionRef.get().await()
-
+                    val userAttrQuerySnapshot = userAttrCollectionRef.get().await()
 
                     if (!userAttrQuerySnapshot.isEmpty) {
                         userAttrQuerySnapshot.documents.forEach { it ->
                             val userAttr = UserAttributes.parse(it) ?: return@forEach
                             user.local_user_attr = userAttr
                         }
-
                     }
-
                 }
 
                 UserDetailsResult.Success(userData)
-
-
             } catch (e: Exception) {
                 UserDetailsResult.Error(e.message.toString())
             }
         }
 
-
-    @WorkerThread
     suspend fun fetchFeedSync(request: FetchUserFeedRequest): Result =
         withContext(Dispatchers.IO) {
 

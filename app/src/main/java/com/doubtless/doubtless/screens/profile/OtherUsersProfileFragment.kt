@@ -146,8 +146,8 @@ class OtherUsersProfileFragment : Fragment() {
     private fun getViewModel(): OtherUsersProfileViewModel {
         return ViewModelProvider(
             owner = this, factory = OtherUsersProfileViewModel.Companion.Factory(
-                fetchUserDataUseCase = DoubtlessApp.getInstance().getAppCompRoot()
-                    .getFetchUserDataUseCase(),
+                fetchUserProfileFeedUseCase = DoubtlessApp.getInstance().getAppCompRoot()
+                    .getFetchUserProfileFeedUseCase(),
                 analyticsTracker = tracker
             )
         )[OtherUsersProfileViewModel::class.java]
